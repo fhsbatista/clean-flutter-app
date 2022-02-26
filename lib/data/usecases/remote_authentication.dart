@@ -1,3 +1,4 @@
+import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/authentication.dart';
 
 import '../http/http.dart';
@@ -12,11 +13,15 @@ class RemoteAuthentication {
   });
 
   Future<void> auth(AuthenticationParams params) async {
-    httpClient.request(
-      url: url,
-      method: 'post',
-      body: RemoteAuthenticationParams.fromDomain(params).toJson(),
-    );
+    try {
+      httpClient.request(
+        url: url,
+        method: 'post',
+        body: RemoteAuthenticationParams.fromDomain(params).toJson(),
+      );
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 
