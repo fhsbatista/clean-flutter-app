@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -33,18 +34,6 @@ void main() {
     httpClient = MockHttpClient();
     url = faker.internet.httpUrl();
     sut = RemoteAuthentication(httpClient: httpClient, url: url);
-  });
-
-  test('Should call HttpClient with correct URL', () async {
-    when(httpClient.request(url: anyNamed('url'), method: anyNamed('method')))
-        .thenAnswer((_) async => '');
-
-    await sut.auth();
-
-    verify(httpClient.request(
-      url: url,
-      method: anyNamed('method'),
-    )).called(1);
   });
 
   test('Should call HttpClient with correct values', () async {
