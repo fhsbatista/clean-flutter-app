@@ -109,7 +109,7 @@ void main() {
       expect(response, {});
     });
 
-    test('Should return emoty object if post returns 204', () async {
+    test('Should return empty object if post returns 204', () async {
       mockResponse(204, body: '');
 
       final response = await sut.request(
@@ -119,5 +119,6 @@ void main() {
 
       expect(response, {});
     });
+    
   });
 }
