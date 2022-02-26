@@ -25,7 +25,7 @@ class HttpAdapter {
     return client.post(
       Uri.parse(url),
       headers: headers,
-      body: jsonEncode(body),
+      body: body != null ? jsonEncode(body) : null,
     );
   }
 }
@@ -52,12 +52,27 @@ void main() {
       await sut
           .request(url: url, method: 'post', body: {'any_key': 'any_value'});
 
-      verify(client.post(Uri.parse(url),
-          headers: {
-            'content-type': 'application/json',
-            'accept': 'application/json',
-          },
-          body: '{"any_key":"any_value"}'));
+      verify(client.post(
+        Uri.parse(url),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+        },
+        body: '{"any_key":"any_value"}',
+      ));
+    });
+
+    test('Should call post without body', () async {
+      when(client.post(
+        any,
+        headers: anyNamed('headers'),
+        body: anyNamed('body'),
+      )).thenAnswer((_) async => Response('', 200));
+      final url = faker.internet.httpUrl();
+
+      await sut.request(url: url, method: 'post');
+
+      verify(client.post(any, headers: anyNamed('headers')));
     });
   });
 }
