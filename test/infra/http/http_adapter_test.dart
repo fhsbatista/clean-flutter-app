@@ -19,6 +19,17 @@ void main() {
     sut = HttpAdapter(client);
   });
 
+  group('shared', () {
+    test('Should throw serverError if invalid method is provided', () async {
+      final future = sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'invalid_method',
+      );
+
+      expect(future, throwsA(HttpError.serverError));
+    });
+  });
+
   group('post', () {
     PostExpectation anyRequest() => when(
           client.post(
@@ -109,7 +120,8 @@ void main() {
       expect(response, {});
     });
 
-    test('Should return badRequest error if post returns 400 with data', () async {
+    test('Should return badRequest error if post returns 400 with data',
+        () async {
       mockResponse(400, body: '{"any_key":"any_value"}');
 
       final future = sut.request(
@@ -174,6 +186,5 @@ void main() {
 
       expect(future, throwsA(HttpError.serverError));
     });
-
   });
 }
