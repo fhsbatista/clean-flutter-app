@@ -108,5 +108,16 @@ void main() {
 
       expect(response, {});
     });
+
+    test('Should return emoty object if post returns 204', () async {
+      mockResponse(204, body: '');
+
+      final response = await sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'post',
+      );
+
+      expect(response, {});
+    });
   });
 }
