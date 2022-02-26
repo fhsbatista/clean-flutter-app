@@ -131,5 +131,16 @@ void main() {
       expect(future, throwsA(HttpError.badRequest));
     });
 
+    test('Should return serverError if post returns 500', () async {
+      mockResponse(500);
+
+      final future = sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'post',
+      );
+
+      expect(future, throwsA(HttpError.serverError));
+    });
+
   });
 }
