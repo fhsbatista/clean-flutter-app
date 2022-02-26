@@ -28,7 +28,7 @@ class HttpAdapter implements HttpClient {
       headers: headers,
       body: body != null ? jsonEncode(body) : null,
     );
-    return jsonDecode(response.body);
+    return response.body.isEmpty ? {} : jsonDecode(response.body);
   }
 }
 
@@ -48,7 +48,7 @@ void main() {
         any,
         headers: anyNamed('headers'),
         body: anyNamed('body'),
-      )).thenAnswer((_) async => Response('{}', 200));
+      )).thenAnswer((_) async => Response('', 200));
       final url = faker.internet.httpUrl();
 
       await sut
@@ -69,7 +69,7 @@ void main() {
         any,
         headers: anyNamed('headers'),
         body: anyNamed('body'),
-      )).thenAnswer((_) async => Response('{}', 200));
+      )).thenAnswer((_) async => Response('', 200));
       final url = faker.internet.httpUrl();
 
       await sut.request(url: url, method: 'post');
@@ -91,6 +91,19 @@ void main() {
       final response = await sut.request(url: url, method: 'post');
 
       expect(response, {'any_key': 'any_value'});
+    });
+
+    test('Should return null if post returns 200 with no data', () async {
+      when(client.post(
+        any,
+        headers: anyNamed('headers'),
+        body: anyNamed('body'),
+      )).thenAnswer((_) async => Response('', 200));
+      final url = faker.internet.httpUrl();
+
+      final response = await sut.request(url: url, method: 'post');
+
+      expect(response, {});
     });
   });
 }
