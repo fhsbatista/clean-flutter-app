@@ -28,7 +28,11 @@ class HttpAdapter implements HttpClient {
       headers: headers,
       body: body != null ? jsonEncode(body) : null,
     );
-    return response.body.isEmpty ? {} : jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return response.body.isEmpty ? {} : jsonDecode(response.body);
+    } else {
+      return {};
+    }
   }
 }
 
@@ -98,7 +102,8 @@ void main() {
       expect(response, {'any_key': 'any_value'});
     });
 
-    test('Should return empty object if post returns 200 with no data', () async {
+    test('Should return empty object if post returns 200 with no data',
+        () async {
       mockResponse(200, body: '');
 
       final response = await sut.request(
@@ -119,6 +124,16 @@ void main() {
 
       expect(response, {});
     });
-    
+
+    test('Should return empty object if post returns 204 with data', () async {
+      mockResponse(204, body: '{"any_key":"any_value"}');
+
+      final response = await sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'post',
+      );
+
+      expect(response, {});
+    });
   });
 }
