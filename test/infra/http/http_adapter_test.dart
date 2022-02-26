@@ -51,6 +51,10 @@ void main() {
       );
     }
 
+    void mockError() {
+      anyRequest().thenThrow(Exception());
+    }
+
     setUp(() {
       mockResponse(200);
     });
@@ -178,6 +182,17 @@ void main() {
 
     test('Should return serverError if post returns 500', () async {
       mockResponse(500);
+
+      final future = sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'post'
+      );
+
+      expect(future, throwsA(HttpError.serverError));
+    });
+
+    test('Should return serverError if post throws', () async {
+      mockError();
 
       final future = sut.request(
         url: faker.internet.httpUrl(),
