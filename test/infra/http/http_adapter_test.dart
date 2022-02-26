@@ -142,6 +142,28 @@ void main() {
       expect(future, throwsA(HttpError.unauthorized));
     });
 
+    test('Should return forbbiden error if post returns 403', () async {
+      mockResponse(403);
+
+      final future = sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'post',
+      );
+
+      expect(future, throwsA(HttpError.forbidden));
+    });
+
+    test('Should return forbbiden error if post returns 404', () async {
+      mockResponse(404);
+
+      final future = sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'post',
+      );
+
+      expect(future, throwsA(HttpError.notFound));
+    });
+
     test('Should return serverError if post returns 500', () async {
       mockResponse(500);
 
