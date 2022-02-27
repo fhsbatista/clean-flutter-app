@@ -123,4 +123,36 @@ void main() {
 
     expect(find.text('any password error'), findsOneWidget);
   });
+
+  testWidgets('Should present no error if password valid', (tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add(null);
+    await tester.pump();
+
+    expect(
+      find.descendant(
+        of: find.bySemanticsLabel('senha'),
+        matching: find.byType(Text),
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets(
+      'Should present no error if password error stream emits a empty string',
+      (tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add('');
+    await tester.pump();
+
+    expect(
+      find.descendant(
+        of: find.bySemanticsLabel('senha'),
+        matching: find.byType(Text),
+      ),
+      findsOneWidget,
+    );
+  });
 }
