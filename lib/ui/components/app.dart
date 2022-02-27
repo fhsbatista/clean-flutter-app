@@ -46,7 +46,7 @@ class App extends StatelessWidget {
       theme: theme.copyWith(
         colorScheme: theme.colorScheme.copyWith(secondary: primaryColor),
       ),
-      home: LoginPage(),
+      home: LoginPage(null),
     );
   }
 }
