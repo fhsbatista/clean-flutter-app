@@ -23,16 +23,22 @@ class LoginPage extends StatelessWidget {
               child: Form(
                 child: Column(
                   children: [
-                    TextFormField(
-                      onChanged: presenter?.validateEmail,
-                      decoration: InputDecoration(
-                        labelText: 'email',
-                        icon: Icon(
-                          Icons.email,
-                          color: Theme.of(context).primaryColorLight,
-                        ),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
+                    StreamBuilder<String?>(
+                      stream: presenter?.emailErrorStream,
+                      builder: (context, snapshot) {
+                        return TextFormField(
+                          onChanged: presenter?.validateEmail,
+                          decoration: InputDecoration(
+                            labelText: 'email',
+                            errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
+                            icon: Icon(
+                              Icons.email,
+                              color: Theme.of(context).primaryColorLight,
+                            ),
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                        );
+                      }
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
