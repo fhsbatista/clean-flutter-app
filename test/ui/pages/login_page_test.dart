@@ -19,13 +19,15 @@ void main() {
   late StreamController<bool> isFormValidController;
   late StreamController<bool> isLoadingController;
 
-  Future<void> loadPage(WidgetTester tester) async {
-    presenter = MockLoginPresenter();
+  void initStreams() {
     emailErrorController = StreamController<String?>();
     passwordErrorController = StreamController<String?>();
     mainErrorController = StreamController<String?>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
+  }
+
+  void mockStreams() {
     when(presenter.emailErrorStream)
         .thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream)
@@ -36,17 +38,27 @@ void main() {
         .thenAnswer((_) => isFormValidController.stream);
     when(presenter.isLoadingStream)
         .thenAnswer((_) => isLoadingController.stream);
-    when(presenter.auth()).thenReturn(null);
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    when(presenter.auth()).thenAnswer((_) => Future.value(null));
   }
 
-  tearDown(() {
+  void closeStreams() {
     emailErrorController.close();
     passwordErrorController.close();
     mainErrorController.close();
     isFormValidController.close();
     isLoadingController.close();
+  }
+
+  Future<void> loadPage(WidgetTester tester) async {
+    presenter = MockLoginPresenter();
+    initStreams();
+    mockStreams();
+    final loginPage = MaterialApp(home: LoginPage(presenter));
+    await tester.pumpWidget(loginPage);
+  }
+
+  tearDown(() {
+    closeStreams();
   });
 
   testWidgets('Should load with correct initial state', (tester) async {
