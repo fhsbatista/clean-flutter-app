@@ -56,24 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           EmailInput(),
                           const SizedBox(height: 8),
-                          StreamBuilder<String?>(
-                              stream: widget.presenter?.passwordErrorStream,
-                              builder: (context, snapshot) {
-                                return TextFormField(
-                                  onChanged: widget.presenter?.validatePassword,
-                                  decoration: InputDecoration(
-                                    labelText: 'senha',
-                                    errorText: snapshot.data?.isEmpty == true
-                                        ? null
-                                        : snapshot.data,
-                                    icon: Icon(
-                                      Icons.lock,
-                                      color: Theme.of(context).primaryColorLight,
-                                    ),
-                                  ),
-                                  obscureText: true,
-                                );
-                              }),
+                          PasswordInput(),
                           const SizedBox(height: 32),
                           StreamBuilder<bool>(
                               stream: widget.presenter?.isFormValidStream,
@@ -103,5 +86,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-
