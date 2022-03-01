@@ -13,6 +13,7 @@ void main() {
   late StreamLoginPresenter sut;
   late MockValidation validation;
   late String email;
+  late String password;
 
   PostExpectation mockValidationCall(String? field) => when(validation.validate(
         field: field ?? anyNamed('field'),
@@ -26,6 +27,7 @@ void main() {
     validation = MockValidation();
     sut = StreamLoginPresenter(validation: validation);
     email = faker.internet.email();
+    password = faker.internet.password();
     mockValidation();
   });
   test('Should call validation with correct email', () {
@@ -62,5 +64,11 @@ void main() {
     //Calling validation twice so the test can ensure the error will be emitted only once.
     sut.validateEmail(email);
     sut.validateEmail(email);
+  });
+
+  test('Should call validation with correct password', () {
+    sut.validatePassword(password);
+
+    verify(validation.validate(field: 'password', value: password)).called(1);
   });
 }
