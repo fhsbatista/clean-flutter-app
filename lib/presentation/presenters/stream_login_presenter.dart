@@ -48,7 +48,12 @@ class StreamLoginPresenter {
   Stream<String?> get mainErrorStream =>
       _controller.stream.map((state) => state.mainError).distinct();
 
-  void _updateState() => _controller.add(_state);
+  void _updateState() {
+    if (_controller.isClosed) {
+      return;
+    }
+    _controller.add(_state);
+  }
 
   void validateEmail(String email) {
     _state.email = email;
@@ -84,5 +89,9 @@ class StreamLoginPresenter {
 
     _state.isLoading = false;
     _updateState();
+  }
+
+  void dispose() {
+    _controller.close();
   }
 }

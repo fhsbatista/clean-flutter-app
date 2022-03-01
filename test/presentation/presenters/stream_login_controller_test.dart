@@ -189,4 +189,11 @@ void main() {
 
     await sut.auth();
   });
+
+  test('Should not emit new events after dispose', () {
+    expectLater(sut.emailErrorStream, neverEmits(null));
+
+    sut.dispose();
+    sut.validateEmail(email);
+  });
 }
