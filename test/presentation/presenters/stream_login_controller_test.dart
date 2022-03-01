@@ -88,4 +88,19 @@ void main() {
     sut.validatePassword(password);
     sut.validatePassword(password);
   });
+
+  test('Should emit password error if validation succeeds', () {
+    //This way of "expect" ensures the stream will not emit the same value more than once.
+    sut.passwordErrorStream.listen(
+      expectAsync1((error) => expect(error, null)),
+    );
+
+    sut.isFormValidStream.listen(
+      expectAsync1((isValid) => expect(isValid, false)),
+    );
+
+    //Calling validation twice so the test can ensure the error will be emitted only once.
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
 }
