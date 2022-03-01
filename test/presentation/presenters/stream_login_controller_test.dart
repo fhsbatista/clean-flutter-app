@@ -109,7 +109,7 @@ void main() {
 
     //This way of "expect" ensures the stream will not emit the same value more than once.
     sut.emailErrorStream.listen(
-      expectAsync1((error) => expect(error, 'error'))
+      expectAsync1((error) => expect(error, 'error')),
     );
     sut.passwordErrorStream.listen(
       expectAsync1((error) => expect(error, null)),
@@ -122,6 +122,20 @@ void main() {
     sut.validateEmail(email);
     sut.validateEmail(email);
     sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+
+  test('Should emit password error if validation fails', () async {
+    //This way of "expect" ensures the stream will not emit the same value more than once.
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.passwordErrorStream.listen(
+      expectAsync1((error) => expect(error, null)),
+    );
+    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
+
+    sut.validateEmail(email);
+    //Necessary so that there is time to make the "expect later" catch de values.
+    //It was necessary on the previous tests because the "expectAsync" takes care of this.
     sut.validatePassword(password);
   });
 }
