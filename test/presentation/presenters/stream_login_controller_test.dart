@@ -1,10 +1,10 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fordev/domain/entities/account_entity.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:fordev/domain/usecases/usecases.dart';
+import 'package:fordev/domain/entities/entities.dart';
 
 import 'package:fordev/presentation/dependencies/dependencies.dart';
 import 'package:fordev/presentation/presenters/presenters.dart';
@@ -31,7 +31,7 @@ void main() {
 
   void mockAuthentication({String? field, String? value}) =>
       mockAuthenticationCall()
-          .thenAnswer((_) async => AccountEntity(token: 'any token'));
+          .thenAnswer((_) async => AccountEntity(token: faker.guid.guid()));
 
   setUp(() {
     validation = MockValidation();
@@ -43,6 +43,7 @@ void main() {
     email = faker.internet.email();
     password = faker.internet.password();
     mockValidation();
+    mockAuthentication();
   });
   test('Should call validation with correct email', () {
     sut.validateEmail(email);
@@ -130,7 +131,6 @@ void main() {
   });
 
   test('Should call authentication with correct values', () async {
-    mockAuthentication();
     sut.validateEmail(email);
     sut.validatePassword(password);
 
@@ -141,5 +141,14 @@ void main() {
         AuthenticationParams(email: email, password: password),
       ),
     );
+  });
+
+  test('Should emit correct events on Authentication success', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+
+    await sut.auth();
   });
 }
