@@ -3,27 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:fordev/presentation/protocols/protocols.dart';
 import 'package:fordev/validation/protocols/protocols.dart';
+import 'package:fordev/validation/validators/validators.dart';
 import 'validation_composite.mocks.dart';
-
-class ValidationComposite implements Validation {
-  final List<FieldValidation> validations;
-
-  ValidationComposite(this.validations);
-
-  @override
-  String? validate({required String field, required String value}) {
-    String? error;
-    for (final validation in validations.where((e) => e.field == field)) {
-      error = validation.validate(value);
-      if (error?.isNotEmpty ?? true) {
-        return error;
-      }
-    }
-    return error;
-  }
-}
 
 @GenerateMocks([FieldValidation])
 void main() {
