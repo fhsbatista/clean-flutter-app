@@ -56,4 +56,7 @@ class MockLoginPresenter extends _i1.Mock implements _i2.LoginPresenter {
   @override
   void auth() => super.noSuchMethod(Invocation.method(#auth, []),
       returnValueForMissingStub: null);
+  @override
+  void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
+      returnValueForMissingStub: null);
 }

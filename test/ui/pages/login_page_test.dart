@@ -234,4 +234,12 @@ void main() {
 
     expect(find.text('main error'), findsOneWidget);
   });
+
+  testWidgets('Should call presenter dispose method on widget dispose',
+      (tester) async {
+    await loadPage(tester);
+    addTearDown(() {
+      verify(presenter.dispose()).called(1);
+    });
+  });
 }
