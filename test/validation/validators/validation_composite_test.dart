@@ -31,7 +31,7 @@ void main() {
     validation2 = MockFieldValidation();
     validation3 = MockFieldValidation();
     when(validation1.field).thenReturn('any field');
-    when(validation2.field).thenReturn('any field');
+    when(validation2.field).thenReturn('other field');
     when(validation3.field).thenReturn('other field');
     mockValidation1(null);
     mockValidation2(null);
@@ -48,8 +48,8 @@ void main() {
   });
 
   test('Should return the first error found by validations', () {
-    mockValidation1('error 1');
-    mockValidation2('error 2');
+    mockValidation1(null);
+    mockValidation2(null);
     mockValidation3('error 3');
 
     final error = sut.validate(field: 'other field', value: 'any value');

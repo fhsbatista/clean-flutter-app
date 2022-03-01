@@ -10,7 +10,7 @@ class ValidationComposite implements Validation {
   String? validate({required String field, required String value}) {
     for (final validation in validations.where((e) => e.field == field)) {
       final error = validation.validate(value);
-      if (error?.isNotEmpty ?? true) {
+      if (error?.isNotEmpty ?? false) {
         return error;
       }
     }
