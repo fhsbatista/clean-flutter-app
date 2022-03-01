@@ -71,4 +71,21 @@ void main() {
 
     verify(validation.validate(field: 'password', value: password)).called(1);
   });
+
+  test('Should emit password error if validation fails', () {
+    mockValidation(value: 'any error');
+
+    //This way of "expect" ensures the stream will not emit the same value more than once.
+    sut.passwordErrorStream.listen(
+      expectAsync1((error) => expect(error, 'any error')),
+    );
+
+    sut.isFormValidStream.listen(
+      expectAsync1((isValid) => expect(isValid, false)),
+    );
+
+    //Calling validation twice so the test can ensure the error will be emitted only once.
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
 }
