@@ -37,8 +37,12 @@ void main() {
   test('Should emit email error if validation fails', () {
     mockValidation(value: 'any error');
 
-    expectLater(sut.emailErrorStream, emits('any error'));
+    //This way of "expect" ensures the stream will not emit the same value more than once.
+    sut.emailErrorStream.listen(
+      expectAsync1((error) => expect(error, 'any error')),
+    );
 
+    sut.validateEmail(email);
     sut.validateEmail(email);
   });
 }
