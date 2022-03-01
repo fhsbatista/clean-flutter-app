@@ -1,11 +1,11 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:fordev/domain/usecases/usecases.dart';
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
 import 'package:fordev/presentation/dependencies/dependencies.dart';
 import 'package:fordev/presentation/presenters/presenters.dart';
@@ -168,6 +168,23 @@ void main() {
     expectLater(sut.isLoadingStream, emits(false));
     sut.mainErrorStream.listen(expectAsync1((e) {
       expect(e, 'Credenciais Inválidas');
+    }));
+
+    await sut.auth();
+  });
+
+  test(
+      'Should emit correct events on Authentication failure with unexpected error',
+      () async {
+    mockAuthenticationError(DomainError.unexpected);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    //For some reason, the fact of sut uses try/catch do catch de errors make the expectation using "emitsInOrder" fail. Only the last event emited is catched.
+    //Therefore, we are making only this simple assertion below. It's not perfect, but still ensures the loading will not be shown after authentication.
+    expectLater(sut.isLoadingStream, emits(false));
+    sut.mainErrorStream.listen(expectAsync1((e) {
+      expect(e, 'Algo errado aconteceu. Tente novamente em breve.');
     }));
 
     await sut.auth();
