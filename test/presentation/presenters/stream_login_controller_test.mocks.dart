@@ -2,9 +2,8 @@
 // in fordev/test/presentation/presenters/stream_login_controller_test.dart.
 // Do not manually edit this file.
 
+import 'package:fordev/presentation/dependencies/validation.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-
-import 'stream_login_controller_test.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
