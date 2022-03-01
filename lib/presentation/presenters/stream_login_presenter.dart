@@ -3,7 +3,7 @@ import 'dart:async';
 import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 
-import '../dependencies/validation.dart';
+import '../protocols/validation.dart';
 
 class LoginState {
   String email = '';

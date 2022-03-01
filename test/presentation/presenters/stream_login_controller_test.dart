@@ -7,7 +7,7 @@ import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/usecases/usecases.dart';
 
-import 'package:fordev/presentation/dependencies/dependencies.dart';
+import 'package:fordev/presentation/protocols/protocols.dart';
 import 'package:fordev/presentation/presenters/presenters.dart';
 
 import 'stream_login_controller_test.mocks.dart';
