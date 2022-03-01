@@ -1,17 +1,21 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fordev/domain/entities/account_entity.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+
+import 'package:fordev/domain/usecases/usecases.dart';
 
 import 'package:fordev/presentation/dependencies/dependencies.dart';
 import 'package:fordev/presentation/presenters/presenters.dart';
 
 import 'stream_login_controller_test.mocks.dart';
 
-@GenerateMocks([Validation])
+@GenerateMocks([Validation, Authentication])
 void main() {
   late StreamLoginPresenter sut;
   late MockValidation validation;
+  late MockAuthentication authentication;
   late String email;
   late String password;
 
@@ -23,9 +27,19 @@ void main() {
   void mockValidation({String? field, String? value}) =>
       mockValidationCall(field).thenReturn(value);
 
+  PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
+
+  void mockAuthentication({String? field, String? value}) =>
+      mockAuthenticationCall()
+          .thenAnswer((_) async => AccountEntity(token: 'any token'));
+
   setUp(() {
     validation = MockValidation();
-    sut = StreamLoginPresenter(validation: validation);
+    authentication = MockAuthentication();
+    sut = StreamLoginPresenter(
+      validation: validation,
+      authentication: authentication,
+    );
     email = faker.internet.email();
     password = faker.internet.password();
     mockValidation();
@@ -113,5 +127,19 @@ void main() {
     //It was necessary on the previous tests because the "expectAsync" takes care of this.
     await Future.delayed(Duration.zero);
     sut.validatePassword(password);
+  });
+
+  test('Should call authentication with correct values', () async {
+    mockAuthentication();
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    await sut.auth();
+
+    verify(
+      authentication.auth(
+        AuthenticationParams(email: email, password: password),
+      ),
+    );
   });
 }
