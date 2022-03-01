@@ -22,8 +22,7 @@ class StreamLoginPresenter {
       _controller.stream.map((state) => state.isFormValid).distinct();
 
   void validateEmail(String email) {
-    validation.validate(field: 'email', value: email);
-    _state.emailError = 'any error';
+    _state.emailError = validation.validate(field: 'email', value: email);
     _controller.add(_state);
   }
 }
