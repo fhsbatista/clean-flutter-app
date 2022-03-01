@@ -24,14 +24,19 @@ class StreamLoginPresenter {
 
 @GenerateMocks([Validation])
 void main() {
-  test('Should call validation with correct email', () {
-    final validation = MockValidation();
+  late StreamLoginPresenter sut;
+  late MockValidation validation;
+  late String email;
+
+  setUp(() {
+    validation = MockValidation();
+    sut = StreamLoginPresenter(validation: validation);
+    email = faker.internet.email();
     when(validation.validate(
             field: anyNamed('field'), value: anyNamed('value')))
         .thenReturn(null);
-    final sut = StreamLoginPresenter(validation: validation);
-    final email = faker.internet.email();
-
+  });
+  test('Should call validation with correct email', () {
     sut.validateEmail(email);
 
     verify(validation.validate(field: 'email', value: email)).called(1);
