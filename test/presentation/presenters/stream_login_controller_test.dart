@@ -40,13 +40,8 @@ void main() {
     mockValidation(value: 'any error');
 
     //This way of "expect" ensures the stream will not emit the same value more than once.
-    sut.emailErrorStream.listen(
-      expectAsync1((error) => expect(error, 'any error')),
-    );
-
-    sut.isFormValidStream.listen(
-      expectAsync1((isValid) => expect(isValid, false)),
-    );
+    sut.emailErrorStream.listen(expectAsync1((e) => expect(e, 'any error')));
+    sut.isFormValidStream.listen(expectAsync1((valid) => expect(valid, false)));
 
     //Calling validation twice so the test can ensure the error will be emitted only once.
     sut.validateEmail(email);
@@ -55,11 +50,8 @@ void main() {
 
   test('Should emit null if validation succeeds', () {
     //This way of "expect" ensures the stream will not emit the same value more than once.
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
-
-    sut.isFormValidStream.listen(
-      expectAsync1((isValid) => expect(isValid, false)),
-    );
+    sut.emailErrorStream.listen(expectAsync1((e) => expect(e, null)));
+    sut.isFormValidStream.listen(expectAsync1((valid) => expect(valid, false)));
 
     //Calling validation twice so the test can ensure the error will be emitted only once.
     sut.validateEmail(email);
@@ -76,13 +68,8 @@ void main() {
     mockValidation(value: 'any error');
 
     //This way of "expect" ensures the stream will not emit the same value more than once.
-    sut.passwordErrorStream.listen(
-      expectAsync1((error) => expect(error, 'any error')),
-    );
-
-    sut.isFormValidStream.listen(
-      expectAsync1((isValid) => expect(isValid, false)),
-    );
+    sut.passwordErrorStream.listen(expectAsync1((e) => expect(e, 'any error')));
+    sut.isFormValidStream.listen(expectAsync1((valid) => expect(valid, false)));
 
     //Calling validation twice so the test can ensure the error will be emitted only once.
     sut.validatePassword(password);
@@ -91,13 +78,8 @@ void main() {
 
   test('Should emit password error if validation succeeds', () {
     //This way of "expect" ensures the stream will not emit the same value more than once.
-    sut.passwordErrorStream.listen(
-      expectAsync1((error) => expect(error, null)),
-    );
-
-    sut.isFormValidStream.listen(
-      expectAsync1((isValid) => expect(isValid, false)),
-    );
+    sut.passwordErrorStream.listen(expectAsync1((e) => expect(e, null)));
+    sut.isFormValidStream.listen(expectAsync1((valid) => expect(valid, false)));
 
     //Calling validation twice so the test can ensure the error will be emitted only once.
     sut.validatePassword(password);
@@ -108,15 +90,9 @@ void main() {
     mockValidation(field: 'email', value: 'error');
 
     //This way of "expect" ensures the stream will not emit the same value more than once.
-    sut.emailErrorStream.listen(
-      expectAsync1((error) => expect(error, 'error')),
-    );
-    sut.passwordErrorStream.listen(
-      expectAsync1((error) => expect(error, null)),
-    );
-    sut.isFormValidStream.listen(
-      expectAsync1((isValid) => expect(isValid, false)),
-    );
+    sut.emailErrorStream.listen(expectAsync1((e) => expect(e, 'error')));
+    sut.passwordErrorStream.listen(expectAsync1((e) => expect(e, null)));
+    sut.isFormValidStream.listen(expectAsync1((valid) => expect(valid, false)));
 
     //Calling each validation twice so the test can ensure the error will be emitted only once.
     sut.validateEmail(email);
@@ -125,17 +101,17 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should emit password error if validation fails', () async {
+  test('Should emit true on IsFormValidStream if validation succeeds',
+      () async {
     //This way of "expect" ensures the stream will not emit the same value more than once.
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
-    sut.passwordErrorStream.listen(
-      expectAsync1((error) => expect(error, null)),
-    );
+    sut.passwordErrorStream.listen(expectAsync1((e) => expect(e, null)));
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
     sut.validateEmail(email);
     //Necessary so that there is time to make the "expect later" catch de values.
     //It was necessary on the previous tests because the "expectAsync" takes care of this.
+    await Future.delayed(Duration.zero);
     sut.validatePassword(password);
   });
 }
