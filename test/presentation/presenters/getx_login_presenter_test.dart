@@ -10,11 +10,11 @@ import 'package:fordev/domain/usecases/usecases.dart';
 import 'package:fordev/presentation/protocols/protocols.dart';
 import 'package:fordev/presentation/presenters/presenters.dart';
 
-import 'stream_login_controller_test.mocks.dart';
+import 'getx_login_presenter_test.mocks.dart';
 
 @GenerateMocks([Validation, Authentication])
 void main() {
-  late StreamLoginPresenter sut;
+  late GetxLoginPresenter sut;
   late MockValidation validation;
   late MockAuthentication authentication;
   late String email;
@@ -40,7 +40,7 @@ void main() {
   setUp(() {
     validation = MockValidation();
     authentication = MockAuthentication();
-    sut = StreamLoginPresenter(
+    sut = GetxLoginPresenter(
       validation: validation,
       authentication: authentication,
     );
@@ -128,9 +128,6 @@ void main() {
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
     sut.validateEmail(email);
-    //Necessary so that there is time to make the "expect later" catch de values.
-    //It was necessary on the previous tests because the "expectAsync" takes care of this.
-    await Future.delayed(Duration.zero);
     sut.validatePassword(password);
   });
 
@@ -163,9 +160,7 @@ void main() {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
-    //For some reason, the fact of sut uses try/catch do catch de errors make the expectation using "emitsInOrder" fail. Only the last event emited is catched.
-    //Therefore, we are making only this simple assertion below. It's not perfect, but still ensures the loading will not be shown after authentication.
-    expectLater(sut.isLoadingStream, emits(false));
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1((e) {
       expect(e, 'Credenciais Inválidas');
     }));
@@ -180,20 +175,11 @@ void main() {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
-    //For some reason, the fact of sut uses try/catch do catch de errors make the expectation using "emitsInOrder" fail. Only the last event emited is catched.
-    //Therefore, we are making only this simple assertion below. It's not perfect, but still ensures the loading will not be shown after authentication.
-    expectLater(sut.isLoadingStream, emits(false));
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1((e) {
       expect(e, 'Algo errado aconteceu. Tente novamente em breve.');
     }));
 
     await sut.auth();
-  });
-
-  test('Should not emit new events after dispose', () {
-    expectLater(sut.emailErrorStream, neverEmits(null));
-
-    sut.dispose();
-    sut.validateEmail(email);
   });
 }

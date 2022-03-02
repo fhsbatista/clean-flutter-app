@@ -5,7 +5,8 @@ import 'package:mockito/mockito.dart';
 
 import 'package:fordev/validation/protocols/protocols.dart';
 import 'package:fordev/validation/validators/validators.dart';
-import 'validation_composite.mocks.dart';
+
+import 'validation_composite_test.mocks.dart';
 
 @GenerateMocks([FieldValidation])
 void main() {
