@@ -26,6 +26,16 @@ void main() {
 
     verify(secureStorage.write(key: key, value: value));
   });
+
+  test('Should throw if save secure throws', () async {
+    final exception = Exception('any error');
+    when(secureStorage.write(key: anyNamed('key'), value: anyNamed('value')))
+        .thenThrow(exception);
+
+    final future = sut.saveSecure(key: key, value: value);
+
+    expect(future, throwsA(exception));
+  });
 }
 
 class LocalStorageAdapter implements SaveSecureCacheStorage {
