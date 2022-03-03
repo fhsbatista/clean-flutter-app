@@ -12,13 +12,15 @@ import 'package:fordev/presentation/presenters/presenters.dart';
 
 import 'getx_login_presenter_test.mocks.dart';
 
-@GenerateMocks([Validation, Authentication])
+@GenerateMocks([Validation, Authentication, SaveCurrentAccount])
 void main() {
   late GetxLoginPresenter sut;
   late MockValidation validation;
   late MockAuthentication authentication;
+  late MockSaveCurrentAccount saveCurrentAccount;
   late String email;
   late String password;
+  late String token;
 
   PostExpectation mockValidationCall(String? field) => when(validation.validate(
         field: field ?? anyNamed('field'),
@@ -32,7 +34,7 @@ void main() {
 
   void mockAuthentication({String? field, String? value}) =>
       mockAuthenticationCall()
-          .thenAnswer((_) async => AccountEntity(token: faker.guid.guid()));
+          .thenAnswer((_) async => AccountEntity(token: token));
 
   void mockAuthenticationError(DomainError error) =>
       mockAuthenticationCall().thenThrow(error);
@@ -40,12 +42,15 @@ void main() {
   setUp(() {
     validation = MockValidation();
     authentication = MockAuthentication();
+    saveCurrentAccount = MockSaveCurrentAccount();
     sut = GetxLoginPresenter(
       validation: validation,
       authentication: authentication,
+      saveCurrentAccount: saveCurrentAccount,
     );
     email = faker.internet.email();
     password = faker.internet.password();
+    token = faker.guid.guid();
     mockValidation();
     mockAuthentication();
   });
@@ -142,6 +147,15 @@ void main() {
         AuthenticationParams(email: email, password: password),
       ),
     );
+  });
+
+  test('Should call SaveCurrentAccount with correct values', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    await sut.auth();
+
+    verify(saveCurrentAccount.save(AccountEntity(token: token))).called(1);
   });
 
   test('Should emit correct events on Authentication success', () async {
