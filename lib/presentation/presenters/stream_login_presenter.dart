@@ -13,6 +13,7 @@ class LoginState {
   String? passwordError;
   String? mainError;
   bool isLoading = false;
+  String? navigateTo;
 
   bool get isFormValid =>
       emailError == null &&
@@ -48,6 +49,9 @@ class StreamLoginPresenter implements LoginPresenter {
 
   Stream<String?> get mainErrorStream =>
       _controller.stream.map((state) => state.mainError).distinct();
+
+  Stream<String?> get navigateToStream =>
+      _controller.stream.map((state) => state.navigateTo).distinct();
 
   void _updateState() {
     if (_controller.isClosed) {
