@@ -10,13 +10,18 @@ import 'local_save_current_account_test.mocks.dart';
 
 @GenerateMocks([SaveSecureCacheStorage])
 void main() {
-  test('Should call SaveSecureCacheStorage with correct values', () async {
-    final saveSecureCacheStorage = MockSaveSecureCacheStorage();
-    final sut = LocalSaveCurrentAccount(
+  late LocalSaveCurrentAccount sut;
+  late MockSaveSecureCacheStorage saveSecureCacheStorage;
+  late AccountEntity account;
+
+  setUp(() {
+    saveSecureCacheStorage = MockSaveSecureCacheStorage();
+    sut = LocalSaveCurrentAccount(
       saveSecureCacheStorage: saveSecureCacheStorage,
     );
-    final account = AccountEntity(token: faker.guid.guid());
-
+    account = AccountEntity(token: faker.guid.guid());
+  });
+  test('Should call SaveSecureCacheStorage with correct values', () async {
     await sut.save(account);
 
     verify(saveSecureCacheStorage.saveSecure(
@@ -27,11 +32,6 @@ void main() {
 
   test('Should throw unexpected error if SaveSecureCacheStorage throws',
       () async {
-    final saveSecureCacheStorage = MockSaveSecureCacheStorage();
-    final sut = LocalSaveCurrentAccount(
-      saveSecureCacheStorage: saveSecureCacheStorage,
-    );
-    final account = AccountEntity(token: faker.guid.guid());
     when(saveSecureCacheStorage.saveSecure(
       key: anyNamed('key'),
       value: anyNamed('value'),
@@ -40,11 +40,6 @@ void main() {
     final future = sut.save(account);
 
     expect(future, throwsA(DomainError.unexpected));
-
-    verify(saveSecureCacheStorage.saveSecure(
-      key: 'token',
-      value: account.token,
-    ));
   });
 }
 
