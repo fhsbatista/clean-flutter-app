@@ -7,7 +7,7 @@ import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/usecases/usecases.dart';
 
 import 'package:fordev/data/http/http.dart';
-import 'package:fordev/data/usecases/remote_authentication.dart';
+import 'package:fordev/data/usecases/authentication/remote_authentication.dart';
 
 import 'remote_authentication_test.mocks.dart';
 
