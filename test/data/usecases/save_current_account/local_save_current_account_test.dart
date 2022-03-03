@@ -1,10 +1,12 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fordev/domain/entities/account_entity.dart';
-import 'package:fordev/domain/helpers/helpers.dart';
-import 'package:fordev/domain/usecases/usecases.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+
+import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
+import 'package:fordev/data/cache/cache.dart';
+import 'package:fordev/data/usecases/usecases.dart';
 
 import 'local_save_current_account_test.mocks.dart';
 
@@ -47,24 +49,3 @@ void main() {
   });
 }
 
-abstract class SaveSecureCacheStorage {
-  Future<void> saveSecure({String key, String value});
-}
-
-class LocalSaveCurrentAccount implements SaveCurrentAccount {
-  final SaveSecureCacheStorage saveSecureCacheStorage;
-
-  LocalSaveCurrentAccount({required this.saveSecureCacheStorage});
-
-  @override
-  Future<void> save(AccountEntity account) async {
-    try {
-      await saveSecureCacheStorage.saveSecure(
-        key: 'token',
-        value: account.token,
-      );
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
-  }
-}
