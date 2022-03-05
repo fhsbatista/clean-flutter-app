@@ -30,8 +30,8 @@ void main() {
     mockLoadCurrentAccount(AccountEntity(token: faker.guid.guid()));
   });
 
-  test('Should call LoadCurrentAccount', () {
-    sut.checkAccount();
+  test('Should call LoadCurrentAccount', () async {
+    await sut.checkAccount(delayInSeconds: 0);
 
     verify(loadCurrentAccount.load()).called(1);
   });
@@ -41,7 +41,7 @@ void main() {
       (page) => expect(page, '/surveys'),
     ));
 
-    await sut.checkAccount();
+    await sut.checkAccount(delayInSeconds: 0);
   });
 
   test('Should go to login page on LoadCurrentAccount returning null',
@@ -51,7 +51,7 @@ void main() {
       (page) => expect(page, '/login'),
     ));
 
-    await sut.checkAccount();
+    await sut.checkAccount(delayInSeconds: 0);
   });
 
   test('Should go to login page if LoadCurrentAccount throws', () async {
@@ -60,6 +60,6 @@ void main() {
       (page) => expect(page, '/login'),
     ));
 
-    await sut.checkAccount();
+    await sut.checkAccount(delayInSeconds: 0);
   });
 }
