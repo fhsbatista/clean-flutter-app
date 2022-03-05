@@ -26,7 +26,7 @@ void main() {
         getPages: [
           GetPage(
             name: '/',
-            page: () => SplashPage(presenter: presenter),
+            page: () => SplashPage(presenter),
           ),
           GetPage(
             name: '/any_route',

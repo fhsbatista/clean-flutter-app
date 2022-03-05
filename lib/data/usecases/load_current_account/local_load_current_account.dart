@@ -4,7 +4,7 @@ import '../../../domain/helpers/helpers.dart';
 import '../../../domain/usecases/usecases.dart';
 
 class LocalLoadCurrentAccount implements LoadCurrentAccount {
-  LocalLoadCurrentAccount(this.fetchSecureCacheStorage);
+  LocalLoadCurrentAccount({required this.fetchSecureCacheStorage});
 
   FetchSecureCacheStorage fetchSecureCacheStorage;
 

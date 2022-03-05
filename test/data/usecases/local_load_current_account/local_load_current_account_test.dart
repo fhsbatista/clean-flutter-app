@@ -26,7 +26,9 @@ void main() {
 
   setUp(() {
     fetchSecureCacheStorage = MockFetchSecureCacheStorage();
-    sut = LocalLoadCurrentAccount(fetchSecureCacheStorage);
+    sut = LocalLoadCurrentAccount(
+      fetchSecureCacheStorage: fetchSecureCacheStorage,
+    );
     token = faker.guid.guid();
     mockFetchSecure();
   });
@@ -49,7 +51,3 @@ void main() {
     expect(future, throwsA(DomainError.unexpected));
   });
 }
-
-
-
-

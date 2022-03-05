@@ -5,7 +5,7 @@ import 'splash_presenter.dart';
 
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({required this.presenter});
+  const SplashPage(this.presenter);
 
   final SplashPresenter presenter;
 
