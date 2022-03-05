@@ -4,9 +4,8 @@
 
 import 'dart:async' as _i3;
 
+import 'package:fordev/ui/pages/splash/splash_presenter.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-
-import 'splash_page_test.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

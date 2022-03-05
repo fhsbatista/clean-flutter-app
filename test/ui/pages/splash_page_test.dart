@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:fordev/ui/pages/pages.dart';
+
 import 'splash_page_test.mocks.dart';
 
 @GenerateMocks([SplashPresenter])
@@ -73,37 +75,4 @@ void main() {
     await tester.pump();
     expect(Get.currentRoute, '/');
   });
-}
-
-class SplashPage extends StatelessWidget {
-  const SplashPage({required this.presenter});
-
-  final SplashPresenter presenter;
-
-  @override
-  Widget build(BuildContext context) {
-    presenter.loadCurrentAccount();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('fordev'),
-      ),
-      body: Builder(
-        builder: (context) {
-          presenter.navigateToStream.listen((route) {
-            if (route?.isNotEmpty ?? false) {
-              Get.offAllNamed(route!);
-            }
-          });
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
-    );
-  }
-}
-
-abstract class SplashPresenter {
-  Stream<String?> get navigateToStream;
-  Future<void> loadCurrentAccount();
 }
