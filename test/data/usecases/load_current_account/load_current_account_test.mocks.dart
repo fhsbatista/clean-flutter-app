@@ -2,6 +2,8 @@
 // in fordev/test/data/usecases/load_current_account/load_current_account_test.dart.
 // Do not manually edit this file.
 
+import 'dart:async' as _i3;
+
 import 'package:mockito/mockito.dart' as _i1;
 
 import 'load_current_account_test.dart' as _i2;
@@ -26,7 +28,7 @@ class MockFetchSecureCacheStorage extends _i1.Mock
   }
 
   @override
-  void fetchSecure(String? key) =>
-      super.noSuchMethod(Invocation.method(#fetchSecure, [key]),
-          returnValueForMissingStub: null);
+  _i3.Future<String> fetchSecure(String? key) =>
+      (super.noSuchMethod(Invocation.method(#fetchSecure, [key]),
+          returnValue: Future<String>.value('')) as _i3.Future<String>);
 }
