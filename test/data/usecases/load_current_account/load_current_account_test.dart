@@ -1,11 +1,12 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
-import 'package:fordev/domain/usecases/usecases.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
+import 'package:fordev/data/cache/cache.dart';
+import 'package:fordev/data/usecases/usecases.dart';
 
 import 'load_current_account_test.mocks.dart';
 
@@ -49,21 +50,6 @@ void main() {
   });
 }
 
-class LocalLoadCurrentAccount implements LoadCurrentAccount {
-  LocalLoadCurrentAccount(this.fetchSecureCacheStorage);
 
-  FetchSecureCacheStorage fetchSecureCacheStorage;
 
-  Future<AccountEntity> load() async {
-    try {
-      final token = await fetchSecureCacheStorage.fetchSecure('token');
-      return AccountEntity(token: token);
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
-  }
-}
 
-abstract class FetchSecureCacheStorage {
-  Future<String> fetchSecure(String key);
-}
