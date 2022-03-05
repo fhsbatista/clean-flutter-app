@@ -1,3 +1,4 @@
+import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/domain/entities/account_entity.dart';
 import 'package:fordev/domain/usecases/load_current_account.dart';
@@ -13,11 +14,14 @@ void main() {
   late GetxSplashPresenter sut;
   late MockLoadCurrentAccount loadCurrentAccount;
 
+  void mockLoadCurrentAccount(AccountEntity? value) {
+    when(loadCurrentAccount.load()).thenAnswer((_) async => value);
+  }
+
   setUp(() {
     loadCurrentAccount = MockLoadCurrentAccount();
-    when(loadCurrentAccount.load())
-        .thenAnswer((_) async => AccountEntity(token: 'token'));
     sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
+    mockLoadCurrentAccount(AccountEntity(token: faker.guid.guid()));
   });
 
   test('Should call LoadCurrentAccount', () {
@@ -26,15 +30,19 @@ void main() {
     verify(loadCurrentAccount.load()).called(1);
   });
 
-  test('Should call LoadCurrentAccount', () async {
-    await sut.checkAccount();
-
-    verify(loadCurrentAccount.load()).called(1);
-  });
-
   test('Should go to surveys page on LoadCurrentAccount success', () async {
     sut.navigateToStream.listen(expectAsync1(
       (page) => expect(page, '/surveys'),
+    ));
+
+    await sut.checkAccount();
+  });
+
+  test('Should go to login page on LoadCurrentAccount returning null',
+      () async {
+    mockLoadCurrentAccount(null);
+    sut.navigateToStream.listen(expectAsync1(
+      (page) => expect(page, '/login'),
     ));
 
     await sut.checkAccount();
@@ -52,7 +60,7 @@ class GetxSplashPresenter implements SplashPresenter {
 
   @override
   Future<void> checkAccount() async {
-    await loadCurrentAccount.load();
-    _navigateTo.value = '/surveys';
+    final account = await loadCurrentAccount.load();
+    _navigateTo.value = account == null ? '/login' : '/surveys';
   }
 }
