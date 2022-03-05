@@ -51,7 +51,7 @@ void main() {
   testWidgets('Should call LoadCurrentAccount on page load', (tester) async {
     await loadPage(tester);
 
-    verify(presenter.loadCurrentAccount()).called(1);
+    verify(presenter.checkAccount()).called(1);
   });
 
   testWidgets('Should change page', (tester) async {
