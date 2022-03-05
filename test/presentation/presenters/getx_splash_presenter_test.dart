@@ -2,8 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/domain/entities/account_entity.dart';
 import 'package:fordev/domain/usecases/load_current_account.dart';
-import 'package:fordev/ui/pages/pages.dart';
-import 'package:get/get.dart';
+import 'package:fordev/presentation/presenters/presenters.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -63,24 +62,4 @@ void main() {
 
     await sut.checkAccount();
   });
-}
-
-class GetxSplashPresenter implements SplashPresenter {
-  GetxSplashPresenter({required this.loadCurrentAccount});
-
-  final LoadCurrentAccount loadCurrentAccount;
-
-  var _navigateTo = Rx<String?>(null);
-
-  Stream<String?> get navigateToStream => _navigateTo.stream;
-
-  @override
-  Future<void> checkAccount() async {
-    try {
-      final account = await loadCurrentAccount.load();
-      _navigateTo.value = account == null ? '/login' : '/surveys';
-    } catch (error) {
-      _navigateTo.value = '/login';
-    }
-  }
 }
