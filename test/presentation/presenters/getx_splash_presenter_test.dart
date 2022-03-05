@@ -19,10 +19,25 @@ void main() {
         .thenAnswer((_) async => AccountEntity(token: 'token'));
     sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
   });
+
   test('Should call LoadCurrentAccount', () {
     sut.checkAccount();
 
     verify(loadCurrentAccount.load()).called(1);
+  });
+
+  test('Should call LoadCurrentAccount', () async {
+    await sut.checkAccount();
+
+    verify(loadCurrentAccount.load()).called(1);
+  });
+
+  test('Should go to surveys page on LoadCurrentAccount success', () async {
+    sut.navigateToStream.listen(expectAsync1(
+      (page) => expect(page, '/surveys'),
+    ));
+
+    await sut.checkAccount();
   });
 }
 
@@ -37,6 +52,7 @@ class GetxSplashPresenter implements SplashPresenter {
 
   @override
   Future<void> checkAccount() async {
-    loadCurrentAccount.load();
+    await loadCurrentAccount.load();
+    _navigateTo.value = '/surveys';
   }
 }
