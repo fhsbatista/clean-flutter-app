@@ -8,7 +8,7 @@ import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/data/cache/cache.dart';
 import 'package:fordev/data/usecases/usecases.dart';
 
-import 'load_current_account_test.mocks.dart';
+import 'local_load_current_account_test.mocks.dart';
 
 @GenerateMocks([FetchSecureCacheStorage])
 void main() {
