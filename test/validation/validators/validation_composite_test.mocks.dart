@@ -2,6 +2,7 @@
 // in fordev/test/validation/validators/validation_composite_test.dart.
 // Do not manually edit this file.
 
+import 'package:fordev/presentation/protocols/protocols.dart' as _i3;
 import 'package:fordev/validation/protocols/field_validation.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -28,6 +29,7 @@ class MockFieldValidation extends _i1.Mock implements _i2.FieldValidation {
       (super.noSuchMethod(Invocation.getter(#field), returnValue: '')
           as String);
   @override
-  String? validate(String? value) =>
-      (super.noSuchMethod(Invocation.method(#validate, [value])) as String?);
+  _i3.ValidationError? validate(String? value) =>
+      (super.noSuchMethod(Invocation.method(#validate, [value]))
+          as _i3.ValidationError?);
 }

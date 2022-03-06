@@ -10,6 +10,9 @@ class I18n {
       case 'en':
         strings = EnUs();
         break;
+      case 'en_US':
+        strings = EnUs();
+        break;
       default:
         strings = PtBr();
         break;

@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fordev/ui/helpers/errors/errors.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -27,7 +28,7 @@ void main() {
         value: anyNamed('value'),
       ));
 
-  void mockValidation({String? field, String? value}) =>
+  void mockValidation({String? field, ValidationError? value}) =>
       mockValidationCall(field).thenReturn(value);
 
   PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
@@ -66,11 +67,27 @@ void main() {
     verify(validation.validate(field: 'email', value: email)).called(1);
   });
 
-  test('Should emit email error if validation fails', () {
-    mockValidation(value: 'any error');
+  test('Should emit invalid field error if email is invalid', () {
+    mockValidation(value: ValidationError.invalidField);
 
     //This way of "expect" ensures the stream will not emit the same value more than once.
-    sut.emailErrorStream.listen(expectAsync1((e) => expect(e, 'any error')));
+    sut.emailErrorStream.listen(expectAsync1(
+      (e) => expect(e, UIError.invalidField),
+    ));
+    sut.isFormValidStream.listen(expectAsync1((valid) => expect(valid, false)));
+
+    //Calling validation twice so the test can ensure the error will be emitted only once.
+    sut.validateEmail(email);
+    sut.validateEmail(email);
+  });
+
+  test('Should emit required field error if email is empty', () {
+    mockValidation(value: ValidationError.requiredField);
+
+    //This way of "expect" ensures the stream will not emit the same value more than once.
+    sut.emailErrorStream.listen(expectAsync1(
+      (e) => expect(e, UIError.requiredField),
+    ));
     sut.isFormValidStream.listen(expectAsync1((valid) => expect(valid, false)));
 
     //Calling validation twice so the test can ensure the error will be emitted only once.
@@ -94,11 +111,13 @@ void main() {
     verify(validation.validate(field: 'password', value: password)).called(1);
   });
 
-  test('Should emit password error if validation fails', () {
-    mockValidation(value: 'any error');
+  test('Should emit required field error if password is empty', () {
+    mockValidation(value: ValidationError.requiredField);
 
     //This way of "expect" ensures the stream will not emit the same value more than once.
-    sut.passwordErrorStream.listen(expectAsync1((e) => expect(e, 'any error')));
+    sut.passwordErrorStream.listen(expectAsync1(
+      (e) => expect(e, UIError.requiredField),
+    ));
     sut.isFormValidStream.listen(expectAsync1((valid) => expect(valid, false)));
 
     //Calling validation twice so the test can ensure the error will be emitted only once.
@@ -106,7 +125,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should emit password error if validation succeeds', () {
+  test('Should not emit password error if validation succeeds', () {
     //This way of "expect" ensures the stream will not emit the same value more than once.
     sut.passwordErrorStream.listen(expectAsync1((e) => expect(e, null)));
     sut.isFormValidStream.listen(expectAsync1((valid) => expect(valid, false)));
@@ -117,10 +136,12 @@ void main() {
   });
 
   test('Should emit password error if validation fails', () {
-    mockValidation(field: 'email', value: 'error');
+    mockValidation(field: 'email', value: ValidationError.requiredField);
 
     //This way of "expect" ensures the stream will not emit the same value more than once.
-    sut.emailErrorStream.listen(expectAsync1((e) => expect(e, 'error')));
+    sut.emailErrorStream.listen(expectAsync1(
+      (e) => expect(e, UIError.requiredField),
+    ));
     sut.passwordErrorStream.listen(expectAsync1((e) => expect(e, null)));
     sut.isFormValidStream.listen(expectAsync1((valid) => expect(valid, false)));
 
@@ -171,7 +192,7 @@ void main() {
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1((e) {
-      expect(e, 'Algo errado aconteceu. Tente novamente em breve.');
+      expect(e, UIError.unexpected);
     }));
 
     await sut.auth();
@@ -195,7 +216,7 @@ void main() {
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1((e) {
-      expect(e, 'Credenciais Inválidas');
+      expect(e, UIError.invalidCredentials);
     }));
 
     await sut.auth();
@@ -210,7 +231,7 @@ void main() {
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1((e) {
-      expect(e, 'Algo errado aconteceu. Tente novamente em breve.');
+      expect(e, UIError.unexpected);
     }));
 
     await sut.auth();

@@ -31,9 +31,10 @@ class MockValidation extends _i1.Mock implements _i3.Validation {
   }
 
   @override
-  String? validate({String? field, String? value}) => (super.noSuchMethod(
-          Invocation.method(#validate, [], {#field: field, #value: value}))
-      as String?);
+  _i3.ValidationError? validate({String? field, String? value}) =>
+      (super.noSuchMethod(
+              Invocation.method(#validate, [], {#field: field, #value: value}))
+          as _i3.ValidationError?);
 }
 
 /// A class which mocks [Authentication].

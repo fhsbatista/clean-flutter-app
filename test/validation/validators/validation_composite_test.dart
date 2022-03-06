@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:fordev/presentation/protocols/protocols.dart';
 import 'package:fordev/validation/protocols/protocols.dart';
 import 'package:fordev/validation/validators/validators.dart';
 
@@ -15,15 +16,15 @@ void main() {
   late MockFieldValidation validation2;
   late MockFieldValidation validation3;
 
-  void mockValidation1(String? error) {
+  void mockValidation1(ValidationError? error) {
     when(validation1.validate(any)).thenReturn(error);
   }
 
-  void mockValidation2(String? error) {
+  void mockValidation2(ValidationError? error) {
     when(validation2.validate(any)).thenReturn(error);
   }
 
-  void mockValidation3(String? error) {
+  void mockValidation3(ValidationError? error) {
     when(validation3.validate(any)).thenReturn(error);
   }
 
@@ -40,9 +41,7 @@ void main() {
     sut = ValidationComposite([validation1, validation2, validation3]);
   });
 
-  test('Should return null if all validations returns null or empty', () {
-    mockValidation2('');
-
+  test('Should return null if all validations returns null', () {
     final error = sut.validate(field: 'any field', value: 'any value');
 
     expect(error, null);
@@ -51,10 +50,10 @@ void main() {
   test('Should return the first error found by validations', () {
     mockValidation1(null);
     mockValidation2(null);
-    mockValidation3('error 3');
+    mockValidation3(ValidationError.invalidField);
 
     final error = sut.validate(field: 'other field', value: 'any value');
 
-    expect(error, 'error 3');
+    expect(error, ValidationError.invalidField);
   });
 }

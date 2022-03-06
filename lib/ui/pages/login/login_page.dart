@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fordev/utils/i18n/i18n.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../helpers/i18n/i18n.dart';
 import '../pages.dart';
 import '../../components/components.dart';
+import '../../helpers/errors/errors.dart';
 import 'components/components.dart';
 
 class LoginPage extends StatefulWidget {
@@ -45,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
 
           widget.presenter?.mainErrorStream.listen((error) {
             if (error != null) {
-              showErrorMessage(context, error);
+              showErrorMessage(context, error.description);
             }
           });
 

@@ -4,6 +4,7 @@
 
 import 'dart:async' as _i3;
 
+import 'package:fordev/ui/helpers/errors/errors.dart' as _i4;
 import 'package:fordev/ui/pages/login/login_presenter.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -26,17 +27,17 @@ class MockLoginPresenter extends _i1.Mock implements _i2.LoginPresenter {
   }
 
   @override
-  _i3.Stream<String?> get emailErrorStream =>
-      (super.noSuchMethod(Invocation.getter(#emailErrorStream),
-          returnValue: Stream<String?>.empty()) as _i3.Stream<String?>);
+  _i3.Stream<_i4.UIError?> get emailErrorStream => (super.noSuchMethod(
+      Invocation.getter(#emailErrorStream),
+      returnValue: Stream<_i4.UIError?>.empty()) as _i3.Stream<_i4.UIError?>);
   @override
-  _i3.Stream<String?> get passwordErrorStream =>
-      (super.noSuchMethod(Invocation.getter(#passwordErrorStream),
-          returnValue: Stream<String?>.empty()) as _i3.Stream<String?>);
+  _i3.Stream<_i4.UIError?> get passwordErrorStream => (super.noSuchMethod(
+      Invocation.getter(#passwordErrorStream),
+      returnValue: Stream<_i4.UIError?>.empty()) as _i3.Stream<_i4.UIError?>);
   @override
-  _i3.Stream<String?> get mainErrorStream =>
-      (super.noSuchMethod(Invocation.getter(#mainErrorStream),
-          returnValue: Stream<String?>.empty()) as _i3.Stream<String?>);
+  _i3.Stream<_i4.UIError?> get mainErrorStream => (super.noSuchMethod(
+      Invocation.getter(#mainErrorStream),
+      returnValue: Stream<_i4.UIError?>.empty()) as _i3.Stream<_i4.UIError?>);
   @override
   _i3.Stream<bool> get isFormValidStream =>
       (super.noSuchMethod(Invocation.getter(#isFormValidStream),
