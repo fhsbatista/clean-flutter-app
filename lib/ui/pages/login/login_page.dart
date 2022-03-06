@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fordev/utils/i18n/i18n.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                             TextButton.icon(
                               onPressed: () {},
                               icon: Icon(Icons.person),
-                              label: Text('Criar conta'),
+                              label: Text(I18n.strings.addAccount),
                             ),
                           ],
                         ),
