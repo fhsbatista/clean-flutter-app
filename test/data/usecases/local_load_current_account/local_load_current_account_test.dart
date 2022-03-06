@@ -19,8 +19,8 @@ void main() {
   PostExpectation mockFetchSecureCall() =>
       when(fetchSecureCacheStorage.fetchSecure(any));
 
-  void mockFetchSecure() =>
-      mockFetchSecureCall().thenAnswer((_) async => token);
+  void mockFetchSecure(String? value) =>
+      mockFetchSecureCall().thenAnswer((_) async => value);
 
   void mockFetchSecureError() => mockFetchSecureCall().thenThrow(Exception());
 
@@ -30,7 +30,7 @@ void main() {
       fetchSecureCacheStorage: fetchSecureCacheStorage,
     );
     token = faker.guid.guid();
-    mockFetchSecure();
+    mockFetchSecure(token);
   });
 
   test('Should call FetchSecureCacheStorage with correct value', () async {
@@ -42,6 +42,12 @@ void main() {
   test('Should return an AccountEntity', () async {
     final account = await sut.load();
     expect(account, AccountEntity(token: token));
+  });
+
+  test('Should return null if storage returns null', () async {
+    mockFetchSecure(null);
+    final account = await sut.load();
+    expect(account, null);
   });
 
   test('Should throw UnexpectedError if FetchSecureCacheStorage throws',
