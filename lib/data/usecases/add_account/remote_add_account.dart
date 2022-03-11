@@ -1,8 +1,6 @@
-import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
 import '../../../domain/usecases/add_account.dart';
 
-import '../../models/models.dart';
 import '../../http/http.dart';
 
 class RemoteAddAccount {
@@ -15,11 +13,15 @@ class RemoteAddAccount {
   });
 
   Future<void> add(AddAccountParams params) async {
-    await httpClient.request(
-      url: url,
-      method: 'post',
-      body: RemoteAddAccountParams.fromDomain(params).toJson(),
-    );
+    try {
+      await httpClient.request(
+        url: url,
+        method: 'post',
+        body: RemoteAddAccountParams.fromDomain(params).toJson(),
+      );
+    } catch (error) {
+      throw DomainError.unexpected;
+    }
   }
 }
 
