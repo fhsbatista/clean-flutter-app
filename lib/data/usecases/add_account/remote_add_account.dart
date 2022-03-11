@@ -1,3 +1,5 @@
+import 'package:fordev/data/models/models.dart';
+
 import '../../../domain/helpers/helpers.dart';
 import '../../../domain/usecases/add_account.dart';
 
@@ -19,8 +21,10 @@ class RemoteAddAccount {
         method: 'post',
         body: RemoteAddAccountParams.fromDomain(params).toJson(),
       );
-    } catch (error) {
-      throw DomainError.unexpected;
+    } on HttpError catch (error) {
+      throw error == HttpError.forbidden
+          ? DomainError.emailInUse
+          : DomainError.unexpected;
     }
   }
 }
