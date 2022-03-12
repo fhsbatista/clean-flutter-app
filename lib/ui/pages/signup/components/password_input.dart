@@ -17,6 +17,7 @@ class PasswordInput extends StatelessWidget {
           onChanged: presenter.validatePassword,
           decoration: InputDecoration(
             labelText: I18n.strings.password,
+            errorText: snapshot.data?.description,
             icon: Icon(
               Icons.lock,
               color: Theme.of(context).primaryColorLight,

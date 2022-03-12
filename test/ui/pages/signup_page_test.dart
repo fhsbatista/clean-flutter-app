@@ -218,5 +218,39 @@ void main() {
     });
   });
 
+  group('password field errors', () {
+    testWidgets('Should present error if password is invalid', (tester) async {
+      await loadPage(tester);
+
+      passwordErrorController.add(UIError.invalidField);
+      await tester.pump();
+
+      expect(find.text('Campo inválido'), findsOneWidget);
+    });
+
+    testWidgets('Should present error if password is empty', (tester) async {
+      await loadPage(tester);
+
+      passwordErrorController.add(UIError.requiredField);
+      await tester.pump();
+
+      expect(find.text('Campo obrigatório'), findsOneWidget);
+    });
+
+    testWidgets('Should present no error if password valid', (tester) async {
+      await loadPage(tester);
+
+      passwordErrorController.add(null);
+      await tester.pump();
+
+      expect(
+        find.descendant(
+          of: find.bySemanticsLabel(I18n.strings.password),
+          matching: find.byType(Text),
+        ),
+        findsOneWidget,
+      );
+    });
+  });
   
 }
