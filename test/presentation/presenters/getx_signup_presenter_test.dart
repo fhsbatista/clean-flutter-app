@@ -174,10 +174,13 @@ void main() {
   group('passwordConfirmation validation', () {
     test('Should call validation with correct passwordConfirmation', () async {
       sut.validatePasswordConfirmation(passwordConfirmation);
-      verify(validation.validate(field: 'passwordConfirmation', value: passwordConfirmation)).called(1);
+      verify(validation.validate(
+              field: 'passwordConfirmation', value: passwordConfirmation))
+          .called(1);
     });
 
-    test('Should emit invalid field error if passwordConfirmation is invalid', () {
+    test('Should emit invalid field error if passwordConfirmation is invalid',
+        () {
       mockValidation(value: ValidationError.invalidField);
 
       sut.passwordConfirmationErrorStream.listen(expectAsync1(
@@ -191,7 +194,8 @@ void main() {
       sut.validatePasswordConfirmation(passwordConfirmation);
     });
 
-    test('Should emit required field error if passwordConfirmation is empty', () {
+    test('Should emit required field error if passwordConfirmation is empty',
+        () {
       mockValidation(value: ValidationError.requiredField);
 
       sut.passwordConfirmationErrorStream.listen(expectAsync1(
@@ -206,7 +210,8 @@ void main() {
     });
 
     test('Should emit null if validation succeeds', () {
-      sut.passwordConfirmationErrorStream.listen(expectAsync1((e) => expect(e, null)));
+      sut.passwordConfirmationErrorStream
+          .listen(expectAsync1((e) => expect(e, null)));
       sut.isFormValidStream.listen(
         expectAsync1((valid) => expect(valid, false)),
       );
@@ -214,5 +219,15 @@ void main() {
       sut.validatePasswordConfirmation(passwordConfirmation);
       sut.validatePasswordConfirmation(passwordConfirmation);
     });
+  });
+
+  test('Should emit true on IsFormValidStream if validation succeeds',
+      () async {
+    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
   });
 }
