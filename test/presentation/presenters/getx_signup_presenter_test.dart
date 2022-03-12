@@ -1,5 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fordev/domain/entities/account_entity.dart';
+import 'package:fordev/domain/usecases/add_account.dart';
 import 'package:fordev/ui/helpers/errors/errors.dart';
 import 'package:mockito/annotations.dart';
 
@@ -9,10 +11,11 @@ import 'package:mockito/mockito.dart';
 
 import 'getx_signup_presenter_test.mocks.dart';
 
-@GenerateMocks([Validation])
+@GenerateMocks([Validation, AddAccount])
 void main() {
   late GetxSignUpPresenter sut;
   late MockValidation validation;
+  late MockAddAccount addAccount;
   late String name;
   late String email;
   late String password;
@@ -26,14 +29,21 @@ void main() {
   void mockValidation({String? field, ValidationError? value}) =>
       mockValidationCall(field).thenReturn(value);
 
+  PostExpectation mockAddAccountCall() => when(addAccount.add(any));
+
+  void mockAddAccount() => mockAddAccountCall()
+      .thenAnswer((_) async => AccountEntity(token: faker.guid.guid()));
+
   setUp(() {
     name = faker.person.name();
     email = faker.internet.email();
     password = faker.internet.password();
     passwordConfirmation = faker.internet.password();
+    addAccount = MockAddAccount();
     validation = MockValidation();
-    sut = GetxSignUpPresenter(validation: validation);
+    sut = GetxSignUpPresenter(validation: validation, addAccount: addAccount);
     mockValidation();
+    mockAddAccount();
   });
 
   group('name validation', () {
@@ -229,5 +239,25 @@ void main() {
     sut.validateEmail(email);
     sut.validatePassword(password);
     sut.validatePasswordConfirmation(passwordConfirmation);
+  });
+
+  test('Should call AddAccount with correct values', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    await sut.signUp();
+
+    verify(
+      addAccount.add(
+        AddAccountParams(
+          name: name,
+          email: email,
+          password: password,
+          passwordConfirmation: passwordConfirmation,
+        ),
+      ),
+    );
   });
 }
