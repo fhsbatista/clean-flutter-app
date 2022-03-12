@@ -23,6 +23,7 @@ void main() {
   late StreamController<bool> isFormValidController;
   late StreamController<bool> isLoadingController;
   late StreamController<UIError?> mainErrorController;
+  late StreamController<String?> navigateToController;
 
   void initStreams() {
     nameErrorController = StreamController<UIError?>();
@@ -32,6 +33,7 @@ void main() {
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
     mainErrorController = StreamController<UIError?>();
+    navigateToController = StreamController<String?>();
   }
 
   void mockStreams() {
@@ -50,6 +52,8 @@ void main() {
         .thenAnswer((_) => isLoadingController.stream);
     when(presenter.mainErrorStream)
         .thenAnswer((_) => mainErrorController.stream);
+    when(presenter.navigateToStream)
+        .thenAnswer((_) => navigateToController.stream);
   }
 
   void closeStreams() {
@@ -60,6 +64,7 @@ void main() {
     isFormValidController.close();
     isLoadingController.close();
     mainErrorController.close();
+    navigateToController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -387,6 +392,21 @@ void main() {
       );
     });
   });
+
+  group('navigation', () {
+    testWidgets('Should change page on navigateTo events', (tester) async {
+      await loadPage(tester);
+
+      navigateToController.add('/fake_route');
+
+      //Settle so that the test waits to animation ends
+      await tester.pumpAndSettle();
+
+      expect(Get.currentRoute, '/fake_route');
+      expect(find.text('fake page'), findsOneWidget);
+    });
+  });
+
   testWidgets('Should call presenter dispose method on widget dispose',
       (tester) async {
     await loadPage(tester);
