@@ -22,6 +22,7 @@ void main() {
   late StreamController<UIError?> passwordConfirmationErrorController;
   late StreamController<bool> isFormValidController;
   late StreamController<bool> isLoadingController;
+  late StreamController<UIError?> mainErrorController;
 
   void initStreams() {
     nameErrorController = StreamController<UIError?>();
@@ -30,6 +31,7 @@ void main() {
     passwordConfirmationErrorController = StreamController<UIError?>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
+    mainErrorController = StreamController<UIError?>();
   }
 
   void mockStreams() {
@@ -46,6 +48,8 @@ void main() {
         .thenAnswer((_) => isFormValidController.stream);
     when(presenter.isLoadingStream)
         .thenAnswer((_) => isLoadingController.stream);
+    when(presenter.mainErrorStream)
+        .thenAnswer((_) => mainErrorController.stream);
   }
 
   void closeStreams() {
@@ -55,6 +59,7 @@ void main() {
     passwordConfirmationErrorController.close();
     isFormValidController.close();
     isLoadingController.close();
+    mainErrorController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -359,6 +364,17 @@ void main() {
     });
   });
 
+  group('error messages', () {
+    testWidgets('Should present error message if signup fails',
+        (tester) async {
+      await loadPage(tester);
+
+      mainErrorController.add(UIError.emailInUse);
+      await tester.pump();
+
+      expect(find.text(I18n.strings.msgEmailInUse), findsOneWidget);
+    });
+  });
   testWidgets('Should call presenter dispose method on widget dispose',
       (tester) async {
     await loadPage(tester);

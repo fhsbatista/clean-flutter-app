@@ -52,6 +52,10 @@ class MockSignUpPresenter extends _i1.Mock implements _i2.SignUpPresenter {
       (super.noSuchMethod(Invocation.getter(#isLoadingStream),
           returnValue: Stream<bool>.empty()) as _i3.Stream<bool>);
   @override
+  _i3.Stream<_i4.UIError?> get mainErrorStream => (super.noSuchMethod(
+      Invocation.getter(#mainErrorStream),
+      returnValue: Stream<_i4.UIError?>.empty()) as _i3.Stream<_i4.UIError?>);
+  @override
   void validateName(String? name) =>
       super.noSuchMethod(Invocation.method(#validateName, [name]),
           returnValueForMissingStub: null);

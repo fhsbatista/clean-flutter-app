@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../pages.dart';
 
+import '../../helpers/errors/errors.dart';
 import '../../helpers/i18n/i18n.dart';
 import '../../components/components.dart';
 
@@ -43,7 +44,13 @@ class _SignUpPageState extends State<SignUpPage> {
               hideLoading(context);
             }
           });
-          
+
+          widget.presenter?.mainErrorStream.listen((error) {
+            if (error != null) {
+              showErrorMessage(context, error.description);
+            }
+          });
+
           return GestureDetector(
             onTap: _hideKeyboard,
             child: SingleChildScrollView(
