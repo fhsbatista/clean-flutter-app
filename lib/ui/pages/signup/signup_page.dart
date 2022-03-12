@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../pages.dart';
 
 import '../../helpers/i18n/i18n.dart';
 import '../../components/components.dart';
@@ -6,6 +9,10 @@ import '../../components/components.dart';
 import 'components/components.dart';
 
 class SignUpPage extends StatefulWidget {
+  final SignUpPresenter? presenter;
+
+  SignUpPage(this.presenter);
+
   @override
   State<SignUpPage> createState() => _SignUpPageState();
 }
@@ -34,24 +41,27 @@ class _SignUpPageState extends State<SignUpPage> {
                   Headline1(text: I18n.strings.addAccount),
                   Padding(
                     padding: const EdgeInsets.all(32),
-                    child: Form(
-                      child: Column(
-                        children: [
-                          NameInput(),
-                          const SizedBox(height: 8),
-                          EmailInput(),
-                          const SizedBox(height: 8),
-                          PasswordInput(),
-                          const SizedBox(height: 8),
-                          PasswordConfirmationInput(),
-                          const SizedBox(height: 32),
-                          SignUpButton(),
-                          TextButton.icon(
-                            onPressed: () {},
-                            icon: Icon(Icons.exit_to_app),
-                            label: Text(I18n.strings.addAccount),
-                          ),
-                        ],
+                    child: Provider(
+                      create: (context) => widget.presenter,
+                      child: Form(
+                        child: Column(
+                          children: [
+                            NameInput(),
+                            const SizedBox(height: 8),
+                            EmailInput(),
+                            const SizedBox(height: 8),
+                            PasswordInput(),
+                            const SizedBox(height: 8),
+                            PasswordConfirmationInput(),
+                            const SizedBox(height: 32),
+                            SignUpButton(),
+                            TextButton.icon(
+                              onPressed: () {},
+                              icon: Icon(Icons.exit_to_app),
+                              label: Text(I18n.strings.addAccount),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   )

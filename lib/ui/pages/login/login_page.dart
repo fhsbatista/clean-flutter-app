@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../../helpers/i18n/i18n.dart';
 import '../pages.dart';
-import '../../components/components.dart';
+import '../../helpers/i18n/i18n.dart';
 import '../../helpers/errors/errors.dart';
+import '../../components/components.dart';
+
 import 'components/components.dart';
 
 class LoginPage extends StatefulWidget {
