@@ -18,6 +18,12 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  @override
+  void dispose() {
+    widget.presenter?.dispose();
+    super.dispose();
+  }
+
   void _hideKeyboard() {
     final currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus) {
