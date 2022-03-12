@@ -15,6 +15,7 @@ void main() {
   late MockValidation validation;
   late String name;
   late String email;
+  late String password;
 
   PostExpectation mockValidationCall(String? field) => when(validation.validate(
         field: field ?? anyNamed('field'),
@@ -27,6 +28,7 @@ void main() {
   setUp(() {
     name = faker.person.name();
     email = faker.internet.email();
+    password = faker.internet.password();
     validation = MockValidation();
     sut = GetxSignUpPresenter(validation: validation);
     mockValidation();
@@ -119,6 +121,51 @@ void main() {
 
       sut.validateEmail(email);
       sut.validateEmail(email);
+    });
+  });
+
+  group('password validation', () {
+    test('Should call validation with correct password', () async {
+      sut.validatePassword(password);
+      verify(validation.validate(field: 'password', value: password)).called(1);
+    });
+
+    test('Should emit invalid field error if password is invalid', () {
+      mockValidation(value: ValidationError.invalidField);
+
+      sut.passwordErrorStream.listen(expectAsync1(
+        (e) => expect(e, UIError.invalidField),
+      ));
+      sut.isFormValidStream.listen(
+        expectAsync1((valid) => expect(valid, false)),
+      );
+
+      sut.validatePassword(password);
+      sut.validatePassword(password);
+    });
+
+    test('Should emit required field error if password is empty', () {
+      mockValidation(value: ValidationError.requiredField);
+
+      sut.passwordErrorStream.listen(expectAsync1(
+        (e) => expect(e, UIError.requiredField),
+      ));
+      sut.isFormValidStream.listen(
+        expectAsync1((valid) => expect(valid, false)),
+      );
+
+      sut.validatePassword(password);
+      sut.validatePassword(password);
+    });
+
+    test('Should emit null if validation succeeds', () {
+      sut.passwordErrorStream.listen(expectAsync1((e) => expect(e, null)));
+      sut.isFormValidStream.listen(
+        expectAsync1((valid) => expect(valid, false)),
+      );
+
+      sut.validatePassword(name);
+      sut.validatePassword(name);
     });
   });
 }
