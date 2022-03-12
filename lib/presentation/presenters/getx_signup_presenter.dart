@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:get/get.dart';
 
 import '../protocols/validation.dart';
@@ -28,6 +29,7 @@ class GetxSignUpPresenter extends GetxController {
   var _passwordError = Rx<UIError?>(null);
   var _passwordConfirmationError = Rx<UIError?>(null);
   var _isFormValid = false.obs;
+  var _mainError = Rx<UIError?>(null);
 
   Stream<UIError?> get nameErrorStream => _nameError.stream;
   Stream<UIError?> get emailErrorStream => _emailError.stream;
@@ -35,6 +37,7 @@ class GetxSignUpPresenter extends GetxController {
   Stream<UIError?> get passwordConfirmationErrorStream =>
       _passwordConfirmationError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<UIError?> get mainErrorStream => _mainError.stream;
 
   void validateName(String name) {
     _name = name;
@@ -87,14 +90,18 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   Future<void> signUp() async {
-    final params = AddAccountParams(
-      name: _name,
-      email: _email,
-      password: _password,
-      passwordConfirmation: _passwordConfirmation,
-    );
-    final account = await addAccount.add(params);
-    saveCurrentAccount.save(account);
+    try {
+      final params = AddAccountParams(
+        name: _name,
+        email: _email,
+        password: _password,
+        passwordConfirmation: _passwordConfirmation,
+      );
+      final account = await addAccount.add(params);
+      saveCurrentAccount.save(account);
+    } on DomainError catch (_) {
+      _mainError.value = UIError.unexpected;
+    }
   }
 
   void dispose() {

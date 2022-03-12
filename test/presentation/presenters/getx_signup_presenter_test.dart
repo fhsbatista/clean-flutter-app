@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
@@ -43,6 +44,9 @@ void main() {
 
   void mockSaveCurrentAccount() => mockSaveCurrentAccountCall()
       .thenAnswer((_) async => AccountEntity(token: token));
+
+  void mockSaveCurrentAccountError() =>
+      mockSaveCurrentAccountCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
     name = faker.person.name();
@@ -287,5 +291,19 @@ void main() {
     await sut.signUp();
 
     verify(saveCurrentAccount.save(AccountEntity(token: token))).called(1);
+  });
+
+  test('Should emit Unexpected error on SaveCurrentAccount failure', () async {
+    mockSaveCurrentAccountError();
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    sut.mainErrorStream.listen(expectAsync1((e) {
+      expect(e, UIError.unexpected);
+    }));
+
+    await sut.signUp();
   });
 }
