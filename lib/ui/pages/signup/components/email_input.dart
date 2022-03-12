@@ -17,6 +17,7 @@ class EmailInput extends StatelessWidget {
           onChanged: presenter.validateEmail,
           decoration: InputDecoration(
             labelText: I18n.strings.email,
+            errorText: snapshot.data?.description,
             icon: Icon(
               Icons.email,
               color: Theme.of(context).primaryColorLight,

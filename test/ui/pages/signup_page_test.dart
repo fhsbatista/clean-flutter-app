@@ -147,4 +147,39 @@ void main() {
     );
     verify(presenter.validatePasswordConfirmation(password));
   });
+
+  group('email field errors', () {
+    testWidgets('Should present error if email is invalid', (tester) async {
+      await loadPage(tester);
+
+      emailErrorController.add(UIError.invalidField);
+      await tester.pump();
+
+      expect(find.text('Campo inválido'), findsOneWidget);
+    });
+
+    testWidgets('Should present error if email is empty', (tester) async {
+      await loadPage(tester);
+
+      emailErrorController.add(UIError.requiredField);
+      await tester.pump();
+
+      expect(find.text('Campo obrigatório'), findsOneWidget);
+    });
+
+    testWidgets('Should present no error if email valid', (tester) async {
+      await loadPage(tester);
+
+      emailErrorController.add(null);
+      await tester.pump();
+
+      expect(
+        find.descendant(
+          of: find.bySemanticsLabel(I18n.strings.email),
+          matching: find.byType(Text),
+        ),
+        findsOneWidget,
+      );
+    });
+  });
 }
