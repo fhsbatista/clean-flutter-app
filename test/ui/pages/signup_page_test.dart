@@ -308,14 +308,28 @@ void main() {
     });
 
     testWidgets('Should disable button if form is not valid', (tester) async {
+      await loadPage(tester);
+
+      isFormValidController.add(false);
+      await tester.pump();
+
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(button.onPressed, isNull);
+    });
+  });
+
+  testWidgets('Should call signUp on form submit', (tester) async {
     await loadPage(tester);
 
-    isFormValidController.add(false);
+    isFormValidController.add(true);
+    await tester.pump();
+    final button = find.byType(ElevatedButton);
+    //Sometimes errors can happend cuz the widget is not visible. This line of code prevents this.
+    await tester.ensureVisible(button);
+    await tester.tap(button);
     await tester.pump();
 
-    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-    expect(button.onPressed, isNull);
-  });
+    verify(presenter.signUp()).called(1);
   });
   testWidgets('Should call presenter dispose method on widget dispose',
       (tester) async {
