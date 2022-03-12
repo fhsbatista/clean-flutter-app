@@ -365,14 +365,26 @@ void main() {
   });
 
   group('error messages', () {
-    testWidgets('Should present error message if signup fails',
-        (tester) async {
+    testWidgets('Should present error message if signup fails', (tester) async {
       await loadPage(tester);
 
       mainErrorController.add(UIError.emailInUse);
       await tester.pump();
 
       expect(find.text(I18n.strings.msgEmailInUse), findsOneWidget);
+    });
+
+    testWidgets('Should present error message if signup throws',
+        (tester) async {
+      await loadPage(tester);
+
+      mainErrorController.add(UIError.unexpected);
+      await tester.pump();
+
+      expect(
+        find.text(I18n.strings.msgUnexpectedError),
+        findsOneWidget,
+      );
     });
   });
   testWidgets('Should call presenter dispose method on widget dispose',
