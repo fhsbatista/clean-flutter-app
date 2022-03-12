@@ -7,6 +7,10 @@ class EnUs implements Translations {
   String get msgUnexpectedError => 'Something went wrong. Try again later.';
 
   String get addAccount => 'Create Account';
+  String get name => 'Name';
+  String get email => 'Email';
+  String get password => 'Password';
+  String get confirmPassword => 'Confirm password';
 
 
 }

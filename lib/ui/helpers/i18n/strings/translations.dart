@@ -5,4 +5,8 @@ abstract class Translations {
   String get msgUnexpectedError;
 
   String get addAccount;
+  String get name;
+  String get email;
+  String get password;
+  String get confirmPassword;
 }

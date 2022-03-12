@@ -7,6 +7,8 @@ class PtBr implements Translations {
   String get msgUnexpectedError => 'Algo errado aconteceu. Tente novamente em breve.';
 
   String get addAccount => 'Criar conta';
-
-
+  String get name => 'Nome';
+  String get email => 'Email';
+  String get password => 'Senha';
+  String get confirmPassword => 'Confirmar Senha';
 }

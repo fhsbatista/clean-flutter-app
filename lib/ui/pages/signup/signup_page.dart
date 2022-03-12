@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+
+import '../../helpers/i18n/i18n.dart';
+import '../../components/components.dart';
+
+import 'components/components.dart';
+
+class SignUpPage extends StatefulWidget {
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  void _hideKeyboard() {
+    final currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Builder(
+        builder: (context) {
+          return GestureDetector(
+            onTap: _hideKeyboard,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  LoginHeader(),
+                  const SizedBox(height: 32),
+                  Headline1(text: I18n.strings.addAccount),
+                  Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Form(
+                      child: Column(
+                        children: [
+                          NameInput(),
+                          const SizedBox(height: 8),
+                          EmailInput(),
+                          const SizedBox(height: 8),
+                          PasswordInput(),
+                          const SizedBox(height: 8),
+                          PasswordConfirmationInput(),
+                          const SizedBox(height: 32),
+                          SignUpButton(),
+                          TextButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.exit_to_app),
+                            label: Text(I18n.strings.addAccount),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
