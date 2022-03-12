@@ -13,6 +13,7 @@ import 'getx_signup_presenter_test.mocks.dart';
 void main() {
   late GetxSignUpPresenter sut;
   late MockValidation validation;
+  late String name;
   late String email;
 
   PostExpectation mockValidationCall(String? field) => when(validation.validate(
@@ -24,16 +25,61 @@ void main() {
       mockValidationCall(field).thenReturn(value);
 
   setUp(() {
+    name = faker.person.name();
     email = faker.internet.email();
     validation = MockValidation();
     sut = GetxSignUpPresenter(validation: validation);
     mockValidation();
   });
 
+  group('name validation', () {
+    test('Should call validation with correct name', () async {
+      sut.validateName(name);
+      verify(validation.validate(field: 'name', value: name)).called(1);
+    });
+
+    test('Should emit invalid field error if name is invalid', () {
+      mockValidation(value: ValidationError.invalidField);
+
+      sut.nameErrorStream.listen(expectAsync1(
+        (e) => expect(e, UIError.invalidField),
+      ));
+      sut.isFormValidStream.listen(
+        expectAsync1((valid) => expect(valid, false)),
+      );
+
+      sut.validateName(name);
+      sut.validateName(name);
+    });
+
+    test('Should emit required field error if name is empty', () {
+      mockValidation(value: ValidationError.requiredField);
+
+      sut.nameErrorStream.listen(expectAsync1(
+        (e) => expect(e, UIError.requiredField),
+      ));
+      sut.isFormValidStream.listen(
+        expectAsync1((valid) => expect(valid, false)),
+      );
+
+      sut.validateName(name);
+      sut.validateName(name);
+    });
+
+    test('Should emit null if validation succeeds', () {
+      sut.nameErrorStream.listen(expectAsync1((e) => expect(e, null)));
+      sut.isFormValidStream.listen(
+        expectAsync1((valid) => expect(valid, false)),
+      );
+
+      sut.validateName(name);
+      sut.validateName(name);
+    });
+  });
+
   group('email validation', () {
     test('Should call validation with correct email', () async {
       sut.validateEmail(email);
-      verify(sut.validateEmail(email)).called(1);
       verify(validation.validate(field: 'email', value: email)).called(1);
     });
 
