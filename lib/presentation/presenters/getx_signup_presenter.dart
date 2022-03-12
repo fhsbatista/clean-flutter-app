@@ -10,10 +10,12 @@ import '../../ui/helpers/errors/errors.dart';
 class GetxSignUpPresenter extends GetxController {
   final Validation validation;
   final AddAccount addAccount;
+  final SaveCurrentAccount saveCurrentAccount;
 
   GetxSignUpPresenter({
     required this.validation,
     required this.addAccount,
+    required this.saveCurrentAccount,
   });
 
   String _name = '';
@@ -91,7 +93,8 @@ class GetxSignUpPresenter extends GetxController {
       password: _password,
       passwordConfirmation: _passwordConfirmation,
     );
-    addAccount.add(params);
+    final account = await addAccount.add(params);
+    saveCurrentAccount.save(account);
   }
 
   void dispose() {

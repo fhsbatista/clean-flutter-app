@@ -6,6 +6,7 @@ import 'dart:async' as _i5;
 
 import 'package:fordev/domain/entities/account_entity.dart' as _i2;
 import 'package:fordev/domain/usecases/add_account.dart' as _i4;
+import 'package:fordev/domain/usecases/save_current_account.dart' as _i6;
 import 'package:fordev/presentation/protocols/validation.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -50,4 +51,20 @@ class MockAddAccount extends _i1.Mock implements _i4.AddAccount {
               returnValue:
                   Future<_i2.AccountEntity>.value(_FakeAccountEntity_0()))
           as _i5.Future<_i2.AccountEntity>);
+}
+
+/// A class which mocks [SaveCurrentAccount].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSaveCurrentAccount extends _i1.Mock
+    implements _i6.SaveCurrentAccount {
+  MockSaveCurrentAccount() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<void> save(_i2.AccountEntity? account) =>
+      (super.noSuchMethod(Invocation.method(#save, [account]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
 }
