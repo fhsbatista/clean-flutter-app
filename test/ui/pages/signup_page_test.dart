@@ -182,4 +182,41 @@ void main() {
       );
     });
   });
+
+  group('name field errors', () {
+    testWidgets('Should present error if name is invalid', (tester) async {
+      await loadPage(tester);
+
+      nameErrorController.add(UIError.invalidField);
+      await tester.pump();
+
+      expect(find.text('Campo inválido'), findsOneWidget);
+    });
+
+    testWidgets('Should present error if name is empty', (tester) async {
+      await loadPage(tester);
+
+      nameErrorController.add(UIError.requiredField);
+      await tester.pump();
+
+      expect(find.text('Campo obrigatório'), findsOneWidget);
+    });
+
+    testWidgets('Should present no error if name valid', (tester) async {
+      await loadPage(tester);
+
+      nameErrorController.add(null);
+      await tester.pump();
+
+      expect(
+        find.descendant(
+          of: find.bySemanticsLabel(I18n.strings.name),
+          matching: find.byType(Text),
+        ),
+        findsOneWidget,
+      );
+    });
+  });
+
+  
 }
