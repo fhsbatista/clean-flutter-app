@@ -5,9 +5,11 @@ import 'package:fordev/validation/validators/validators.dart';
 
 void main() {
   late MinLengthValidation sut;
+  late int minimum;
 
   setUp(() {
-    sut = MinLengthValidation(field: 'any_field', length: 5);
+    minimum = 5;
+    sut = MinLengthValidation(field: 'any_field', length: minimum);
   });
 
   test('Should return error if value is empty', () {
@@ -19,7 +21,12 @@ void main() {
   });
 
   test('Should return error if value length is less than minimum', () {
-    final input = faker.randomGenerator.string(4, min: 1);
+    final input = faker.randomGenerator.string(minimum -1, min: 1);
     expect(sut.validate(input), ValidationError.invalidField);
+  });
+
+  test('Should return null if value length is equal to minimum', () {
+    final input = faker.randomGenerator.string(minimum, min: minimum);
+    expect(sut.validate(input), null);
   });
 }
