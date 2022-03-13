@@ -1,3 +1,4 @@
+import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/presentation/protocols/validation.dart';
 import 'package:fordev/validation/validators/validators.dart';
@@ -15,5 +16,10 @@ void main() {
 
   test('Should return error if value is null', () {
     expect(sut.validate(null), ValidationError.invalidField);
+  });
+
+  test('Should return error if value length is less than minimum', () {
+    final input = faker.randomGenerator.string(4, min: 1);
+    expect(sut.validate(input), ValidationError.invalidField);
   });
 }
