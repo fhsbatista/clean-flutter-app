@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(height: 32),
                             LoginButton(),
                             TextButton.icon(
-                              onPressed: () {},
+                              onPressed: widget.presenter?.signUp,
                               icon: Icon(Icons.person),
                               label: Text(I18n.strings.addAccount),
                             ),

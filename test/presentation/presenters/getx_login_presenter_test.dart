@@ -247,4 +247,12 @@ void main() {
 
     await sut.auth();
   });
+
+  test('Should change page to signup on signup request', () async {
+    sut.navigateToStream.listen(expectAsync1((page) {
+      expect(page, '/signup');
+    }));
+
+    sut.signUp();
+  });
 }

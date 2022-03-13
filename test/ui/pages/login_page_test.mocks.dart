@@ -63,6 +63,9 @@ class MockLoginPresenter extends _i1.Mock implements _i2.LoginPresenter {
       returnValue: Future<void>.value(),
       returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
   @override
+  void signUp() => super.noSuchMethod(Invocation.method(#signUp, []),
+      returnValueForMissingStub: null);
+  @override
   void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
       returnValueForMissingStub: null);
 }

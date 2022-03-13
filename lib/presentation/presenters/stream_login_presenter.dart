@@ -112,6 +112,9 @@ class StreamLoginPresenter implements LoginPresenter {
     _updateState();
   }
 
+  @override
+  void signUp() {}
+
   void dispose() {
     _controller.close();
   }

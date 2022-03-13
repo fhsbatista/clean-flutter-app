@@ -70,6 +70,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
         _password.isNotEmpty;
   }
 
+  @override
   Future<dynamic> auth() async {
     _isLoading.value = true;
     try {
@@ -89,6 +90,11 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
       }
     }
     _isLoading.value = false;
+  }
+
+  @override
+  void signUp() {
+    _navigateTo.value = '/signup';
   }
 
   void dispose() {

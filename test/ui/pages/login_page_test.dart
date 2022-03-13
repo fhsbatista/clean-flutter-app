@@ -4,6 +4,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/ui/helpers/errors/errors.dart';
+import 'package:fordev/ui/helpers/i18n/i18n.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:get/get.dart';
@@ -285,5 +286,17 @@ void main() {
     navigateToController.add(null);
     await tester.pump();
     expect(Get.currentRoute, '/login');
+  });
+
+  testWidgets('Should call signup on signup click', (tester) async {
+    await loadPage(tester);
+
+    await tester.pump();
+    final button = find.text(I18n.strings.addAccount);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+
+    verify(presenter.signUp()).called(1);
   });
 }
