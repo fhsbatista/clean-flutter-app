@@ -29,4 +29,9 @@ void main() {
     final input = faker.randomGenerator.string(minimum, min: minimum);
     expect(sut.validate(input), null);
   });
+
+  test('Should return null if value length is greater than minimum', () {
+    final input = faker.randomGenerator.string(minimum + 5, min: minimum + 1);
+    expect(sut.validate(input), null);
+  });
 }
