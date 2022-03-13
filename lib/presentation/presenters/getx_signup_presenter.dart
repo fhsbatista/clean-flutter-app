@@ -30,6 +30,7 @@ class GetxSignUpPresenter extends GetxController {
   var _passwordConfirmationError = Rx<UIError?>(null);
   var _isFormValid = false.obs;
   var _mainError = Rx<UIError?>(null);
+  var _isLoading = false.obs;
 
   Stream<UIError?> get nameErrorStream => _nameError.stream;
   Stream<UIError?> get emailErrorStream => _emailError.stream;
@@ -38,6 +39,7 @@ class GetxSignUpPresenter extends GetxController {
       _passwordConfirmationError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<UIError?> get mainErrorStream => _mainError.stream;
+  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   void validateName(String name) {
     _name = name;
@@ -90,6 +92,7 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   Future<void> signUp() async {
+    _isLoading.value = true;
     try {
       final params = AddAccountParams(
         name: _name,
@@ -99,8 +102,16 @@ class GetxSignUpPresenter extends GetxController {
       );
       final account = await addAccount.add(params);
       saveCurrentAccount.save(account);
-    } on DomainError catch (_) {
-      _mainError.value = UIError.unexpected;
+    } on DomainError catch (error) {
+      _isLoading.value = false;
+      switch (error) {
+        case DomainError.emailInUse:
+          _mainError.value = UIError.emailInUse;
+          break;
+        default:
+          _mainError.value = UIError.unexpected;
+          break;
+      }
     }
   }
 
