@@ -65,10 +65,7 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
 
   void validatePasswordConfirmation(String passwordConfirmation) {
     _passwordConfirmation = passwordConfirmation;
-    _passwordConfirmationError.value = _validateField(
-      field: 'passwordConfirmation',
-      value: passwordConfirmation,
-    );
+    _passwordConfirmationError.value = _validatePasswordConfirmation();
     _validateForm();
   }
 
@@ -81,6 +78,20 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
         return UIError.requiredField;
       default:
         return null;
+    }
+  }
+
+  UIError? _validatePasswordConfirmation() {
+    final error = _validateField(
+      field: 'passwordConfirmation',
+      value: _passwordConfirmation,
+    );
+    if (error != null) {
+      return error;
+    } else if (_password != _passwordConfirmation) {
+      return UIError.invalidField;
+    } else {
+      return null;
     }
   }
 

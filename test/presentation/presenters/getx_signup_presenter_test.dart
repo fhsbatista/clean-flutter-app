@@ -55,7 +55,7 @@ void main() {
     name = faker.person.name();
     email = faker.internet.email();
     password = faker.internet.password();
-    passwordConfirmation = faker.internet.password();
+    passwordConfirmation = password;
     token = faker.guid.guid();
     saveCurrentAccount = MockSaveCurrentAccount();
     addAccount = MockAddAccount();
@@ -243,13 +243,28 @@ void main() {
       sut.validatePasswordConfirmation(passwordConfirmation);
     });
 
+    test(
+        'Should emit invalid field error if passwordConfirmation is different than password',
+        () {
+      sut.passwordConfirmationErrorStream.listen(expectAsync1(
+        (e) => expect(e, UIError.invalidField),
+      ));
+      sut.isFormValidStream.listen(
+        expectAsync1((valid) => expect(valid, false)),
+      );
+      sut.validatePassword(faker.internet.password());
+      sut.validatePasswordConfirmation(passwordConfirmation);
+      sut.validatePasswordConfirmation(passwordConfirmation);
+    });
+
     test('Should emit null if validation succeeds', () {
       sut.passwordConfirmationErrorStream
           .listen(expectAsync1((e) => expect(e, null)));
       sut.isFormValidStream.listen(
         expectAsync1((valid) => expect(valid, false)),
       );
-
+      
+      sut.validatePassword(password);
       sut.validatePasswordConfirmation(passwordConfirmation);
       sut.validatePasswordConfirmation(passwordConfirmation);
     });
