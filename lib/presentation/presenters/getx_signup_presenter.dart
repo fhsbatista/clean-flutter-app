@@ -1,14 +1,16 @@
 import 'dart:async';
 
-import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:get/get.dart';
 
 import '../protocols/validation.dart';
 
+import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
-import '../../ui/helpers/errors/errors.dart';
 
-class GetxSignUpPresenter extends GetxController {
+import '../../ui/helpers/errors/errors.dart';
+import '../../ui/pages/pages.dart';
+
+class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   final Validation validation;
   final AddAccount addAccount;
   final SaveCurrentAccount saveCurrentAccount;
@@ -93,6 +95,7 @@ class GetxSignUpPresenter extends GetxController {
         _passwordConfirmation.isNotEmpty;
   }
 
+  @override
   Future<void> signUp() async {
     _isLoading.value = true;
     try {
@@ -116,6 +119,11 @@ class GetxSignUpPresenter extends GetxController {
           break;
       }
     }
+  }
+
+  @override
+  void login() {
+    _navigateTo.value = '/login';
   }
 
   void dispose() {

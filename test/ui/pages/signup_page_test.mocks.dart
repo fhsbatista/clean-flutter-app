@@ -81,6 +81,9 @@ class MockSignUpPresenter extends _i1.Mock implements _i2.SignUpPresenter {
   void signUp() => super.noSuchMethod(Invocation.method(#signUp, []),
       returnValueForMissingStub: null);
   @override
+  void login() => super.noSuchMethod(Invocation.method(#login, []),
+      returnValueForMissingStub: null);
+  @override
   void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
       returnValueForMissingStub: null);
 }

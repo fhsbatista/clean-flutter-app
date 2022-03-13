@@ -427,4 +427,16 @@ void main() {
       verify(presenter.dispose()).called(1);
     });
   });
+
+  testWidgets('Should call login on login click', (tester) async {
+    await loadPage(tester);
+
+    await tester.pump();
+    final button = find.text(I18n.strings.login);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+
+    verify(presenter.login()).called(1);
+  });
 }

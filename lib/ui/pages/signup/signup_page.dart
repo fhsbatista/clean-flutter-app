@@ -83,6 +83,11 @@ class _SignUpPageState extends State<SignUpPage> {
                             PasswordConfirmationInput(),
                             const SizedBox(height: 32),
                             SignUpButton(),
+                            TextButton.icon(
+                              onPressed: widget.presenter?.login,
+                              icon: Icon(Icons.exit_to_app),
+                              label: Text(I18n.strings.login),
+                            ),
                           ],
                         ),
                       ),

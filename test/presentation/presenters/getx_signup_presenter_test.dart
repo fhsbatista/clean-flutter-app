@@ -355,4 +355,12 @@ void main() {
 
     await sut.signUp();
   });
+
+  test('Should change page to login on signup login', () async {
+    sut.navigateToStream.listen(expectAsync1((page) {
+      expect(page, '/login');
+    }));
+
+    sut.login();
+  });
 }

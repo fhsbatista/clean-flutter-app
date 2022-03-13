@@ -7,6 +7,7 @@ class EnUs implements Translations {
   String get msgUnexpectedError => 'Something went wrong. Try again later.';
   String get msgEmailInUse => 'The email is already in use.';
 
+  String get login => 'Login';
   String get addAccount => 'Create Account';
   String get name => 'Name';
   String get email => 'Email';
