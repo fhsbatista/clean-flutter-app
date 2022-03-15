@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../ui/pages/pages.dart';
 
-class GetxSplashPresenter implements SplashPresenter {
+class GetxSplashPresenter extends GetxController implements SplashPresenter {
   GetxSplashPresenter({required this.loadCurrentAccount});
 
   final LoadCurrentAccount loadCurrentAccount;
