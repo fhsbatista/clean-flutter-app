@@ -263,7 +263,7 @@ void main() {
       sut.isFormValidStream.listen(
         expectAsync1((valid) => expect(valid, false)),
       );
-      
+
       sut.validatePassword(password);
       sut.validatePasswordConfirmation(passwordConfirmation);
       sut.validatePasswordConfirmation(passwordConfirmation);
@@ -319,9 +319,7 @@ void main() {
     sut.validatePasswordConfirmation(passwordConfirmation);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((e) {
-      expect(e, UIError.unexpected);
-    }));
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.signUp();
   });
@@ -335,9 +333,7 @@ void main() {
     sut.validatePasswordConfirmation(passwordConfirmation);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((e) {
-      expect(e, UIError.emailInUse);
-    }));
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.emailInUse]));
 
     await sut.signUp();
   });
@@ -351,9 +347,7 @@ void main() {
     sut.validatePasswordConfirmation(passwordConfirmation);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((e) {
-      expect(e, UIError.unexpected);
-    }));
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.signUp();
   });
