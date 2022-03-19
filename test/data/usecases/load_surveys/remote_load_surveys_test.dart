@@ -16,9 +16,13 @@ void main() {
   late String url;
   late MockHttpClient httpClient;
 
-  void mockHttpData(List<Map> data) =>
-      when(httpClient.request(url: anyNamed('url'), method: anyNamed('method')))
-          .thenAnswer((_) async => data);
+  PostExpectation mockHttp() => when(httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+      ));
+
+  void mockHttpData({List<Map>? data}) =>
+      mockHttp().thenAnswer((_) async => data);
 
   List<Map> mockValidData() => [
         {
@@ -35,11 +39,13 @@ void main() {
         },
       ];
 
+  void mockHttpError(HttpError error) => mockHttp().thenThrow(error);
+
   setUp(() {
     url = faker.internet.httpUrl();
     httpClient = MockHttpClient();
     sut = RemoteLoadSurveys(url: url, httpClient: httpClient);
-    mockHttpData(mockValidData());
+    mockHttpData(data: mockValidData());
   });
 
   test('Should call HttpClient with correct values', () async {
@@ -50,7 +56,7 @@ void main() {
 
   test('Should return surveys on 200', () async {
     final List<Map> data = mockValidData();
-    mockHttpData(data);
+    mockHttpData(data: data);
     final expectedSurveys = [
       SurveyEntity(
         id: data[0]['id'],
@@ -68,15 +74,26 @@ void main() {
 
     final surveys = await sut.load();
 
-    
     expect(surveys, expectedSurveys);
   });
 
-  test('Should throw Unexpected error if HttpClient returns 200 with invalid data', () async {
-    mockHttpData([{'invalid_key': 'invalid_value'}]);
+  test(
+      'Should throw Unexpected error if HttpClient returns 200 with invalid data',
+      () async {
+    mockHttpData(data: [
+      {'invalid_key': 'invalid_value'}
+    ]);
 
     final future = sut.load();
-    
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw Unexpected error if HttpClient returns 404', () {
+    mockHttpError(HttpError.notFound);
+
+    final future = sut.load();
+
     expect(future, throwsA(DomainError.unexpected));
   });
 }
