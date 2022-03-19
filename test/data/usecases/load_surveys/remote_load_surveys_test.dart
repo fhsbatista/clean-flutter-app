@@ -6,6 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:fordev/data/http/http.dart';
 import 'package:fordev/data/usecases/load_surveys/load_surveys.dart';
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 
 import '../add_account/remote_add_account_test.mocks.dart';
 
@@ -69,5 +70,13 @@ void main() {
 
     
     expect(surveys, expectedSurveys);
+  });
+
+  test('Should throw Unexpected error if HttpClient returns 200 with invalid data', () async {
+    mockHttpData([{'invalid_key': 'invalid_value'}]);
+
+    final future = sut.load();
+    
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
