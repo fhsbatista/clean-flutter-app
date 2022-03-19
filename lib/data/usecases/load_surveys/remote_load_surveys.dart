@@ -22,8 +22,10 @@ class RemoteLoadSurveys {
       return response
           .map((json) => RemoteSurveyModel.fromJson(json).toEntity())
           .toList();
-    } on HttpError {
-      throw DomainError.unexpected;
+    } on HttpError catch (error) {
+      throw error == HttpError.forbidden
+          ? DomainError.access_denied
+          : DomainError.unexpected;
     }
   }
 }
