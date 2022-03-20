@@ -258,5 +258,28 @@ void main() {
 
       expect(response, {});
     });
+
+    test('Should return empty object if get returns 204', () async {
+      mockResponse(204, body: '');
+
+      final response = await sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'get',
+      );
+
+      expect(response, {});
+    });
+
+    test('Should return empty object if get returns 204 with data', () async {
+      mockResponse(204, body: '{"any_key":"any_value"}');
+
+      final response = await sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'get',
+      );
+
+      expect(response, {});
+    });
+
   });
 }
