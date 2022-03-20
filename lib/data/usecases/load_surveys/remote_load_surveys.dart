@@ -1,10 +1,11 @@
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
 import '../../../domain/helpers/helpers.dart';
 import '../../http/http.dart';
 import '../../models/models.dart';
 
-class RemoteLoadSurveys {
+class RemoteLoadSurveys implements LoadSurveys {
   final String url;
   final HttpClient httpClient;
 
