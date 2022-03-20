@@ -169,7 +169,7 @@ void main() {
       expect(future, throwsA(HttpError.forbidden));
     });
 
-    test('Should return forbbiden error if post returns 404', () async {
+    test('Should return NotFound error if post returns 404', () async {
       mockResponse(404);
 
       final future = sut.request(
@@ -324,6 +324,17 @@ void main() {
       );
 
       expect(future, throwsA(HttpError.forbidden));
+    });
+
+    test('Should return NotFound error if post returns 404', () async {
+      mockResponse(404);
+
+      final future = sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'get',
+      );
+
+      expect(future, throwsA(HttpError.notFound));
     });
   });
 }
