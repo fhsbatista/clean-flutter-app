@@ -315,6 +315,15 @@ void main() {
       expect(future, throwsA(HttpError.unauthorized));
     });
 
+    test('Should return forbbiden error if get returns 403', () async {
+      mockResponse(403);
 
+      final future = sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'get',
+      );
+
+      expect(future, throwsA(HttpError.forbidden));
+    });
   });
 }
