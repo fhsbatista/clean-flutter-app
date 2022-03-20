@@ -281,5 +281,28 @@ void main() {
       expect(response, {});
     });
 
+    test('Should return badRequest error if get returns 400 with data',
+        () async {
+      mockResponse(400, body: '{"any_key":"any_value"}');
+
+      final future = sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'get',
+      );
+
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
+    test('Should return badRequest error if get returns 400', () async {
+      mockResponse(400);
+
+      final future = sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'get',
+      );
+
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
   });
 }
