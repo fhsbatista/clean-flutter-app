@@ -326,7 +326,7 @@ void main() {
       expect(future, throwsA(HttpError.forbidden));
     });
 
-    test('Should return NotFound error if post returns 404', () async {
+    test('Should return NotFound error if get returns 404', () async {
       mockResponse(404);
 
       final future = sut.request(
@@ -335,6 +335,14 @@ void main() {
       );
 
       expect(future, throwsA(HttpError.notFound));
+    });
+
+    test('Should return serverError if get returns 500', () async {
+      mockResponse(500);
+
+      final future = sut.request(url: faker.internet.httpUrl(), method: 'get');
+
+      expect(future, throwsA(HttpError.serverError));
     });
   });
 }
