@@ -183,10 +183,7 @@ void main() {
     test('Should return serverError if post returns 500', () async {
       mockResponse(500);
 
-      final future = sut.request(
-        url: faker.internet.httpUrl(),
-        method: 'post'
-      );
+      final future = sut.request(url: faker.internet.httpUrl(), method: 'post');
 
       expect(future, throwsA(HttpError.serverError));
     });
@@ -200,6 +197,45 @@ void main() {
       );
 
       expect(future, throwsA(HttpError.serverError));
+    });
+  });
+
+  group('get', () {
+    PostExpectation anyRequest() => when(
+          client.get(
+            any,
+            headers: anyNamed('headers'),
+          ),
+        );
+
+    void mockResponse(
+      int statusCode, {
+      String body = '{"any_key":"any_value"}',
+    }) {
+      anyRequest().thenAnswer(
+        (_) async => Response(
+          body,
+          statusCode,
+        ),
+      );
+    }
+
+    setUp(() {
+      mockResponse(200);
+    });
+
+    test('Should call get with correct values', () async {
+      final url = faker.internet.httpUrl();
+
+      await sut.request(url: url, method: 'get');
+
+      verify(client.get(
+        Uri.parse(url),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+        },
+      ));
     });
   });
 }
