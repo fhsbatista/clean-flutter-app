@@ -237,5 +237,26 @@ void main() {
         },
       ));
     });
+
+    test('Should return data if get returns 200', () async {
+      final response = await sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'get',
+      );
+
+      expect(response, {'any_key': 'any_value'});
+    });
+
+    test('Should return empty object if get returns 200 with no data',
+        () async {
+      mockResponse(200, body: '');
+
+      final response = await sut.request(
+        url: faker.internet.httpUrl(),
+        method: 'get',
+      );
+
+      expect(response, {});
+    });
   });
 }
