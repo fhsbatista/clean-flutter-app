@@ -4,9 +4,23 @@ import 'package:flutter/material.dart';
 import '../../helpers/i18n/i18n.dart';
 
 import './components/components.dart';
+import 'surveys_presenter.dart';
 
-class SurveysPage extends StatelessWidget {
-  const SurveysPage();
+class SurveysPage extends StatefulWidget {
+  final SurveysPresenter? presenter;
+  
+  const SurveysPage(this.presenter);
+
+  @override
+  State<SurveysPage> createState() => _SurveysPageState();
+}
+
+class _SurveysPageState extends State<SurveysPage> {
+  @override
+  void initState() {
+    super.initState();
+    widget.presenter?.loadPage();
+  }
 
   @override
   Widget build(BuildContext context) {
