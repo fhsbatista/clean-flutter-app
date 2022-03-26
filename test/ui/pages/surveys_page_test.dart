@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fordev/ui/helpers/errors/errors.dart';
+import 'package:fordev/ui/helpers/i18n/i18n.dart';
 import 'package:get/get.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -14,19 +16,24 @@ import 'surveys_page_test.mocks.dart';
 void main() {
   late SurveysPresenter presenter;
   late StreamController<bool> isLoadingController;
+  late StreamController<List<SurveyViewModel>> surveysController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
+    surveysController = StreamController<List<SurveyViewModel>>();
   }
 
   void mockStreams() {
     presenter = MockSurveysPresenter();
     when(presenter.isLoadingStream)
         .thenAnswer((_) => isLoadingController.stream);
+        when(presenter.surveysStream)
+        .thenAnswer((_) => surveysController.stream);
   }
 
   void closeStreams() {
     isLoadingController.close();
+    surveysController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -77,5 +84,17 @@ void main() {
 
       expect(find.byType(CircularProgressIndicator), findsNothing);
     });
+  });
+
+  testWidgets('Should present error if LoadSurveysStream emit error',
+      (tester) async {
+    await loadPage(tester);
+
+    surveysController.addError(UIError.unexpected.description);
+    await tester.pump();
+
+    expect(find.text(I18n.strings.msgUnexpectedError), findsOneWidget);
+    expect(find.text(I18n.strings.reload), findsOneWidget);
+    expect(find.text('Question 1'), findsNothing);
   });
 }
