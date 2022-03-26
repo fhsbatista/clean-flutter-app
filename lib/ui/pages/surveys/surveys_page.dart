@@ -37,19 +37,20 @@ class _SurveysPageState extends State<SurveysPage> {
           }
         });
         return StreamBuilder<List<SurveyViewModel>>(
-            stream: widget.presenter?.surveysStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Column(
-                  children: [
-                    Text(snapshot.error.toString()),
-                    ElevatedButton(
-                      child: Text(I18n.strings.reload),
-                      onPressed: null,
-                    ),
-                  ],
-                );
-              }
+          stream: widget.presenter?.surveysStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Column(
+                children: [
+                  Text(snapshot.error.toString()),
+                  ElevatedButton(
+                    child: Text(I18n.strings.reload),
+                    onPressed: null,
+                  ),
+                ],
+              );
+            }
+            if (snapshot.hasData) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: CarouselSlider(
@@ -57,14 +58,17 @@ class _SurveysPageState extends State<SurveysPage> {
                     enlargeCenterPage: true,
                     aspectRatio: 1,
                   ),
-                  items: [
-                    SurveyITem(),
-                    SurveyITem(),
-                    SurveyITem(),
-                  ],
+                  items: snapshot.data?.map(
+                    (viewModel) {
+                      return SurveyItem(viewModel);
+                    },
+                  ).toList(),
                 ),
               );
-            });
+            }
+            return SizedBox.shrink();
+          },
+        );
       }),
     );
   }

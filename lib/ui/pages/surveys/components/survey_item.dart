@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SurveyITem extends StatelessWidget {
-  const SurveyITem();
+import '../surveys.dart';
+
+class SurveyItem extends StatelessWidget {
+  final SurveyViewModel viewModel;
+
+  const SurveyItem(this.viewModel);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,7 @@ class SurveyITem extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'Qual é seu framework web favorito?',
+              viewModel.question,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
