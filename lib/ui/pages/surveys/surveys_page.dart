@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
+import '../../components/components.dart';
 import '../../helpers/i18n/i18n.dart';
 
 import './components/components.dart';
@@ -26,19 +27,30 @@ class _SurveysPageState extends State<SurveysPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(I18n.strings.surveys)),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: CarouselSlider(
-          options: CarouselOptions(
-            enlargeCenterPage: true,
-            aspectRatio: 1,
-          ),
-          items: [
-            SurveyITem(),
-            SurveyITem(),
-            SurveyITem(),
-          ],
-        ),
+      body: Builder(
+        builder: (context) {
+          widget.presenter?.isLoadingStream.listen((isLoading) {
+            if (isLoading) {
+              showLoading(context);
+            } else {
+              hideLoading(context);
+            }
+          });
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: CarouselSlider(
+              options: CarouselOptions(
+                enlargeCenterPage: true,
+                aspectRatio: 1,
+              ),
+              items: [
+                SurveyITem(),
+                SurveyITem(),
+                SurveyITem(),
+              ],
+            ),
+          );
+        }
       ),
     );
   }

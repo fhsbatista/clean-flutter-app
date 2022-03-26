@@ -1,3 +1,5 @@
 abstract class SurveysPresenter {
-  Future<void> loadPage();
+  Stream<bool> get isLoadingStream;
+
+  void loadPage();
 }
