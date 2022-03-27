@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/ui/helpers/errors/errors.dart';
@@ -59,13 +58,13 @@ void main() {
         SurveyViewModel(
           id: '1',
           question: 'Question 1',
-          date: '1/2',
+          date: 'Date 1',
           isAnswered: false,
         ),
         SurveyViewModel(
           id: '1',
           question: 'Question 2',
-          date: '1/2',
+          date: 'Date 2',
           isAnswered: false,
         ),
       ];
@@ -122,7 +121,9 @@ void main() {
 
     expect(find.text(I18n.strings.msgUnexpectedError), findsNothing);
     expect(find.text(I18n.strings.reload), findsNothing);
-    expect(find.text('Question 1'), findsOneWidget);
+    expect(find.text('Question 1'), findsWidgets);
     expect(find.text('Question 2'), findsWidgets);
+    expect(find.text('Date 1'), findsWidgets);
+    expect(find.text('Date 2'), findsWidgets);
   });
 }
