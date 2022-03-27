@@ -45,7 +45,7 @@ class _SurveysPageState extends State<SurveysPage> {
                   Text(snapshot.error.toString()),
                   ElevatedButton(
                     child: Text(I18n.strings.reload),
-                    onPressed: null,
+                    onPressed: widget.presenter?.loadPage,
                   ),
                 ],
               );
