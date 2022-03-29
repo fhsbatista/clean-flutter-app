@@ -1,5 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
+import 'package:fordev/ui/helpers/errors/ui_error.dart';
 import 'package:fordev/ui/pages/surveys/surveys.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -31,10 +33,15 @@ void main() {
         ),
       ];
 
+  PostExpectation mockSurveysCall() => when(loadSurveys.load());
+
   void mockLoadSurveys(List<SurveyEntity> data) {
     surveys = data;
-    when(loadSurveys.load()).thenAnswer((_) async => data);
+    mockSurveysCall().thenAnswer((_) async => data);
   }
+
+  void mockLoadSurveysError() =>
+      mockSurveysCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
     loadSurveys = MockLoadSurveys();
@@ -66,6 +73,18 @@ void main() {
         )
       ]),
     ));
+
+    await sut.loadData();
+  });
+
+  test('Should emit correct events on LoadSurveys failure', () async {
+    mockLoadSurveysError();
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.surveysStream.listen(
+      null,
+      onError: (error) => expect(error, UIError.unexpected.description),
+    );
 
     await sut.loadData();
   });

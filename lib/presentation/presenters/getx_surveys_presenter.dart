@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
+import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/surveys/surveys.dart';
 
 class GetxSurveysPresenter {
@@ -16,14 +18,21 @@ class GetxSurveysPresenter {
   GetxSurveysPresenter({required this.loadSurveys});
 
   Future<void> loadData() async {
-    _isLoading.value = true;
-    final surveys = await loadSurveys.load();
-    _surveys.value = surveys.map((e) => SurveyViewModel(
-          id: e.id,
-          question: e.question,
-          date: DateFormat('dd MMM yyyy').format(e.date),
-          isAnswered: e.isAnswered,
-        )).toList();
-    _isLoading.value = false;
+    try {
+      _isLoading.value = true;
+      final surveys = await loadSurveys.load();
+      _surveys.value = surveys
+          .map((e) => SurveyViewModel(
+                id: e.id,
+                question: e.question,
+                date: DateFormat('dd MMM yyyy').format(e.date),
+                isAnswered: e.isAnswered,
+              ))
+          .toList();
+    } on DomainError {
+      _surveys.subject.addError(UIError.unexpected.description);
+    } finally {
+      _isLoading.value = false;
+    }
   }
 }
