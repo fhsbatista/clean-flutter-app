@@ -3,6 +3,7 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i3;
+import 'dart:ui' as _i4;
 
 import 'package:fordev/ui/pages/pages.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
@@ -35,6 +36,14 @@ class MockSurveysPresenter extends _i1.Mock implements _i2.SurveysPresenter {
               returnValue: Stream<List<_i2.SurveyViewModel>>.empty())
           as _i3.Stream<List<_i2.SurveyViewModel>>);
   @override
-  void loadData() => super.noSuchMethod(Invocation.method(#loadPage, []),
+  void loadData() => super.noSuchMethod(Invocation.method(#loadData, []),
       returnValueForMissingStub: null);
+  @override
+  void addListener(_i4.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#addListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void removeListener(_i4.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#removeListener, [listener]),
+          returnValueForMissingStub: null);
 }
