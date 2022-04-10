@@ -16,9 +16,8 @@ import 'getx_surveys_presenter_test.mocks.dart';
 void main() {
   late GetxSurveysPresenter sut;
   late MockLoadSurveys loadSurveys;
-  late List<SurveyEntity> surveys;
 
-  List<SurveyEntity> mockValidData() => [
+  final validSurveys = [
         SurveyEntity(
           id: faker.guid.guid(),
           question: faker.lorem.sentence(),
@@ -36,7 +35,6 @@ void main() {
   PostExpectation mockSurveysCall() => when(loadSurveys.load());
 
   void mockLoadSurveys(List<SurveyEntity> data) {
-    surveys = data;
     mockSurveysCall().thenAnswer((_) async => data);
   }
 
@@ -46,7 +44,7 @@ void main() {
   setUp(() {
     loadSurveys = MockLoadSurveys();
     sut = GetxSurveysPresenter(loadSurveys: loadSurveys);
-    mockLoadSurveys(mockValidData());
+    mockLoadSurveys(validSurveys);
   });
 
   test('Should call LoadSurveys on loadData', () async {
@@ -60,16 +58,16 @@ void main() {
     sut.surveysStream.listen(expectAsync1(
       (surveys) => expect(surveys, [
         SurveyViewModel(
-          id: surveys[0].id,
-          question: surveys[0].question,
+          id: validSurveys[0].id,
+          question: validSurveys[0].question,
           date: '20 Feb 2022',
-          isAnswered: surveys[0].isAnswered,
+          isAnswered: validSurveys[0].isAnswered,
         ),
         SurveyViewModel(
-          id: surveys[1].id,
-          question: surveys[1].question,
+          id: validSurveys[1].id,
+          question: validSurveys[1].question,
           date: '20 Mar 2022',
-          isAnswered: surveys[1].isAnswered,
+          isAnswered: validSurveys[1].isAnswered,
         )
       ]),
     ));

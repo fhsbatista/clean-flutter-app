@@ -6,7 +6,7 @@ import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/surveys/surveys.dart';
 
-class GetxSurveysPresenter {
+class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
   final LoadSurveys loadSurveys;
 
   final _isLoading = true.obs;

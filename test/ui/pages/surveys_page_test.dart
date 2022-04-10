@@ -75,7 +75,7 @@ void main() {
 
   testWidgets('Should call LoadSurveys on page load', (tester) async {
     await loadPage(tester);
-    verify(presenter.loadPage()).called(1);
+    verify(presenter.loadData()).called(1);
   });
 
   group('loading states', () {
@@ -134,6 +134,6 @@ void main() {
     await tester.pump();
     await tester.tap(find.text(I18n.strings.reload));
 
-    verify(presenter.loadPage()).called(2);
+    verify(presenter.loadData()).called(2);
   });
 }

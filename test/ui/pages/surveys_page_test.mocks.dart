@@ -35,6 +35,6 @@ class MockSurveysPresenter extends _i1.Mock implements _i2.SurveysPresenter {
               returnValue: Stream<List<_i2.SurveyViewModel>>.empty())
           as _i3.Stream<List<_i2.SurveyViewModel>>);
   @override
-  void loadPage() => super.noSuchMethod(Invocation.method(#loadPage, []),
+  void loadData() => super.noSuchMethod(Invocation.method(#loadPage, []),
       returnValueForMissingStub: null);
 }

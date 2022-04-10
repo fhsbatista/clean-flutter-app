@@ -1,17 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../components/components.dart';
 import '../../helpers/i18n/i18n.dart';
 
 import './components/components.dart';
 import 'surveys.dart';
-import 'surveys_presenter.dart';
 
 class SurveysPage extends StatefulWidget {
-  final SurveysPresenter? presenter;
+  SurveysPage(this.presenter);
 
-  const SurveysPage(this.presenter);
+  final SurveysPresenter presenter;
 
   @override
   State<SurveysPage> createState() => _SurveysPageState();
@@ -19,17 +19,12 @@ class SurveysPage extends StatefulWidget {
 
 class _SurveysPageState extends State<SurveysPage> {
   @override
-  void initState() {
-    super.initState();
-    widget.presenter?.loadPage();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    widget.presenter.loadData();
     return Scaffold(
       appBar: AppBar(title: Text(I18n.strings.surveys)),
       body: Builder(builder: (context) {
-        widget.presenter?.isLoadingStream.listen((isLoading) {
+        widget.presenter.isLoadingStream.listen((isLoading) {
           if (isLoading) {
             showLoading(context);
           } else {
@@ -37,17 +32,28 @@ class _SurveysPageState extends State<SurveysPage> {
           }
         });
         return StreamBuilder<List<SurveyViewModel>>(
-          stream: widget.presenter?.surveysStream,
+          stream: widget.presenter.surveysStream,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Column(
-                children: [
-                  Text(snapshot.error.toString()),
-                  ElevatedButton(
-                    child: Text(I18n.strings.reload),
-                    onPressed: widget.presenter?.loadPage,
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        snapshot.error.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        child: Text(I18n.strings.reload),
+                        onPressed: widget.presenter.loadData,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               );
             }
             if (snapshot.hasData) {
