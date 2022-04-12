@@ -50,3 +50,4 @@ pubspec.lock
 pubspec.lock
 .vscode/launch.json
 .vscode
+ios/build/Pods.build/Release-iphonesimulator
