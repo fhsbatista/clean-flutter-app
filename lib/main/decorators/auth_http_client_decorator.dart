@@ -1,9 +1,12 @@
 import 'package:fordev/data/cache/fetch_secure_cache_storage.dart';
 
+import '../../data/http/http.dart';
+
 class AuthHttpClientDecorator {
   final FetchSecureCacheStorage fetchSecureCacheStorage;
+  final HttpClient decoratee;
 
-  AuthHttpClientDecorator(this.fetchSecureCacheStorage);
+  AuthHttpClientDecorator(this.fetchSecureCacheStorage, this.decoratee);
 
   Future<void> request({
     required String url,
@@ -11,6 +14,13 @@ class AuthHttpClientDecorator {
     Map headers = const {},
     Map body = const {},
   }) async {
-    await fetchSecureCacheStorage.fetchSecure('token');
+    final token = await fetchSecureCacheStorage.fetchSecure('token');
+    final headersWithAuth = {'x-access-token': token};
+    await decoratee.request(
+      url: url,
+      method: method,
+      headers: headersWithAuth,
+      body: body,
+    );
   }
 }
