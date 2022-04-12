@@ -1,7 +1,7 @@
 import '../../data/cache/cache.dart';
 import '../../data/http/http.dart';
 
-class AuthHttpClientDecorator {
+class AuthHttpClientDecorator implements HttpClient {
   final FetchSecureCacheStorage fetchSecureCacheStorage;
   final HttpClient decoratee;
 
