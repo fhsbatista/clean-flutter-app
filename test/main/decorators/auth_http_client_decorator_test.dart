@@ -32,14 +32,22 @@ void main() {
     whenTokenCall().thenThrow(Exception());
   }
 
-  void mockDecoratee() {
-    decorateeResponse = faker.randomGenerator.string(50);
-    when(httpClient.request(
+  PostExpectation whenDecorateeCall() {
+    return when(httpClient.request(
       url: anyNamed('url'),
       method: anyNamed('method'),
       headers: anyNamed('headers'),
       body: anyNamed('body'),
-    )).thenAnswer((_) async => decorateeResponse);
+    ));
+  }
+
+  void mockDecoratee() {
+    decorateeResponse = faker.randomGenerator.string(50);
+    whenDecorateeCall().thenAnswer((_) async => decorateeResponse);
+  }
+
+  void mockDecorateeError(HttpError error) {
+    whenDecorateeCall().thenThrow(error);
   }
 
   setUp(() {
@@ -93,7 +101,6 @@ void main() {
     final response = await sut.request(
       url: url,
       method: method,
-      headers: {'header1': 'header1-value'},
     );
 
     expect(response, decorateeResponse);
@@ -103,14 +110,27 @@ void main() {
     'Should throw Forbidden error if FetchSecureCacheStorage throws',
     () async {
       mockTokenError();
+
+      final future = sut.request(
+        url: url,
+        method: method,
+      );
+
+      expect(future, throwsA(HttpError.forbidden));
+    },
+  );
+
+  test(
+    'Should rethrow if decoratee throws',
+    () async {
+      mockDecorateeError(HttpError.badRequest);
       
       final future = sut.request(
         url: url,
         method: method,
-        headers: {'header1': 'header1-value'},
       );
 
-      expect(future, throwsA(HttpError.forbidden));
+      expect(future, throwsA(HttpError.badRequest));
     },
   );
 }

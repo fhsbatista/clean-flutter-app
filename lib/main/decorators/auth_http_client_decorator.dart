@@ -23,6 +23,8 @@ class AuthHttpClientDecorator {
         headers: {...headers, ...authHeader},
         body: body,
       );
+    } on HttpError {
+      rethrow;
     } catch (error) {
       throw HttpError.forbidden;
     }
