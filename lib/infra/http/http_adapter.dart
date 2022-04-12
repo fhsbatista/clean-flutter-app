@@ -19,8 +19,10 @@ class HttpAdapter implements HttpClient {
       'content-type': 'application/json',
       'accept': 'application/json',
     };
-    final Map<String, String> finalHeaders =
-        (headers?.cast<String, String>() ?? {})..addAll(defaultHeaders);
+    final Map<String, String> finalHeaders = {
+      ...(headers?.cast<String, String>() ?? {}),
+      ...defaultHeaders,
+    };
     Response? response;
     try {
       if (method == 'post') {
