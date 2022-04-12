@@ -5,7 +5,12 @@ class AuthHttpClientDecorator {
 
   AuthHttpClientDecorator(this.fetchSecureCacheStorage);
 
-  Future<void> request() async {
+  Future<void> request({
+    required String url,
+    required String method,
+    Map headers = const {},
+    Map body = const {},
+  }) async {
     await fetchSecureCacheStorage.fetchSecure('token');
   }
 }

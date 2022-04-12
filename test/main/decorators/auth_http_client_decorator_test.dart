@@ -1,3 +1,4 @@
+import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -11,16 +12,20 @@ import 'auth_http_client_decorator_test.mocks.dart';
 void main() {
   late AuthHttpClientDecorator sut;
   late MockFetchSecureCacheStorage fetchSecureCacheStorage;
+  late String url;
+  late String method;
 
   setUp(() {
     fetchSecureCacheStorage = MockFetchSecureCacheStorage();
     sut = AuthHttpClientDecorator(fetchSecureCacheStorage);
+    url = faker.internet.httpUrl();
+    method = faker.randomGenerator.string(10);
     when(fetchSecureCacheStorage.fetchSecure(any))
         .thenAnswer((_) async => 'any_token');
   });
 
   test('should call FetchSecureCacheStorage with correct key', () async {
-    await sut.request();
+    await sut.request(url: url, method: method);
 
     verify(fetchSecureCacheStorage.fetchSecure('token')).called(1);
   });
