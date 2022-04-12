@@ -14,13 +14,17 @@ class AuthHttpClientDecorator {
     Map headers = const {},
     Map body = const {},
   }) async {
-    final token = await fetchSecureCacheStorage.fetchSecure('token');
-    final authHeader = {'x-access-token': token};
-    return decoratee.request(
-      url: url,
-      method: method,
-      headers: {...headers, ...authHeader},
-      body: body,
-    );
+    try {
+      final token = await fetchSecureCacheStorage.fetchSecure('token');
+      final authHeader = {'x-access-token': token};
+      return decoratee.request(
+        url: url,
+        method: method,
+        headers: {...headers, ...authHeader},
+        body: body,
+      );
+    } catch (error) {
+      throw HttpError.forbidden;
+    }
   }
 }

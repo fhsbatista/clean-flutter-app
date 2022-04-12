@@ -19,10 +19,17 @@ void main() {
   late String token;
   late String decorateeResponse;
 
+  PostExpectation whenTokenCall() {
+    return when(fetchSecureCacheStorage.fetchSecure(any));
+  }
+
   void mockToken() {
     token = faker.guid.guid();
-    when(fetchSecureCacheStorage.fetchSecure(any))
-        .thenAnswer((_) async => token);
+    whenTokenCall().thenAnswer((_) async => token);
+  }
+
+  void mockTokenError() {
+    whenTokenCall().thenThrow(Exception());
   }
 
   void mockDecoratee() {
@@ -91,4 +98,19 @@ void main() {
 
     expect(response, decorateeResponse);
   });
+
+  test(
+    'Should throw Forbidden error if FetchSecureCacheStorage throws',
+    () async {
+      mockTokenError();
+      
+      final future = sut.request(
+        url: url,
+        method: method,
+        headers: {'header1': 'header1-value'},
+      );
+
+      expect(future, throwsA(HttpError.forbidden));
+    },
+  );
 }
