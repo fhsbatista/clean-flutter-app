@@ -8,7 +8,7 @@ class AuthHttpClientDecorator {
 
   AuthHttpClientDecorator(this.fetchSecureCacheStorage, this.decoratee);
 
-  Future<void> request({
+  Future<dynamic> request({
     required String url,
     required String method,
     Map headers = const {},
@@ -16,7 +16,7 @@ class AuthHttpClientDecorator {
   }) async {
     final token = await fetchSecureCacheStorage.fetchSecure('token');
     final authHeader = {'x-access-token': token};
-    await decoratee.request(
+    return decoratee.request(
       url: url,
       method: method,
       headers: {...headers, ...authHeader},

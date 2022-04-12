@@ -17,6 +17,7 @@ void main() {
   late String url;
   late String method;
   late String token;
+  late String decorateeResponse;
 
   void mockToken() {
     token = faker.guid.guid();
@@ -25,12 +26,13 @@ void main() {
   }
 
   void mockDecoratee() {
+    decorateeResponse = faker.randomGenerator.string(50);
     when(httpClient.request(
       url: anyNamed('url'),
       method: anyNamed('method'),
       headers: anyNamed('headers'),
       body: anyNamed('body'),
-    )).thenAnswer((_) async => null);
+    )).thenAnswer((_) async => decorateeResponse);
   }
 
   setUp(() {
@@ -79,4 +81,14 @@ void main() {
       )).called(1);
     },
   );
+
+  test('Should return same result as decoratee', () async {
+    final response = await sut.request(
+      url: url,
+      method: method,
+      headers: {'header1': 'header1-value'},
+    );
+
+    expect(response, decorateeResponse);
+  });
 }
