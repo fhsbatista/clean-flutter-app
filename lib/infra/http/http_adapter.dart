@@ -9,7 +9,7 @@ class HttpAdapter implements HttpClient {
 
   HttpAdapter(this.client);
 
-  Future<Map> request({
+  Future<dynamic> request({
     required String url,
     required String method,
     Map? headers,
@@ -44,7 +44,7 @@ class HttpAdapter implements HttpClient {
     return _handleResponse(response);
   }
 
-  Map _handleResponse(Response response) {
+  dynamic _handleResponse(Response response) {
     if (response.statusCode == 200) {
       return response.body.isEmpty ? {} : jsonDecode(response.body);
     } else if (response.statusCode == 204) {
