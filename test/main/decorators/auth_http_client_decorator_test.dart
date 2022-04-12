@@ -1,11 +1,11 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fordev/main/decorators/decorators.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:fordev/data/cache/cache.dart';
 import 'package:fordev/data/http/http.dart';
-import 'package:fordev/main/decorators/auth_http_client_decorator.dart';
 
 import 'auth_http_client_decorator_test.mocks.dart';
 
