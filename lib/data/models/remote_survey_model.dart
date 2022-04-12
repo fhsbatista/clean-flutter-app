@@ -19,7 +19,7 @@ class RemoteSurveyModel {
       'id',
       'question',
       'date',
-      'isAnswered',
+      'didAnswer',
     ]);
     if (!isJsonValid) {
       throw HttpError.invalidData;
@@ -28,7 +28,7 @@ class RemoteSurveyModel {
       id: json['id'],
       question: json['question'],
       date: json['date'],
-      isAnswered: json['isAnswered'],
+      isAnswered: json['didAnswer'],
     );
   }
 
