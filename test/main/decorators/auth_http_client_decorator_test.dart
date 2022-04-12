@@ -53,10 +53,30 @@ void main() {
     await sut.request(url: url, method: method);
 
     verify(httpClient.request(
-      url: url,
-      method: method,
-      headers: {'x-access-token': token},
-      body: {}
-    )).called(1);
+        url: url,
+        method: method,
+        headers: {'x-access-token': token},
+        body: {})).called(1);
   });
+
+  test(
+    'Should call decoratee with token on header without modifying original headers',
+    () async {
+      await sut.request(
+        url: url,
+        method: method,
+        headers: {'header1': 'header1-value'},
+      );
+
+      verify(httpClient.request(
+        url: url,
+        method: method,
+        headers: {
+          'x-access-token': token,
+          'header1': 'header1-value',
+        },
+        body: {},
+      )).called(1);
+    },
+  );
 }

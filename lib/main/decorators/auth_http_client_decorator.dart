@@ -15,11 +15,11 @@ class AuthHttpClientDecorator {
     Map body = const {},
   }) async {
     final token = await fetchSecureCacheStorage.fetchSecure('token');
-    final headersWithAuth = {'x-access-token': token};
+    final authHeader = {'x-access-token': token};
     await decoratee.request(
       url: url,
       method: method,
-      headers: headersWithAuth,
+      headers: {...headers, ...authHeader},
       body: body,
     );
   }
