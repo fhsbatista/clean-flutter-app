@@ -18,8 +18,15 @@ class SurveysPage extends StatefulWidget {
 
 class _SurveysPageState extends State<SurveysPage> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      widget.presenter.loadData();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    widget.presenter.loadData();
     return Scaffold(
       appBar: AppBar(title: Text(I18n.strings.surveys)),
       body: Builder(builder: (context) {
