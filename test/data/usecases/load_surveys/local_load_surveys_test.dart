@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/data/cache/cache.dart';
 import 'package:fordev/data/usecases/usecases.dart';
 import 'package:fordev/domain/entities/survey_entity.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -28,14 +29,14 @@ void main() {
     }
   ];
 
-  void mockFetch() {
-    when(fetchCacheStorage.fetch(any)).thenAnswer((_) async => validSurveysMap);
+  void mockFetch(List<Map> data) {
+    when(fetchCacheStorage.fetch(any)).thenAnswer((_) async => data);
   }
 
   setUp(() {
     fetchCacheStorage = MockFetchCacheStorage();
     sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorage);
-    mockFetch();
+    mockFetch(validSurveysMap);
   });
 
   test('Should call FetchCacheStorage with correct key', () async {
@@ -64,5 +65,12 @@ void main() {
         ),
       ],
     );
+  });
+
+  test('Should throw Unexpected error if cache is empty', () async {
+    mockFetch([]);
+    final future = () => sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
