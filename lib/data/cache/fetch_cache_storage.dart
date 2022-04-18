@@ -1,3 +1,3 @@
 abstract class FetchCacheStorage {
-  Future<void> fetch(String key);
+  Future<dynamic> fetch(String key);
 }
