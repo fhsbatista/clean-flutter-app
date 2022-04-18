@@ -1,6 +1,6 @@
-import 'package:fordev/data/cache/cache.dart';
-import 'package:fordev/domain/helpers/helpers.dart';
 import '../../../domain/entities/entities.dart';
+import '../../../domain/helpers/helpers.dart';
+import '../../cache/cache.dart';
 import '../../models/models.dart';
 
 class LocalLoadSurveys {
