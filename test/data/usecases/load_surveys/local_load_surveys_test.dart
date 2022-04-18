@@ -69,7 +69,7 @@ void main() {
 
   test('Should throw Unexpected error if cache is empty', () async {
     mockFetch([]);
-    
+
     final future = () => sut.load();
 
     expect(future, throwsA(DomainError.unexpected));
@@ -77,6 +77,21 @@ void main() {
 
   test('Should throw Unexpected error if cache is null', () async {
     mockFetch(null);
+
+    final future = () => sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw Unexpected error if cache is invalid', () async {
+    mockFetch([
+      {
+        'id': faker.guid.guid(),
+        'question': faker.lorem.words(3).toString(),
+        'date': 'invalid date',
+        'didAnswer': 'false',
+      }
+    ]);
 
     final future = () => sut.load();
 

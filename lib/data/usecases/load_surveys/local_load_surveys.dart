@@ -10,11 +10,16 @@ class LocalLoadSurveys {
 
   Future<List<SurveyEntity>> load() async {
     final data = await fetchCacheStorage.fetch('surveys');
-    if (data == null || data.isEmpty) {
+    try {
+      if (data == null || data.isEmpty) {
+        throw DomainError.unexpected;
+      }
+      return data
+          .map<SurveyEntity>(
+              (json) => LocalSurveyModel.fromJson(json).toEntity())
+          .toList();
+    } catch (error) {
       throw DomainError.unexpected;
     }
-    return data
-        .map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity())
-        .toList();
   }
 }
