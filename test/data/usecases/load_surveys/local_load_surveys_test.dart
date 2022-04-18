@@ -33,6 +33,10 @@ void main() {
     when(fetchCacheStorage.fetch(any)).thenAnswer((_) async => data);
   }
 
+  void mockFetchError() {
+    when(fetchCacheStorage.fetch(any)).thenThrow(Exception());
+  }
+
   setUp(() {
     fetchCacheStorage = MockFetchCacheStorage();
     sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorage);
@@ -105,6 +109,14 @@ void main() {
         'didAnswer': 'false',
       }
     ]);
+
+    final future = () => sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw Unexpected error if fetch throws', () async {
+    mockFetchError();
 
     final future = () => sut.load();
 

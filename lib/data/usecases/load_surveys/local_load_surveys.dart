@@ -9,8 +9,8 @@ class LocalLoadSurveys {
   LocalLoadSurveys({required this.fetchCacheStorage});
 
   Future<List<SurveyEntity>> load() async {
-    final data = await fetchCacheStorage.fetch('surveys');
     try {
+      final data = await fetchCacheStorage.fetch('surveys');
       if (data == null || data.isEmpty) {
         throw DomainError.unexpected;
       }
