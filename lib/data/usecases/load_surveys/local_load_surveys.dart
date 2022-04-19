@@ -15,10 +15,7 @@ class LocalLoadSurveys implements LoadSurveys {
       if (data == null || data.isEmpty) {
         throw DomainError.unexpected;
       }
-      return data
-          .map<SurveyEntity>(
-              (json) => LocalSurveyModel.fromJson(json).toEntity())
-          .toList();
+      return _toSurveyEntities(data);
     } catch (error) {
       throw DomainError.unexpected;
     }
@@ -27,12 +24,15 @@ class LocalLoadSurveys implements LoadSurveys {
   Future<void> validate() async {
     final data = await cacheStorage.fetch('surveys');
     try {
-      data
-          .map<SurveyEntity>(
-              (json) => LocalSurveyModel.fromJson(json).toEntity())
-          .toList();
+      _toSurveyEntities(data);
     } catch (error) {
       cacheStorage.delete('surveys');
     }
+  }
+
+  List<SurveyEntity> _toSurveyEntities(dynamic data) {
+    return data
+        .map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity())
+        .toList();
   }
 }
