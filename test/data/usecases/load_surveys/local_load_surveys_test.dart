@@ -9,10 +9,10 @@ import 'package:mockito/mockito.dart';
 
 import 'local_load_surveys_test.mocks.dart';
 
-@GenerateMocks([FetchCacheStorage])
+@GenerateMocks([CacheStorage])
 void main() {
   late LocalLoadSurveys sut;
-  late MockFetchCacheStorage fetchCacheStorage;
+  late MockCacheStorage fetchCacheStorage;
 
   final validSurveysMap = [
     {
@@ -38,8 +38,8 @@ void main() {
   }
 
   setUp(() {
-    fetchCacheStorage = MockFetchCacheStorage();
-    sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorage);
+    fetchCacheStorage = MockCacheStorage();
+    sut = LocalLoadSurveys(cacheStorage: fetchCacheStorage);
     mockFetch(validSurveysMap);
   });
 
