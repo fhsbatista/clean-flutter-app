@@ -43,83 +43,85 @@ void main() {
     mockFetch(validSurveysMap);
   });
 
-  test('Should call FetchCacheStorage with correct key', () async {
-    await sut.load();
+  group('load', () {
+    test('Should call FetchCacheStorage with correct key', () async {
+      await sut.load();
 
-    verify(fetchCacheStorage.fetch('surveys')).called(1);
-  });
+      verify(fetchCacheStorage.fetch('surveys')).called(1);
+    });
 
-  test('Should return a list of surveys on success', () async {
-    final surveys = await sut.load();
+    test('Should return a list of surveys on success', () async {
+      final surveys = await sut.load();
 
-    expect(
-      surveys,
-      [
-        SurveyEntity(
-          id: validSurveysMap[0]['id'] ?? '',
-          question: validSurveysMap[0]['question'] ?? '',
-          date: DateTime.utc(2022, 01, 27),
-          isAnswered: false,
-        ),
-        SurveyEntity(
-          id: validSurveysMap[1]['id'] ?? '',
-          question: validSurveysMap[1]['question'] ?? '',
-          date: DateTime.utc(2021, 09, 27, 1),
-          isAnswered: true,
-        ),
-      ],
-    );
-  });
+      expect(
+        surveys,
+        [
+          SurveyEntity(
+            id: validSurveysMap[0]['id'] ?? '',
+            question: validSurveysMap[0]['question'] ?? '',
+            date: DateTime.utc(2022, 01, 27),
+            isAnswered: false,
+          ),
+          SurveyEntity(
+            id: validSurveysMap[1]['id'] ?? '',
+            question: validSurveysMap[1]['question'] ?? '',
+            date: DateTime.utc(2021, 09, 27, 1),
+            isAnswered: true,
+          ),
+        ],
+      );
+    });
 
-  test('Should throw Unexpected error if cache is empty', () async {
-    mockFetch([]);
+    test('Should throw Unexpected error if cache is empty', () async {
+      mockFetch([]);
 
-    final future = () => sut.load();
+      final future = () => sut.load();
 
-    expect(future, throwsA(DomainError.unexpected));
-  });
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-  test('Should throw Unexpected error if cache is null', () async {
-    mockFetch(null);
+    test('Should throw Unexpected error if cache is null', () async {
+      mockFetch(null);
 
-    final future = () => sut.load();
+      final future = () => sut.load();
 
-    expect(future, throwsA(DomainError.unexpected));
-  });
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-  test('Should throw Unexpected error if cache is invalid', () async {
-    mockFetch([
-      {
-        'id': faker.guid.guid(),
-        'question': faker.lorem.words(3).toString(),
-        'date': 'invalid date',
-        'didAnswer': 'false',
-      }
-    ]);
+    test('Should throw Unexpected error if cache is invalid', () async {
+      mockFetch([
+        {
+          'id': faker.guid.guid(),
+          'question': faker.lorem.words(3).toString(),
+          'date': 'invalid date',
+          'didAnswer': 'false',
+        }
+      ]);
 
-    final future = () => sut.load();
+      final future = () => sut.load();
 
-    expect(future, throwsA(DomainError.unexpected));
-  });
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-  test('Should throw Unexpected error if cache is incomplete', () async {
-    mockFetch([
-      {
-        'date': '2022-01-27T00:00:00Z',
-        'didAnswer': 'false',
-      }
-    ]);
+    test('Should throw Unexpected error if cache is incomplete', () async {
+      mockFetch([
+        {
+          'date': '2022-01-27T00:00:00Z',
+          'didAnswer': 'false',
+        }
+      ]);
 
-    final future = () => sut.load();
+      final future = () => sut.load();
 
-    expect(future, throwsA(DomainError.unexpected));
-  });
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-  test('Should throw Unexpected error if fetch throws', () async {
-    mockFetchError();
+    test('Should throw Unexpected error if fetch throws', () async {
+      mockFetchError();
 
-    final future = () => sut.load();
+      final future = () => sut.load();
 
-    expect(future, throwsA(DomainError.unexpected));
+      expect(future, throwsA(DomainError.unexpected));
+    });
   });
 }
