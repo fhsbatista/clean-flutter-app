@@ -159,6 +159,14 @@ void main() {
 
         verify(fetchCacheStorage.delete('surveys')).called(1);
       });
+
+      test('Should delete cache if fetch throws', () async {
+        mockFetchError();
+
+        await sut.validate();
+
+        verify(fetchCacheStorage.delete('surveys')).called(1);
+      });
     });
   });
 }
