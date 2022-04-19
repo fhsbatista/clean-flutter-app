@@ -123,5 +123,13 @@ void main() {
 
       expect(future, throwsA(DomainError.unexpected));
     });
+
+    group('validate', () {
+      test('Should call FetchCacheStorage with correct key', () async {
+        await sut.validate();
+
+        verify(fetchCacheStorage.fetch('surveys')).called(1);
+      });
+    });
   });
 }
