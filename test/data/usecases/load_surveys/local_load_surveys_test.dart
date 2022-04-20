@@ -57,6 +57,11 @@ void main() {
         .thenAnswer((_) async => null);
   }
 
+  void mockSaveError() {
+    when(fetchCacheStorage.save(key: anyNamed('key'), value: anyNamed('value')))
+        .thenThrow(Exception());
+  }
+
   setUp(() {
     fetchCacheStorage = MockCacheStorage();
     sut = LocalLoadSurveys(cacheStorage: fetchCacheStorage);
@@ -210,6 +215,14 @@ void main() {
         await sut.save(validSurveysEntities);
 
         verify(fetchCacheStorage.save(key: 'surveys', value: list)).called(1);
+      });
+
+      test('Should throw Unexpected error if save throws', () async {
+        mockSaveError();
+
+        final future = sut.save(validSurveysEntities);
+
+        expect(() => future, throwsA(DomainError.unexpected));
       });
     });
   });

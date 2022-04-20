@@ -31,7 +31,11 @@ class LocalLoadSurveys implements LoadSurveys {
   }
 
   Future<void> save(List<SurveyEntity> surveys) async {
-    await cacheStorage.save(key: 'surveys', value: _toSurveyMaps(surveys));
+    try {
+      await cacheStorage.save(key: 'surveys', value: _toSurveyMaps(surveys));
+    } catch (error) {
+      throw DomainError.unexpected;
+    }
   }
 
   List<SurveyEntity> _toSurveyEntities(dynamic data) {
