@@ -11,16 +11,18 @@ import 'local_storage_adapter_test.mocks.dart';
 void main() {
   late LocalStorageAdapter sut;
   late LocalStorage localStorage;
+  late String key;
+  late String value;
 
   setUp(() {
     localStorage = MockLocalStorage();
     sut = LocalStorageAdapter(localStorage);
+    key = faker.randomGenerator.string(5);
+    value = faker.randomGenerator.string(100);
+
   });
 
   test('Should call local storage with correct values', () async {
-    final key = faker.randomGenerator.string(5);
-    final value = faker.randomGenerator.string(100);
-
     await sut.save(key: key, value: value);
 
     verify(localStorage.deleteItem(key)).called(1);
