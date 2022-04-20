@@ -4,7 +4,7 @@ import '../../../data/http/http.dart';
 
 HttpClient makeAuthHttpAdapterDecorator() {
   return AuthHttpClientDecorator(
-    makeLocalStorageAdapter(),
+    makeSecureStorageAdapter(),
     makeHttpAdapter(),
   );
 }
