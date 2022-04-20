@@ -10,9 +10,13 @@ import 'local_storage_adapter_test.mocks.dart';
 @GenerateMocks([LocalStorage])
 void main() {
   late LocalStorageAdapter sut;
-  late LocalStorage localStorage;
+  late MockLocalStorage localStorage;
   late String key;
   late String value;
+
+  void mockDeleteItemError() {
+    when(localStorage.deleteItem(any)).thenThrow(Exception());
+  }
 
   setUp(() {
     localStorage = MockLocalStorage();
@@ -27,5 +31,13 @@ void main() {
 
     verify(localStorage.deleteItem(key)).called(1);
     verify(localStorage.setItem(key, value)).called(1);
+  });
+
+  test('Should throw if delete throws', () async {
+    mockDeleteItemError();
+
+    final future = sut.save(key: key, value: value);
+
+    expect(() => future, throwsA(isA<Exception>()));
   });
 }
