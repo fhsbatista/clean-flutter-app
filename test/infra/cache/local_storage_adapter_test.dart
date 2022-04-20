@@ -1,6 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fordev/infra/cache/local_storage_adapter_test.dart';
+import 'package:fordev/infra/cache/cache.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
