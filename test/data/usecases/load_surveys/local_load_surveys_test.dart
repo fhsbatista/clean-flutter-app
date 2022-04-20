@@ -29,6 +29,21 @@ void main() {
     }
   ];
 
+  final validSurveysEntities = [
+    SurveyEntity(
+      id: 'id 1',
+      question: 'question 1',
+      date: DateTime.utc(2022, 1, 22),
+      isAnswered: true,
+    ),
+    SurveyEntity(
+      id: 'id 2',
+      question: 'question 2',
+      date: DateTime.utc(2022, 2, 22),
+      isAnswered: false,
+    ),
+  ];
+
   void mockFetch(List<Map>? data) {
     when(fetchCacheStorage.fetch(any)).thenAnswer((_) async => data);
   }
@@ -37,10 +52,16 @@ void main() {
     when(fetchCacheStorage.fetch(any)).thenThrow(Exception());
   }
 
+  void mockSave() {
+    when(fetchCacheStorage.save(key: anyNamed('key'), value: anyNamed('value')))
+        .thenAnswer((_) async => null);
+  }
+
   setUp(() {
     fetchCacheStorage = MockCacheStorage();
     sut = LocalLoadSurveys(cacheStorage: fetchCacheStorage);
     mockFetch(validSurveysMap);
+    mockSave();
   });
 
   group('load', () {
@@ -166,6 +187,29 @@ void main() {
         await sut.validate();
 
         verify(fetchCacheStorage.delete('surveys')).called(1);
+      });
+    });
+
+    group('save', () {
+      test('Should call CacheStorage with correct values', () async {
+        final list = [
+          {
+            'id': validSurveysEntities[0].id,
+            'question': validSurveysEntities[0].question,
+            'date': validSurveysEntities[0].date.toIso8601String(),
+            'didAnswer': validSurveysEntities[0].isAnswered.toString(),
+          },
+          {
+            'id': validSurveysEntities[1].id,
+            'question': validSurveysEntities[1].question,
+            'date': validSurveysEntities[1].date.toIso8601String(),
+            'didAnswer': validSurveysEntities[1].isAnswered.toString(),
+          },
+        ];
+
+        await sut.save(validSurveysEntities);
+
+        verify(fetchCacheStorage.save(key: 'surveys', value: list)).called(1);
       });
     });
   });

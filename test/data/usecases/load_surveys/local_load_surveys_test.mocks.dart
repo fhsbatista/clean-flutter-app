@@ -34,4 +34,9 @@ class MockCacheStorage extends _i1.Mock implements _i2.CacheStorage {
       (super.noSuchMethod(Invocation.method(#delete, [key]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
+  @override
+  _i3.Future<void> save({String? key, dynamic value}) => (super.noSuchMethod(
+      Invocation.method(#save, [], {#key: key, #value: value}),
+      returnValue: Future<void>.value(),
+      returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
 }
