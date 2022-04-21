@@ -22,8 +22,8 @@ void main() {
     when(localStorage.setItem(any, any)).thenThrow(Exception());
   }
 
-  void mockGetItem() {
-    when(localStorage.getItem(any)).thenAnswer((_) async => '');
+  void mockGetItem(String value) {
+    when(localStorage.getItem(any)).thenAnswer((_) async => value);
   }
 
   setUp(() {
@@ -31,7 +31,7 @@ void main() {
     sut = LocalStorageAdapter(localStorage);
     key = faker.randomGenerator.string(5);
     value = faker.randomGenerator.string(100);
-    mockGetItem();
+    mockGetItem('any_value');
   });
 
   group('save', () {
@@ -80,6 +80,15 @@ void main() {
       await sut.fetch(key);
 
       verify(localStorage.getItem(key)).called(1);
+    });
+
+    test('Should return same value as local storage', () async {
+      final storedValue = 'any_value';
+      mockGetItem(storedValue);
+
+      final result = await sut.fetch(key);
+
+      expect(result, storedValue);
     });
   });
 }
