@@ -27,29 +27,30 @@ void main() {
     sut = LocalStorageAdapter(localStorage);
     key = faker.randomGenerator.string(5);
     value = faker.randomGenerator.string(100);
-
   });
 
-  test('Should call local storage with correct values', () async {
-    await sut.save(key: key, value: value);
+  group('save', () {
+    test('Should call local storage with correct values', () async {
+      await sut.save(key: key, value: value);
 
-    verify(localStorage.deleteItem(key)).called(1);
-    verify(localStorage.setItem(key, value)).called(1);
-  });
+      verify(localStorage.deleteItem(key)).called(1);
+      verify(localStorage.setItem(key, value)).called(1);
+    });
 
-  test('Should throw if delete throws', () async {
-    mockDeleteItemError();
+    test('Should throw if delete throws', () async {
+      mockDeleteItemError();
 
-    final future = sut.save(key: key, value: value);
+      final future = sut.save(key: key, value: value);
 
-    expect(() => future, throwsA(isA<Exception>()));
-  });
+      expect(() => future, throwsA(isA<Exception>()));
+    });
 
-  test('Should throw if set throws', () async {
-    mockSetItemError();
+    test('Should throw if set throws', () async {
+      mockSetItemError();
 
-    final future = sut.save(key: key, value: value);
+      final future = sut.save(key: key, value: value);
 
-    expect(() => future, throwsA(isA<Exception>()));
+      expect(() => future, throwsA(isA<Exception>()));
+    });
   });
 }
