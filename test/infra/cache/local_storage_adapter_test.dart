@@ -22,11 +22,16 @@ void main() {
     when(localStorage.setItem(any, any)).thenThrow(Exception());
   }
 
+  void mockGetItem() {
+    when(localStorage.getItem(any)).thenAnswer((_) async => '');
+  }
+
   setUp(() {
     localStorage = MockLocalStorage();
     sut = LocalStorageAdapter(localStorage);
     key = faker.randomGenerator.string(5);
     value = faker.randomGenerator.string(100);
+    mockGetItem();
   });
 
   group('save', () {
@@ -67,6 +72,14 @@ void main() {
       final future = sut.delete(key);
 
       expect(() => future, throwsA(isA<Exception>()));
+    });
+  });
+
+  group('fetch', () {
+    test('Should call local storage with correct values', () async {
+      await sut.fetch(key);
+
+      verify(localStorage.getItem(key)).called(1);
     });
   });
 }
