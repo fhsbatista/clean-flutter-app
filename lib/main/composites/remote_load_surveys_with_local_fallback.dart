@@ -1,6 +1,8 @@
-import 'package:fordev/data/usecases/usecases.dart';
+import '../../data/usecases/usecases.dart';
+import '../../domain/usecases/usecases.dart';
+import '../../domain/entities/entities.dart';
 
-class RemoteLoadSurveysWithLocalFallback {
+class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
   final RemoteLoadSurveys remote;
   final LocalLoadSurveys local;
 
@@ -9,8 +11,9 @@ class RemoteLoadSurveysWithLocalFallback {
     required this.local,
   });
 
-  Future<void> load() async {
+  Future<List<SurveyEntity>> load() async {
     final surveys = await remote.load();
-    local.save(surveys);
+    await local.save(surveys);
+    return surveys;
   }
 }
