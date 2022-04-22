@@ -2,10 +2,15 @@ import 'package:fordev/data/usecases/usecases.dart';
 
 class RemoteLoadSurveysWithLocalFallback {
   final RemoteLoadSurveys remote;
+  final LocalLoadSurveys local;
 
-  RemoteLoadSurveysWithLocalFallback({required this.remote});
+  RemoteLoadSurveysWithLocalFallback({
+    required this.remote,
+    required this.local,
+  });
 
   Future<void> load() async {
-    remote.load();
+    final surveys = await remote.load();
+    local.save(surveys);
   }
 }

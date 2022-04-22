@@ -2,12 +2,15 @@
 // in fordev/test/main/composites/remote_load_surveys_with_local_fallback_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
+import 'package:fordev/data/cache/cache.dart' as _i3;
 import 'package:fordev/data/http/http.dart' as _i2;
+import 'package:fordev/data/usecases/load_surveys/local_load_surveys.dart'
+    as _i7;
 import 'package:fordev/data/usecases/load_surveys/remote_load_surveys.dart'
-    as _i3;
-import 'package:fordev/domain/entities/entities.dart' as _i5;
+    as _i4;
+import 'package:fordev/domain/entities/entities.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -22,10 +25,12 @@ import 'package:mockito/mockito.dart' as _i1;
 
 class _FakeHttpClient_0 extends _i1.Fake implements _i2.HttpClient {}
 
+class _FakeCacheStorage_1 extends _i1.Fake implements _i3.CacheStorage {}
+
 /// A class which mocks [RemoteLoadSurveys].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockRemoteLoadSurveys extends _i1.Mock implements _i3.RemoteLoadSurveys {
+class MockRemoteLoadSurveys extends _i1.Mock implements _i4.RemoteLoadSurveys {
   MockRemoteLoadSurveys() {
     _i1.throwOnMissingStub(this);
   }
@@ -38,9 +43,39 @@ class MockRemoteLoadSurveys extends _i1.Mock implements _i3.RemoteLoadSurveys {
       (super.noSuchMethod(Invocation.getter(#httpClient),
           returnValue: _FakeHttpClient_0()) as _i2.HttpClient);
   @override
-  _i4.Future<List<_i5.SurveyEntity>> load() =>
+  _i5.Future<List<_i6.SurveyEntity>> load() =>
       (super.noSuchMethod(Invocation.method(#load, []),
               returnValue:
-                  Future<List<_i5.SurveyEntity>>.value(<_i5.SurveyEntity>[]))
-          as _i4.Future<List<_i5.SurveyEntity>>);
+                  Future<List<_i6.SurveyEntity>>.value(<_i6.SurveyEntity>[]))
+          as _i5.Future<List<_i6.SurveyEntity>>);
+}
+
+/// A class which mocks [LocalLoadSurveys].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLocalLoadSurveys extends _i1.Mock implements _i7.LocalLoadSurveys {
+  MockLocalLoadSurveys() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.CacheStorage get cacheStorage =>
+      (super.noSuchMethod(Invocation.getter(#cacheStorage),
+          returnValue: _FakeCacheStorage_1()) as _i3.CacheStorage);
+  @override
+  _i5.Future<List<_i6.SurveyEntity>> load() =>
+      (super.noSuchMethod(Invocation.method(#load, []),
+              returnValue:
+                  Future<List<_i6.SurveyEntity>>.value(<_i6.SurveyEntity>[]))
+          as _i5.Future<List<_i6.SurveyEntity>>);
+  @override
+  _i5.Future<void> validate() =>
+      (super.noSuchMethod(Invocation.method(#validate, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+  @override
+  _i5.Future<void> save(List<_i6.SurveyEntity>? surveys) =>
+      (super.noSuchMethod(Invocation.method(#save, [surveys]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
 }
