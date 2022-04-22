@@ -7,7 +7,7 @@ import 'package:fordev/presentation/protocols/protocols.dart';
 import 'package:fordev/validation/protocols/protocols.dart';
 import 'package:fordev/main/composites/composites.dart';
 
-import '../../validation/validators/validation_composite_test.mocks.dart';
+import 'validation_composite_test.mocks.dart';
 
 @GenerateMocks([FieldValidation])
 void main() {
