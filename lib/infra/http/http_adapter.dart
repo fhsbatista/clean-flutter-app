@@ -30,9 +30,9 @@ class HttpAdapter implements HttpClient {
           Uri.parse(url),
           headers: finalHeaders,
           body: body != null ? jsonEncode(body) : null,
-        );
+        ).timeout(const Duration(seconds: 3));
       } else if (method == 'get') {
-        response = await client.get(Uri.parse(url), headers: finalHeaders);
+        response = await client.get(Uri.parse(url), headers: finalHeaders).timeout(const Duration(seconds: 3));
       }
     } catch (_) {
       throw HttpError.serverError;
