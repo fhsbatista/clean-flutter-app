@@ -15,6 +15,7 @@ void main() {
   late MockRemoteLoadSurveys remote;
   late MockLocalLoadSurveys local;
   late List<SurveyEntity> remoteSurveys;
+  late List<SurveyEntity> localSurveys;
 
   List<SurveyEntity> validSurveys() {
     return [
@@ -43,7 +44,8 @@ void main() {
   }
 
   void mockLocal() {
-    when(local.load()).thenAnswer((_) async => validSurveys());
+    localSurveys = validSurveys();
+    when(local.load()).thenAnswer((_) async => localSurveys);
   }
 
   setUp(() {
@@ -69,7 +71,7 @@ void main() {
     verify(local.save(remoteSurveys)).called(1);
   });
 
-  test('Should return remote data', () async {
+  test('Should return remote surveys', () async {
     final result = await sut.load();
 
     expect(result, remoteSurveys);
@@ -90,5 +92,13 @@ void main() {
 
     verify(local.validate()).called(1);
     verify(local.load()).called(1);
+  });
+
+  test('Should return local surveys', () async {
+    mockRemoteError(DomainError.unexpected);
+
+    final result = await sut.load();
+
+    expect(result, localSurveys);
   });
 }

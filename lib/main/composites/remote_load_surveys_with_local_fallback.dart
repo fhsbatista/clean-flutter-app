@@ -22,8 +22,8 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
         rethrow;
       }
       await local.validate();
-      await local.load();
-      return [];
+      final surveys = await local.load();
+      return surveys;
     }
   }
 }
