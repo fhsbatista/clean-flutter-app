@@ -1,4 +1,5 @@
 import '../../data/usecases/usecases.dart';
+import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../domain/entities/entities.dart';
 
@@ -12,8 +13,17 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
   });
 
   Future<List<SurveyEntity>> load() async {
-    final surveys = await remote.load();
-    await local.save(surveys);
-    return surveys;
+    try {
+      final surveys = await remote.load();
+      await local.save(surveys);
+      return surveys;
+    } catch (error) {
+      if (error == DomainError.access_denied) {
+        rethrow;
+      }
+      await local.validate();
+      await local.load();
+      return [];
+    }
   }
 }

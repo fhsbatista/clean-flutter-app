@@ -42,6 +42,10 @@ void main() {
     when(remote.load()).thenThrow(error);
   }
 
+  void mockLocal() {
+    when(local.load()).thenAnswer((_) async => validSurveys());
+  }
+
   setUp(() {
     remote = MockRemoteLoadSurveys();
     local = MockLocalLoadSurveys();
@@ -50,6 +54,7 @@ void main() {
       local: local,
     );
     mockRemote();
+    mockLocal();
   });
 
   test('Should call remote load', () async {
@@ -76,5 +81,14 @@ void main() {
     final future = sut.load();
 
     expect(() => future, throwsA(DomainError.access_denied));
+  });
+
+  test('Should call local fetch on remote error', () async {
+    mockRemoteError(DomainError.unexpected);
+
+    await sut.load();
+
+    verify(local.validate()).called(1);
+    verify(local.load()).called(1);
   });
 }
