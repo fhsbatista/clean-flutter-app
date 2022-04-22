@@ -1,5 +1,5 @@
 import 'package:fordev/main/builders/validation_builder.dart';
-import 'package:fordev/validation/validators/validators.dart';
+import '../../../composites/composites.dart';
 import '../../../builders/builders.dart';
 
 ValidationComposite makeSignUpValidation() {
