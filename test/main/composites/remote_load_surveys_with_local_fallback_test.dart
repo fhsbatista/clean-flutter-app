@@ -2,6 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/data/usecases/usecases.dart';
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/main/composites/composites.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -37,6 +38,10 @@ void main() {
     when(remote.load()).thenAnswer((_) async => remoteSurveys);
   }
 
+  void mockRemoteError(DomainError error) {
+    when(remote.load()).thenThrow(error);
+  }
+
   setUp(() {
     remote = MockRemoteLoadSurveys();
     local = MockLocalLoadSurveys();
@@ -63,5 +68,13 @@ void main() {
     final result = await sut.load();
 
     expect(result, remoteSurveys);
+  });
+
+  test('Should rethrow if remote load throws AccessDeniedError', () async {
+    mockRemoteError(DomainError.access_denied);
+
+    final future = sut.load();
+
+    expect(() => future, throwsA(DomainError.access_denied));
   });
 }
