@@ -148,5 +148,9 @@ void main() {
     expect(find.text(I18n.strings.msgUnexpectedError), findsNothing);
     expect(find.text(I18n.strings.reload), findsNothing);
     expect(find.text('Question'), findsOneWidget);
+    expect(find.text('answer 1'), findsOneWidget);
+    expect(find.text('answer 2'), findsOneWidget);
+    expect(find.text('60%'), findsOneWidget);
+    expect(find.text('30%'), findsOneWidget);
   });
 }
