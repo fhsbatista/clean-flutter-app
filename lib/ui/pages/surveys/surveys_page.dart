@@ -42,23 +42,9 @@ class _SurveysPageState extends State<SurveysPage> {
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        snapshot.error.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        child: Text(I18n.strings.reload),
-                        onPressed: widget.presenter.loadData,
-                      ),
-                    ],
-                  ),
+                child: ReloadScreen(
+                  error: snapshot.error.toString(),
+                  onReloadClick: widget.presenter.loadData,
                 ),
               );
             }
