@@ -24,7 +24,7 @@ class App extends StatelessWidget {
       title: 'ForDev',
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
-      initialRoute: '/survey_result/1',
+      initialRoute: '/',
       getPages: [
         GetPage(
           name: '/',
