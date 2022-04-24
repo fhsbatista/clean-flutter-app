@@ -49,20 +49,7 @@ class _SurveysPageState extends State<SurveysPage> {
               );
             }
             if (snapshot.hasData) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    enlargeCenterPage: true,
-                    aspectRatio: 1,
-                  ),
-                  items: snapshot.data?.map(
-                    (viewModel) {
-                      return SurveyItem(viewModel);
-                    },
-                  ).toList(),
-                ),
-              );
+              return SurveyItemsList(snapshot.data ?? []);
             }
             return SizedBox.shrink();
           },
@@ -71,3 +58,5 @@ class _SurveysPageState extends State<SurveysPage> {
     );
   }
 }
+
+
