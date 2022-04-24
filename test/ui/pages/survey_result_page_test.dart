@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/ui/helpers/errors/errors.dart';
 import 'package:fordev/ui/helpers/i18n/i18n.dart';
+import 'package:fordev/ui/pages/survey_result/components/components.dart';
 import 'package:get/get.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -41,26 +42,25 @@ void main() {
   });
 
   SurveyResultViewModel validSurveyResultViewModel() {
-    //Não está usando o 'faker' para evitar o risco de o faker acabar gerando strings iguais. 
+    //Não está usando o 'faker' para evitar o risco de o faker acabar gerando strings iguais.
     //Isso faria o teste passar ou falhar por motivos errados já que eles precisam encontrar (método find) um número específico de widgets que dão match.
-    return 
-      SurveyResultViewModel(
-        id: 'any_id',
-        question: 'Question',
-        answers: [
-          SurveyAnswerViewModel(
-            image: 'image 1',
-            answer: 'answer 1',
-            isCurrentAnswer: true,
-            percent: '60%',
-          ),
-          SurveyAnswerViewModel(
-            answer: 'answer 2',
-            isCurrentAnswer: false,
-            percent: '30%',
-          ),
-        ],
-      );
+    return SurveyResultViewModel(
+      id: 'any_id',
+      question: 'Question',
+      answers: [
+        SurveyAnswerViewModel(
+          image: 'image 1',
+          answer: 'answer 1',
+          isCurrentAnswer: true,
+          percent: '60%',
+        ),
+        SurveyAnswerViewModel(
+          answer: 'answer 2',
+          isCurrentAnswer: false,
+          percent: '30%',
+        ),
+      ],
+    );
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -152,5 +152,7 @@ void main() {
     expect(find.text('answer 2'), findsOneWidget);
     expect(find.text('60%'), findsOneWidget);
     expect(find.text('30%'), findsOneWidget);
+    expect(find.byType(ActiveCheckIcon), findsOneWidget);
+    expect(find.byType(DisabledCheckIcon), findsOneWidget);
   });
 }

@@ -58,13 +58,9 @@ class SurveyResult extends StatelessWidget {
                       color: Theme.of(context).primaryColorDark,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Icon(
-                      Icons.check_circle,
-                      color: Theme.of(context).highlightColor,
-                    ),
-                  ),
+                  viewModel.answers[index - 1].isCurrentAnswer
+                      ? ActiveCheckIcon()
+                      : DisabledCheckIcon(),
                 ],
               ),
             ),
@@ -72,6 +68,39 @@ class SurveyResult extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class ActiveCheckIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return CheckIcon(active: true);
+  }
+}
+
+class DisabledCheckIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return CheckIcon(active: false);
+  }
+}
+
+class CheckIcon extends StatelessWidget {
+  final bool active;
+
+  const CheckIcon({required this.active});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Icon(
+        Icons.check_circle,
+        color: active
+            ? Theme.of(context).highlightColor
+            : Theme.of(context).disabledColor,
+      ),
     );
   }
 }
