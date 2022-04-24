@@ -31,9 +31,9 @@ class _SurveysPageState extends State<SurveysPage> {
     return Scaffold(
       appBar: AppBar(title: Text(I18n.strings.surveys)),
       body: Builder(builder: (context) {
-        widget.presenter.isLoadingStream.listen((isLoading) {
+        widget.presenter.isLoadingStream.listen((isLoading) async {
           if (isLoading) {
-            showLoading(context);
+            await showLoading(context);
           } else {
             hideLoading(context);
           }

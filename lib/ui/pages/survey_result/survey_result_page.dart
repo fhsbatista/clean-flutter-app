@@ -15,9 +15,9 @@ class SurveyResultPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(I18n.strings.surveys)),
       body: Builder(builder: (context) {
-        presenter?.isLoadingStream.listen((isLoading) {
+        presenter?.isLoadingStream.listen((isLoading) async {
           if (isLoading) {
-            showLoading(context);
+            await showLoading(context);
           } else {
             hideLoading(context);
           }
