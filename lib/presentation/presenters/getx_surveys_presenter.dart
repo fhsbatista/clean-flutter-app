@@ -40,5 +40,7 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
   }
 
   @override
-  void goToSurveyResult({required String surveyId}) {}
+  void goToSurveyResult({required String surveyId}) {
+    _navigateTo.value = '/survey_result/$surveyId';
+  }
 }

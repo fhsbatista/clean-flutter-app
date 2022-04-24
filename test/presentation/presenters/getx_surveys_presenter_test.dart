@@ -86,4 +86,12 @@ void main() {
 
     await sut.loadData();
   });
+
+  test('Should change page to SurveyResult when requested', () async {
+    sut.navigateToStream.listen(expectAsync1((page) {
+      expect(page, '/survey_result/abcde123');
+    }));
+
+    sut.goToSurveyResult(surveyId: 'abcde123');
+  });
 }
