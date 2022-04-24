@@ -5,7 +5,7 @@ import 'survey_result.dart';
 
 abstract class SurveyResultPresenter implements Listenable {
   Stream<bool> get isLoadingStream;
-  Stream<SurveyResultViewModel> get surveyResultsStream;
+  Stream<SurveyResultViewModel?> get surveyResultStream;
 
   Future<void> loadData();
 }

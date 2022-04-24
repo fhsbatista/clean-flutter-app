@@ -1,7 +1,9 @@
 
+import 'package:equatable/equatable.dart';
+
 import 'survey_result.dart';
 
-class SurveyResultViewModel {
+class SurveyResultViewModel extends Equatable {
   final String id;
   final String question;
   final List<SurveyAnswerViewModel> answers;
@@ -11,4 +13,7 @@ class SurveyResultViewModel {
     required this.question,
     required this.answers,
   });
+
+  @override
+  List<Object?> get props => [id, question, answers];
 }

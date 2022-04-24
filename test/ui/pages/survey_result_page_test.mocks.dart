@@ -32,7 +32,7 @@ class MockSurveyResultPresenter extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#isLoadingStream),
           returnValue: Stream<bool>.empty()) as _i3.Stream<bool>);
   @override
-  _i3.Stream<_i2.SurveyResultViewModel> get surveyResultsStream =>
+  _i3.Stream<_i2.SurveyResultViewModel> get surveyResultStream =>
       (super.noSuchMethod(Invocation.getter(#surveyResultsStream),
               returnValue: Stream<_i2.SurveyResultViewModel>.empty())
           as _i3.Stream<_i2.SurveyResultViewModel>);
