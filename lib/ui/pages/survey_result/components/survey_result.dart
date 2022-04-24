@@ -14,18 +14,7 @@ class SurveyResult extends StatelessWidget {
       itemCount: viewModel.answers.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
-          return Container(
-            padding: EdgeInsets.only(
-              top: 40,
-              bottom: 20,
-              left: 20,
-              right: 20,
-            ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).disabledColor.withAlpha(90),
-            ),
-            child: Text(viewModel.question),
-          );
+          return SurveyHeader(viewModel.question);
         }
         return Column(
           children: [
