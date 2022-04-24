@@ -17,22 +17,23 @@ class SurveyAnswer extends StatelessWidget {
       ],
     );
   }
+
   Container _row(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            viewModel.image != null ? _image() : const SizedBox.shrink(),
-            _answer(),
-            _percent(context),
-            _checkIcon(),
-          ],
-        ),
-      );
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Theme.of(context).backgroundColor,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          viewModel.image != null ? _image() : const SizedBox.shrink(),
+          _answer(),
+          _percent(context),
+          _checkIcon(),
+        ],
+      ),
+    );
   }
 
   Divider _divider() => const Divider(height: 1);
@@ -60,12 +61,14 @@ class SurveyAnswer extends StatelessWidget {
     );
   }
 
-  Image _image() {
-    return Image.network(
-      viewModel.image!,
-      width: 80,
-      height: 40,
-    );
+  Widget _image() {
+    return viewModel.image != null
+        ? Image.network(
+            viewModel.image!,
+            width: 80,
+            height: 40,
+          )
+        : const SizedBox.shrink();
   }
 
   CheckIcon _checkIcon() {
