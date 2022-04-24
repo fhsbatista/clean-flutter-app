@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../survey_result.dart';
+
 class SurveyResult extends StatelessWidget {
+  final SurveyResultViewModel viewModel;
+
+  const SurveyResult(this.viewModel);
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -17,7 +23,7 @@ class SurveyResult extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).disabledColor.withAlpha(90),
             ),
-            child: Text('Qual é o seu framework favorito?'),
+            child: Text(viewModel.question),
           );
         }
         return Column(
@@ -37,8 +43,7 @@ class SurveyResult extends StatelessWidget {
                   ),
                   Expanded(
                     child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         'Ruby on rails',
                         style: TextStyle(fontSize: 16),

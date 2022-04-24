@@ -17,27 +17,51 @@ import 'survey_result_page_test.mocks.dart';
 void main() {
   late MockSurveyResultPresenter presenter;
   late StreamController<bool> isLoadingController;
-  late StreamController<List<dynamic>> surveysController;
+  late StreamController<SurveyResultViewModel> surveysController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
-    surveysController = StreamController<List<SurveyViewModel>>();
+    surveysController = StreamController<SurveyResultViewModel>();
   }
 
   void mockStreams() {
     when(presenter.isLoadingStream)
         .thenAnswer((_) => isLoadingController.stream);
-    when(presenter.surveyResultsStream).thenAnswer((_) => surveysController.stream);
+    when(presenter.surveyResultsStream)
+        .thenAnswer((_) => surveysController.stream);
   }
 
   void closeStreams() {
     isLoadingController.close();
     surveysController.close();
   }
-  
+
   tearDown(() {
     closeStreams();
   });
+
+  SurveyResultViewModel validSurveyResultViewModel() {
+    //Não está usando o 'faker' para evitar o risco de o faker acabar gerando strings iguais. 
+    //Isso faria o teste passar ou falhar por motivos errados já que eles precisam encontrar (método find) um número específico de widgets que dão match.
+    return 
+      SurveyResultViewModel(
+        id: 'any_id',
+        question: 'Question',
+        answers: [
+          SurveyAnswerViewModel(
+            image: 'image 1',
+            answer: 'answer 1',
+            isCurrentAnswer: true,
+            percent: '60%',
+          ),
+          SurveyAnswerViewModel(
+            answer: 'answer 2',
+            isCurrentAnswer: false,
+            percent: '30%',
+          ),
+        ],
+      );
+  }
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = MockSurveyResultPresenter();
@@ -99,6 +123,7 @@ void main() {
 
     expect(find.text(I18n.strings.msgUnexpectedError), findsOneWidget);
     expect(find.text(I18n.strings.reload), findsOneWidget);
+    expect(find.text('Question'), findsNothing);
   });
 
   testWidgets('Should call LoadSurveys on reload button click', (tester) async {
@@ -109,5 +134,19 @@ void main() {
     await tester.tap(find.text(I18n.strings.reload));
 
     verify(presenter.loadData()).called(2);
+  });
+
+  testWidgets('Should present valid data if SurveysStream emits valid data',
+      (tester) async {
+    await loadPage(tester);
+
+    surveysController.add(validSurveyResultViewModel());
+    await mockNetworkImagesFor(() async {
+      await tester.pump();
+    });
+
+    expect(find.text(I18n.strings.msgUnexpectedError), findsNothing);
+    expect(find.text(I18n.strings.reload), findsNothing);
+    expect(find.text('Question'), findsOneWidget);
   });
 }
