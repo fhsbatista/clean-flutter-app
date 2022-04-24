@@ -11,12 +11,15 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
 
   final _isLoading = true.obs;
   final _surveys = Rx<List<SurveyViewModel>>([]);
+  final _navigateTo = Rx<String?>(null);
 
   Stream<bool> get isLoadingStream => _isLoading.stream;
   Stream<List<SurveyViewModel>> get surveysStream => _surveys.stream;
+  Stream<String?> get navigateToStream => _navigateTo.stream;
 
   GetxSurveysPresenter({required this.loadSurveys});
 
+  @override
   Future<void> loadData() async {
     try {
       _isLoading.value = true;
@@ -35,4 +38,7 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
       _isLoading.value = false;
     }
   }
+
+  @override
+  void goToSurveyResult({required String surveyId}) {}
 }

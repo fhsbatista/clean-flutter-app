@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../helpers/i18n/i18n.dart';
@@ -36,6 +38,11 @@ class _SurveysPageState extends State<SurveysPage> {
             hideLoading(context);
           }
         });
+        widget.presenter.navigateToStream.listen((route) {
+          if (route?.isNotEmpty ?? false) {
+            Get.toNamed(route!);
+          }
+        });
         return StreamBuilder<List<SurveyViewModel>>(
           stream: widget.presenter.surveysStream,
           builder: (context, snapshot) {
@@ -48,7 +55,10 @@ class _SurveysPageState extends State<SurveysPage> {
               );
             }
             if (snapshot.hasData) {
-              return SurveyItemsList(snapshot.data ?? []);
+              return ListenableProvider(
+                create: (_) => widget.presenter,
+                child: SurveyItemsList(snapshot.data ?? []),
+              );
             }
             return SizedBox.shrink();
           },
@@ -57,5 +67,3 @@ class _SurveysPageState extends State<SurveysPage> {
     );
   }
 }
-
-

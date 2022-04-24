@@ -14,13 +14,15 @@ import 'surveys_page_test.mocks.dart';
 
 @GenerateMocks([SurveysPresenter])
 void main() {
-  late SurveysPresenter presenter;
+  late MockSurveysPresenter presenter;
   late StreamController<bool> isLoadingController;
   late StreamController<List<SurveyViewModel>> surveysController;
+  late StreamController<String?> navigateToController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
     surveysController = StreamController<List<SurveyViewModel>>();
+    navigateToController = StreamController<String?>();
   }
 
   void mockStreams() {
@@ -28,11 +30,16 @@ void main() {
     when(presenter.isLoadingStream)
         .thenAnswer((_) => isLoadingController.stream);
     when(presenter.surveysStream).thenAnswer((_) => surveysController.stream);
+    when(presenter.goToSurveyResult(surveyId: anyNamed('surveyId')))
+        .thenAnswer((_) => Future.value(null));
+    when(presenter.navigateToStream)
+        .thenAnswer((_) => navigateToController.stream);
   }
 
   void closeStreams() {
     isLoadingController.close();
     surveysController.close();
+    navigateToController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -135,5 +142,29 @@ void main() {
     await tester.tap(find.text(I18n.strings.reload));
 
     verify(presenter.loadData()).called(2);
+  });
+
+  testWidgets('Should call goToSurveyResult on survey click', (tester) async {
+    await loadPage(tester);
+
+    surveysController.add(makeSurveys());
+    await tester.pump();
+
+    await tester.tap(find.text('Question 1'));
+    await tester.pump();
+
+    verify(presenter.goToSurveyResult(surveyId: '1')).called(1);
+  });
+
+  testWidgets('Should change page on navigateTo events', (tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/fake_route');
+
+    //Settle so that the test waits to animation ends
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/fake_route');
+    expect(find.text('fake page'), findsOneWidget);
   });
 }
