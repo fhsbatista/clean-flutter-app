@@ -36,11 +36,13 @@ class SurveyResult extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Image.network(
-                    'https://cdn.smartworldclub.net/1387895/accesos_restringidos_web_registros_realizado_con_ruby_on_rails.jpg.webp',
-                    width: 80,
-                    height: 40,
-                  ),
+                  viewModel.answers[index - 1].image != null
+                      ? Image.network(
+                          viewModel.answers[index - 1].image!,
+                          width: 80,
+                          height: 40,
+                        )
+                      : const SizedBox.shrink(),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),

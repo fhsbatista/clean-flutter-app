@@ -154,5 +154,8 @@ void main() {
     expect(find.text('30%'), findsOneWidget);
     expect(find.byType(ActiveCheckIcon), findsOneWidget);
     expect(find.byType(DisabledCheckIcon), findsOneWidget);
+    final image =
+        tester.widget<Image>(find.byType(Image)).image as NetworkImage;
+    expect(image.url, 'image 1');
   });
 }
