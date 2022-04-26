@@ -140,4 +140,20 @@ void main() {
       expect(future, throwsA(HttpError.badRequest));
     },
   );
+
+  test(
+    'Should delete token on cache if request throws forbidden error',
+    () async {
+      mockDecorateeError(HttpError.forbidden);
+
+      final future = sut.request(
+        url: url,
+        method: method,
+      );
+
+      expect(future, throwsA(HttpError.forbidden));
+      await untilCalled(deleteSecureCacheStorage.deleteSecure('token'));
+      verify(deleteSecureCacheStorage.deleteSecure('token')).called(1);
+    },
+  );
 }

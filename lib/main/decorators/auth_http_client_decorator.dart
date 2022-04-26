@@ -27,7 +27,10 @@ class AuthHttpClientDecorator implements HttpClient {
         headers: {...headers, ...authHeader},
         body: body,
       );
-    } on HttpError {
+    } on HttpError catch (error) {
+      if (error == HttpError.forbidden) {
+        await deleteSecureCacheStorage.deleteSecure('token');
+      }
       rethrow;
     } catch (error) {
       await deleteSecureCacheStorage.deleteSecure('token');
