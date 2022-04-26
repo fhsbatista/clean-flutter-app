@@ -3,7 +3,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../data/cache/cache.dart';
 
 class SecureStorageAdapter
-    implements SaveSecureCacheStorage, FetchSecureCacheStorage {
+    implements
+        SaveSecureCacheStorage,
+        FetchSecureCacheStorage,
+        DeleteSecureCacheStorage {
   final FlutterSecureStorage secureStorage;
 
   SecureStorageAdapter({required this.secureStorage});
@@ -16,5 +19,10 @@ class SecureStorageAdapter
   Future<String?> fetch(String key) async {
     final value = await secureStorage.read(key: key);
     return value;
+  }
+
+  @override
+  Future<void> delete(String key) async {
+    await secureStorage.delete(key: key);
   }
 }
