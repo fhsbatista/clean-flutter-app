@@ -8,12 +8,12 @@ class SecureStorageAdapter
 
   SecureStorageAdapter({required this.secureStorage});
 
-  Future<void> saveSecure({required String key, required String value}) async {
+  Future<void> save({required String key, required String value}) async {
     await secureStorage.write(key: key, value: value);
   }
 
   @override
-  Future<String?> fetchSecure(String key) async {
+  Future<String?> fetch(String key) async {
     final value = await secureStorage.read(key: key);
     return value;
   }

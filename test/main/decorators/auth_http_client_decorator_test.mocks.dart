@@ -29,7 +29,7 @@ class MockFetchSecureCacheStorage extends _i1.Mock
   }
 
   @override
-  _i3.Future<String?> fetchSecure(String? key) =>
+  _i3.Future<String?> fetch(String? key) =>
       (super.noSuchMethod(Invocation.method(#fetchSecure, [key]),
           returnValue: Future<String?>.value()) as _i3.Future<String?>);
 }
@@ -44,7 +44,7 @@ class MockDeleteSecureCacheStorage extends _i1.Mock
   }
 
   @override
-  _i3.Future<void> deleteSecure(String? key) =>
+  _i3.Future<void> delete(String? key) =>
       (super.noSuchMethod(Invocation.method(#deleteSecure, [key]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);

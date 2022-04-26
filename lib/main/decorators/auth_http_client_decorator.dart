@@ -19,7 +19,7 @@ class AuthHttpClientDecorator implements HttpClient {
     Map body = const {},
   }) async {
     try {
-      final token = await fetchSecureCacheStorage.fetchSecure('token');
+      final token = await fetchSecureCacheStorage.fetch('token');
       final authHeader = {'x-access-token': token};
       return decoratee.request(
         url: url,
@@ -31,7 +31,7 @@ class AuthHttpClientDecorator implements HttpClient {
       if (error is HttpError && error != HttpError.forbidden) {
         rethrow;
       } else {
-        await deleteSecureCacheStorage.deleteSecure('token');
+        await deleteSecureCacheStorage.delete('token');
         throw HttpError.forbidden;
       }
     }

@@ -27,7 +27,7 @@ class MockSaveSecureCacheStorage extends _i1.Mock
   }
 
   @override
-  _i3.Future<void> saveSecure({String? key, String? value}) =>
+  _i3.Future<void> save({String? key, String? value}) =>
       (super.noSuchMethod(
           Invocation.method(#saveSecure, [], {#key: key, #value: value}),
           returnValue: Future<void>.value(),

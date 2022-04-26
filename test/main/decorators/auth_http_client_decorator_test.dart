@@ -21,7 +21,7 @@ void main() {
   late String decorateeResponse;
 
   PostExpectation whenTokenCall() {
-    return when(fetchSecureCacheStorage.fetchSecure(any));
+    return when(fetchSecureCacheStorage.fetch(any));
   }
 
   void mockToken() {
@@ -69,7 +69,7 @@ void main() {
   test('Should call FetchSecureCacheStorage with correct key', () async {
     await sut.request(url: url, method: method);
 
-    verify(fetchSecureCacheStorage.fetchSecure('token')).called(1);
+    verify(fetchSecureCacheStorage.fetch('token')).called(1);
   });
 
   test('Should call decoratee with token on header', () async {
@@ -123,7 +123,7 @@ void main() {
       );
 
       expect(future, throwsA(HttpError.forbidden));
-      verify(deleteSecureCacheStorage.deleteSecure('token')).called(1);
+      verify(deleteSecureCacheStorage.delete('token')).called(1);
     },
   );
 
@@ -152,8 +152,8 @@ void main() {
       );
 
       expect(future, throwsA(HttpError.forbidden));
-      await untilCalled(deleteSecureCacheStorage.deleteSecure('token'));
-      verify(deleteSecureCacheStorage.deleteSecure('token')).called(1);
+      await untilCalled(deleteSecureCacheStorage.delete('token'));
+      verify(deleteSecureCacheStorage.delete('token')).called(1);
     },
   );
 }
