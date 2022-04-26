@@ -3,9 +3,14 @@ import '../../data/http/http.dart';
 
 class AuthHttpClientDecorator implements HttpClient {
   final FetchSecureCacheStorage fetchSecureCacheStorage;
+  final DeleteSecureCacheStorage deleteSecureCacheStorage;
   final HttpClient decoratee;
 
-  AuthHttpClientDecorator(this.fetchSecureCacheStorage, this.decoratee);
+  AuthHttpClientDecorator({
+    required this.fetchSecureCacheStorage,
+    required this.deleteSecureCacheStorage,
+    required this.decoratee,
+  });
 
   Future<dynamic> request({
     required String url,
@@ -25,6 +30,7 @@ class AuthHttpClientDecorator implements HttpClient {
     } on HttpError {
       rethrow;
     } catch (error) {
+      await deleteSecureCacheStorage.deleteSecure('token');
       throw HttpError.forbidden;
     }
   }
