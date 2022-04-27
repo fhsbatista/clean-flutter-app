@@ -18,19 +18,19 @@ void main() {
   late MockLoadSurveys loadSurveys;
 
   final validSurveys = [
-        SurveyEntity(
-          id: faker.guid.guid(),
-          question: faker.lorem.sentence(),
-          date: DateTime(2022, 2, 20),
-          isAnswered: true,
-        ),
-        SurveyEntity(
-          id: faker.guid.guid(),
-          question: faker.lorem.sentence(),
-          date: DateTime(2022, 3, 20),
-          isAnswered: false,
-        ),
-      ];
+    SurveyEntity(
+      id: faker.guid.guid(),
+      question: faker.lorem.sentence(),
+      date: DateTime(2022, 2, 20),
+      isAnswered: true,
+    ),
+    SurveyEntity(
+      id: faker.guid.guid(),
+      question: faker.lorem.sentence(),
+      date: DateTime(2022, 3, 20),
+      isAnswered: false,
+    ),
+  ];
 
   PostExpectation mockSurveysCall() => when(loadSurveys.load());
 
@@ -40,6 +40,9 @@ void main() {
 
   void mockLoadSurveysError() =>
       mockSurveysCall().thenThrow(DomainError.unexpected);
+
+  void mockAccessDeniedError() =>
+      mockSurveysCall().thenThrow(DomainError.access_denied);
 
   setUp(() {
     loadSurveys = MockLoadSurveys();
@@ -93,5 +96,14 @@ void main() {
     }));
 
     sut.goToSurveyResult(surveyId: 'abcde123');
+  });
+
+  test('Should emit correct events on access denied', () async {
+    mockAccessDeniedError();
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(sut.isSessionExpiredStream, emits(true));
+
+    await sut.loadData();
   });
 }

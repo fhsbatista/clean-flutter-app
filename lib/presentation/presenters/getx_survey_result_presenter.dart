@@ -39,8 +39,15 @@ class GetxSurveyResultPresenter extends GetxController
                 ))
             .toList(),
       );
-    } on DomainError {
-      _surveyResult.addError(UIError.unexpected.description, StackTrace.empty);
+    } on DomainError catch (error) {
+      if (error == DomainError.access_denied) {
+        _isSessionExpired.value = true;
+      } else {
+        _surveyResult.addError(
+          UIError.unexpected.description,
+          StackTrace.empty,
+        );
+      }
     } finally {
       _isLoading.value = false;
     }

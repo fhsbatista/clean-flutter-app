@@ -34,8 +34,12 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
                 isAnswered: e.isAnswered,
               ))
           .toList();
-    } on DomainError {
-      _surveys.addError(UIError.unexpected.description, StackTrace.empty);
+    } on DomainError catch (error) {
+      if (error == DomainError.access_denied) {
+        _isSessionExpired.value = true;
+      } else {
+        _surveys.addError(UIError.unexpected.description, StackTrace.empty);
+      }
     } finally {
       _isLoading.value = false;
     }
