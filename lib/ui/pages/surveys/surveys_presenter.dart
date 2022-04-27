@@ -5,6 +5,7 @@ abstract class SurveysPresenter implements Listenable {
   Stream<bool> get isLoadingStream;
   Stream<List<SurveyViewModel>> get surveysStream;
   Stream<String?> get navigateToStream;
+  Stream<bool> get isSessionExpiredStream;
 
   void loadData();
   void goToSurveyResult({required String surveyId});

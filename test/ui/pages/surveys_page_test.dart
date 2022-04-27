@@ -18,11 +18,13 @@ void main() {
   late StreamController<bool> isLoadingController;
   late StreamController<List<SurveyViewModel>> surveysController;
   late StreamController<String?> navigateToController;
+  late StreamController<bool> isSessionExpiredController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
     surveysController = StreamController<List<SurveyViewModel>>();
     navigateToController = StreamController<String?>();
+    isSessionExpiredController = StreamController<bool>();
   }
 
   void mockStreams() {
@@ -34,12 +36,15 @@ void main() {
         .thenAnswer((_) => Future.value(null));
     when(presenter.navigateToStream)
         .thenAnswer((_) => navigateToController.stream);
+    when(presenter.isSessionExpiredStream)
+        .thenAnswer((_) => isSessionExpiredController.stream);
   }
 
   void closeStreams() {
     isLoadingController.close();
     surveysController.close();
     navigateToController.close();
+    isSessionExpiredController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -55,6 +60,10 @@ void main() {
         GetPage(
           name: '/fake_route',
           page: () => Scaffold(body: Text('fake page')),
+        ),
+        GetPage(
+          name: '/login',
+          page: () => Scaffold(body: Text('login page')),
         ),
       ],
     );
@@ -166,5 +175,27 @@ void main() {
 
     expect(Get.currentRoute, '/fake_route');
     expect(find.text('fake page'), findsOneWidget);
+  });
+
+  testWidgets('Should logout', (tester) async {
+    await loadPage(tester);
+
+    isSessionExpiredController.add(true);
+
+    //Settle so that the test waits to animation ends
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/login');
+  });
+
+  testWidgets('Should not logout', (tester) async {
+    await loadPage(tester);
+
+    isSessionExpiredController.add(false);
+
+    //Settle so that the test waits to animation ends
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/surveys');
   });
 }

@@ -12,9 +12,11 @@ class GetxSurveyResultPresenter extends GetxController
 
   final _isLoading = true.obs;
   final _surveyResult = Rx<SurveyResultViewModel?>(null);
+  final _isSessionExpired = false.obs;
 
   Stream<bool> get isLoadingStream => _isLoading.stream;
   Stream<SurveyResultViewModel?> get surveyResultStream => _surveyResult.stream;
+  Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
 
   GetxSurveyResultPresenter({
     required this.loadSurveyResult,

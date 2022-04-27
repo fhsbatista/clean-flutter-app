@@ -19,10 +19,12 @@ void main() {
   late MockSurveyResultPresenter presenter;
   late StreamController<bool> isLoadingController;
   late StreamController<SurveyResultViewModel> surveysController;
+  late StreamController<bool> isSessionExpiredController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
     surveysController = StreamController<SurveyResultViewModel>();
+    isSessionExpiredController = StreamController<bool>();
   }
 
   void mockStreams() {
@@ -30,11 +32,14 @@ void main() {
         .thenAnswer((_) => isLoadingController.stream);
     when(presenter.surveyResultStream)
         .thenAnswer((_) => surveysController.stream);
+    when(presenter.isSessionExpiredStream)
+        .thenAnswer((_) => isSessionExpiredController.stream);
   }
 
   void closeStreams() {
     isLoadingController.close();
     surveysController.close();
+    isSessionExpiredController.close();
   }
 
   tearDown(() {
@@ -77,6 +82,10 @@ void main() {
         GetPage(
           name: '/fake_route',
           page: () => Scaffold(body: Text('fake page')),
+        ),
+        GetPage(
+          name: '/login',
+          page: () => Scaffold(body: Text('login page')),
         ),
       ],
     );
@@ -157,5 +166,27 @@ void main() {
     final image =
         tester.widget<Image>(find.byType(Image)).image as NetworkImage;
     expect(image.url, 'image 1');
+  });
+
+  testWidgets('Should logout', (tester) async {
+    await loadPage(tester);
+
+    isSessionExpiredController.add(true);
+
+    //Settle so that the test waits to animation ends
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/login');
+  });
+
+  testWidgets('Should not logout', (tester) async {
+    await loadPage(tester);
+
+    isSessionExpiredController.add(false);
+
+    //Settle so that the test waits to animation ends
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/survey_result/any_survey_id');
   });
 }

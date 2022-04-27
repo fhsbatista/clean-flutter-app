@@ -43,6 +43,11 @@ class _SurveysPageState extends State<SurveysPage> {
             Get.toNamed(route!);
           }
         });
+        widget.presenter.isSessionExpiredStream.listen((isExpired) async {
+          if (isExpired) {
+            Get.offAllNamed('/login');
+          }
+        });
         return StreamBuilder<List<SurveyViewModel>>(
           stream: widget.presenter.surveysStream,
           builder: (context, snapshot) {

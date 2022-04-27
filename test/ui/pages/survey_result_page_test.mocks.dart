@@ -37,6 +37,10 @@ class MockSurveyResultPresenter extends _i1.Mock
               returnValue: Stream<_i2.SurveyResultViewModel?>.empty())
           as _i3.Stream<_i2.SurveyResultViewModel?>);
   @override
+  _i3.Stream<bool> get isSessionExpiredStream =>
+      (super.noSuchMethod(Invocation.getter(#isSessionExpiredStream),
+          returnValue: Stream<bool>.empty()) as _i3.Stream<bool>);
+  @override
   _i3.Future<void> loadData() =>
       (super.noSuchMethod(Invocation.method(#loadData, []),
           returnValue: Future<void>.value(),
