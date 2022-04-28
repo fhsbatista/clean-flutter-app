@@ -20,7 +20,8 @@ class SignUpPage extends StatefulWidget {
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> with Keyboard, Loading {
+class _SignUpPageState extends State<SignUpPage>
+    with Keyboard, Loading, MainUIError {
   @override
   void dispose() {
     widget.presenter.dispose();
@@ -33,12 +34,7 @@ class _SignUpPageState extends State<SignUpPage> with Keyboard, Loading {
       body: Builder(
         builder: (context) {
           handleLoading(context, widget.presenter.isLoadingStream);
-          
-          widget.presenter.mainErrorStream.listen((error) {
-            if (error != null) {
-              showErrorMessage(context, error.description);
-            }
-          });
+          handleMainUIError(context, widget.presenter.mainErrorStream);
 
           widget.presenter.navigateToStream.listen((route) {
             if (route?.isNotEmpty ?? false) {

@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../mixins/mixins.dart';
 import '../pages.dart';
 import '../../helpers/i18n/i18n.dart';
-import '../../helpers/errors/errors.dart';
 import '../../components/components.dart';
 
 import 'components/components.dart';
@@ -19,7 +18,8 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with Keyboard, Loading {
+class _LoginPageState extends State<LoginPage>
+    with Keyboard, Loading, MainUIError {
   @override
   void dispose() {
     widget.presenter.dispose();
@@ -32,12 +32,7 @@ class _LoginPageState extends State<LoginPage> with Keyboard, Loading {
       body: Builder(
         builder: (context) {
           handleLoading(context, widget.presenter.isLoadingStream);
-
-          widget.presenter.mainErrorStream.listen((error) {
-            if (error != null) {
-              showErrorMessage(context, error.description);
-            }
-          });
+          handleMainUIError(context, widget.presenter.mainErrorStream);
 
           widget.presenter.navigateToStream.listen((route) {
             if (route?.isNotEmpty ?? false) {
