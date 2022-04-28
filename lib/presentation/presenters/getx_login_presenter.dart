@@ -11,7 +11,7 @@ import '../mixins/mixins.dart';
 import '../protocols/validation.dart';
 
 class GetxLoginPresenter extends GetxController
-    with GetxLoading, GetxNavigation
+    with GetxLoading, GetxNavigation, GetxMainError
     implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
@@ -28,12 +28,10 @@ class GetxLoginPresenter extends GetxController
   var _emailError = Rx<UIError?>(null);
   var _passwordError = Rx<UIError?>(null);
   var _isFormValid = false.obs;
-  var _mainError = Rx<UIError?>(null);
 
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
-  Stream<UIError?> get mainErrorStream => _mainError.stream;
 
   void validateEmail(String email) {
     _email = email;
@@ -71,7 +69,7 @@ class GetxLoginPresenter extends GetxController
 
   @override
   Future<dynamic> auth() async {
-    _mainError.value = null;
+    mainError = null;
     isLoading = true;
     try {
       final account = await authentication.auth(
@@ -82,10 +80,10 @@ class GetxLoginPresenter extends GetxController
     } on DomainError catch (error) {
       switch (error) {
         case DomainError.invalidCredentials:
-          _mainError.value = UIError.invalidCredentials;
+          mainError = UIError.invalidCredentials;
           break;
         default:
-          _mainError.value = UIError.unexpected;
+          mainError = UIError.unexpected;
           break;
       }
     }
