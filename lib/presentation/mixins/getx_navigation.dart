@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-mixin GetxNavigation {
+mixin GetxNavigation on GetxController {
   final _navigateTo = Rx<String?>(null);
 
   Stream<String?> get navigateToStream => _navigateTo.stream;

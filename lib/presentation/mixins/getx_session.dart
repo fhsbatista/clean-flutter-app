@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-mixin GetxSession {
+mixin GetxSession on GetxController {
   final _isSessionExpired = false.obs;
 
   Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
