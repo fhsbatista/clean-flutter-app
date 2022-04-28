@@ -4,17 +4,16 @@ import 'package:get/get.dart';
 import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/errors/errors.dart';
+import '../mixins/mixins.dart';
 
 class GetxSurveyResultPresenter extends GetxController
-    implements SurveyResultPresenter {
+    with GetxLoading implements SurveyResultPresenter {
   final LoadSurveyResult loadSurveyResult;
   final String surveyId;
 
-  final _isLoading = true.obs;
   final _surveyResult = Rx<SurveyResultViewModel?>(null);
   final _isSessionExpired = false.obs;
 
-  Stream<bool> get isLoadingStream => _isLoading.stream;
   Stream<SurveyResultViewModel?> get surveyResultStream => _surveyResult.stream;
   Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
 
@@ -25,7 +24,7 @@ class GetxSurveyResultPresenter extends GetxController
 
   Future<void> loadData() async {
     try {
-      _isLoading.value = true;
+      isLoading = true;
       final surveyResult = await loadSurveyResult.loadBySurvey(surveyId);
       _surveyResult.value = SurveyResultViewModel(
         id: surveyResult.id,
@@ -49,7 +48,7 @@ class GetxSurveyResultPresenter extends GetxController
         );
       }
     } finally {
-      _isLoading.value = false;
+      isLoading = false;
     }
   }
 }

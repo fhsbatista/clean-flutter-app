@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 
+import '../mixins/mixins.dart';
 import '../protocols/validation.dart';
 
 import '../../domain/helpers/helpers.dart';
@@ -10,7 +11,9 @@ import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/pages.dart';
 
-class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
+class GetxSignUpPresenter extends GetxController
+    with GetxLoading
+    implements SignUpPresenter {
   final Validation validation;
   final AddAccount addAccount;
   final SaveCurrentAccount saveCurrentAccount;
@@ -32,7 +35,6 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   var _passwordConfirmationError = Rx<UIError?>(null);
   var _isFormValid = false.obs;
   var _mainError = Rx<UIError?>(null);
-  var _isLoading = false.obs;
   var _navigateTo = Rx<String?>(null);
 
   Stream<UIError?> get nameErrorStream => _nameError.stream;
@@ -42,7 +44,6 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
       _passwordConfirmationError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<UIError?> get mainErrorStream => _mainError.stream;
-  Stream<bool> get isLoadingStream => _isLoading.stream;
   Stream<String?> get navigateToStream => _navigateTo.stream;
 
   void validateName(String name) {
@@ -109,7 +110,7 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   @override
   Future<void> signUp() async {
     _mainError.value = null;
-    _isLoading.value = true;
+    isLoading = true;
     try {
       final params = AddAccountParams(
         name: _name,
@@ -121,7 +122,7 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
       saveCurrentAccount.save(account);
       _navigateTo.value = '/surveys';
     } on DomainError catch (error) {
-      _isLoading.value = false;
+      isLoading = false;
       switch (error) {
         case DomainError.emailInUse:
           _mainError.value = UIError.emailInUse;
