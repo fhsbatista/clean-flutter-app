@@ -11,7 +11,7 @@ import '../mixins/mixins.dart';
 import '../protocols/validation.dart';
 
 class GetxLoginPresenter extends GetxController
-    with GetxLoading
+    with GetxLoading, GetxNavigation
     implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
@@ -29,13 +29,11 @@ class GetxLoginPresenter extends GetxController
   var _passwordError = Rx<UIError?>(null);
   var _isFormValid = false.obs;
   var _mainError = Rx<UIError?>(null);
-  var _navigateTo = Rx<String?>(null);
 
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<UIError?> get mainErrorStream => _mainError.stream;
-  Stream<String?> get navigateToStream => _navigateTo.stream;
 
   void validateEmail(String email) {
     _email = email;
@@ -80,7 +78,7 @@ class GetxLoginPresenter extends GetxController
         AuthenticationParams(email: _email, password: _password),
       );
       await saveCurrentAccount.save(account);
-      _navigateTo.value = '/surveys';
+      navigateTo = '/surveys';
     } on DomainError catch (error) {
       switch (error) {
         case DomainError.invalidCredentials:
@@ -96,7 +94,7 @@ class GetxLoginPresenter extends GetxController
 
   @override
   void signUp() {
-    _navigateTo.value = '/signup';
+    navigateTo = '/signup';
   }
 
   void dispose() {

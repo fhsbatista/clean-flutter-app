@@ -1,2 +1,3 @@
 export './getx_loading.dart';
 export './getx_session.dart';
+export './getx_navigation.dart';

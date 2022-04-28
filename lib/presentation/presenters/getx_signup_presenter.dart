@@ -12,7 +12,7 @@ import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/pages.dart';
 
 class GetxSignUpPresenter extends GetxController
-    with GetxLoading
+    with GetxLoading, GetxNavigation
     implements SignUpPresenter {
   final Validation validation;
   final AddAccount addAccount;
@@ -35,7 +35,6 @@ class GetxSignUpPresenter extends GetxController
   var _passwordConfirmationError = Rx<UIError?>(null);
   var _isFormValid = false.obs;
   var _mainError = Rx<UIError?>(null);
-  var _navigateTo = Rx<String?>(null);
 
   Stream<UIError?> get nameErrorStream => _nameError.stream;
   Stream<UIError?> get emailErrorStream => _emailError.stream;
@@ -44,7 +43,6 @@ class GetxSignUpPresenter extends GetxController
       _passwordConfirmationError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<UIError?> get mainErrorStream => _mainError.stream;
-  Stream<String?> get navigateToStream => _navigateTo.stream;
 
   void validateName(String name) {
     _name = name;
@@ -120,7 +118,7 @@ class GetxSignUpPresenter extends GetxController
       );
       final account = await addAccount.add(params);
       saveCurrentAccount.save(account);
-      _navigateTo.value = '/surveys';
+      navigateTo = '/surveys';
     } on DomainError catch (error) {
       isLoading = false;
       switch (error) {
@@ -136,7 +134,7 @@ class GetxSignUpPresenter extends GetxController
 
   @override
   void login() {
-    _navigateTo.value = '/login';
+    navigateTo = '/login';
   }
 
   void dispose() {
