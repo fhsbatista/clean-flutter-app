@@ -11,7 +11,7 @@ import '../mixins/mixins.dart';
 import '../protocols/validation.dart';
 
 class GetxLoginPresenter extends GetxController
-    with GetxLoading, GetxNavigation, GetxMainError
+    with GetxLoading, GetxNavigation, GetxMainError, GetxFormValidation
     implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
@@ -27,11 +27,9 @@ class GetxLoginPresenter extends GetxController
   String _password = '';
   var _emailError = Rx<UIError?>(null);
   var _passwordError = Rx<UIError?>(null);
-  var _isFormValid = false.obs;
 
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
-  Stream<bool> get isFormValidStream => _isFormValid.stream;
 
   void validateEmail(String email) {
     _email = email;
@@ -61,7 +59,7 @@ class GetxLoginPresenter extends GetxController
   }
 
   void _validateForm() {
-    _isFormValid.value = _emailError.value == null &&
+    isFormValid = _emailError.value == null &&
         _passwordError.value == null &&
         _email.isNotEmpty &&
         _password.isNotEmpty;

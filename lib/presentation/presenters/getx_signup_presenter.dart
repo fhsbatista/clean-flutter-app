@@ -12,7 +12,7 @@ import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/pages.dart';
 
 class GetxSignUpPresenter extends GetxController
-    with GetxLoading, GetxNavigation, GetxMainError
+    with GetxLoading, GetxNavigation, GetxMainError, GetxFormValidation
     implements SignUpPresenter {
   final Validation validation;
   final AddAccount addAccount;
@@ -33,14 +33,12 @@ class GetxSignUpPresenter extends GetxController
   var _emailError = Rx<UIError?>(null);
   var _passwordError = Rx<UIError?>(null);
   var _passwordConfirmationError = Rx<UIError?>(null);
-  var _isFormValid = false.obs;
 
   Stream<UIError?> get nameErrorStream => _nameError.stream;
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
   Stream<UIError?> get passwordConfirmationErrorStream =>
       _passwordConfirmationError.stream;
-  Stream<bool> get isFormValidStream => _isFormValid.stream;
 
   void validateName(String name) {
     _name = name;
@@ -93,7 +91,7 @@ class GetxSignUpPresenter extends GetxController
   }
 
   void _validateForm() {
-    _isFormValid.value = _emailError.value == null &&
+    isFormValid = _emailError.value == null &&
         _nameError.value == null &&
         _passwordError.value == null &&
         _passwordConfirmationError.value == null &&
