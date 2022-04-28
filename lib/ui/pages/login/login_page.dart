@@ -11,7 +11,7 @@ import '../../components/components.dart';
 import 'components/components.dart';
 
 class LoginPage extends StatefulWidget {
-  final LoginPresenter? presenter;
+  final LoginPresenter presenter;
 
   LoginPage(this.presenter);
 
@@ -19,10 +19,10 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with Keyboard {
+class _LoginPageState extends State<LoginPage> with Keyboard, Loading {
   @override
   void dispose() {
-    widget.presenter?.dispose();
+    widget.presenter.dispose();
     super.dispose();
   }
 
@@ -31,21 +31,15 @@ class _LoginPageState extends State<LoginPage> with Keyboard {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          widget.presenter?.isLoadingStream.listen((isLoading) async {
-            if (isLoading) {
-              await showLoading(context);
-            } else {
-              hideLoading(context);
-            }
-          });
+          handleLoading(context, widget.presenter.isLoadingStream);
 
-          widget.presenter?.mainErrorStream.listen((error) {
+          widget.presenter.mainErrorStream.listen((error) {
             if (error != null) {
               showErrorMessage(context, error.description);
             }
           });
 
-          widget.presenter?.navigateToStream.listen((route) {
+          widget.presenter.navigateToStream.listen((route) {
             if (route?.isNotEmpty ?? false) {
               Get.offAllNamed(route!);
             }
@@ -73,7 +67,7 @@ class _LoginPageState extends State<LoginPage> with Keyboard {
                             const SizedBox(height: 32),
                             LoginButton(),
                             TextButton.icon(
-                              onPressed: widget.presenter?.signUp,
+                              onPressed: widget.presenter.signUp,
                               icon: Icon(Icons.person),
                               label: Text(I18n.strings.addAccount),
                             ),
