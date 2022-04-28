@@ -7,7 +7,7 @@ import '../../mixins/mixins.dart';
 import '../pages.dart';
 import 'components/components.dart';
 
-class SurveyResultPage extends StatelessWidget with Loading {
+class SurveyResultPage extends StatelessWidget with Loading, SessionExpiration {
   final SurveyResultPresenter presenter;
 
   const SurveyResultPage(this.presenter);
@@ -18,12 +18,7 @@ class SurveyResultPage extends StatelessWidget with Loading {
       appBar: AppBar(title: Text(I18n.strings.surveys)),
       body: Builder(builder: (context) {
         handleLoading(context, presenter.isLoadingStream);
-
-        presenter.isSessionExpiredStream.listen((isExpired) async {
-          if (isExpired) {
-            Get.offAllNamed('/login');
-          }
-        });
+        handleSessionExpiration(presenter.isSessionExpiredStream);
         presenter.loadData();
         return StreamBuilder<SurveyResultViewModel?>(
           stream: presenter.surveyResultStream,

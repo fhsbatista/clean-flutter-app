@@ -18,7 +18,8 @@ class SurveysPage extends StatefulWidget {
   State<SurveysPage> createState() => _SurveysPageState();
 }
 
-class _SurveysPageState extends State<SurveysPage> with Loading, Navigation {
+class _SurveysPageState extends State<SurveysPage>
+    with Loading, Navigation, SessionExpiration {
   @override
   void initState() {
     super.initState();
@@ -34,12 +35,7 @@ class _SurveysPageState extends State<SurveysPage> with Loading, Navigation {
       body: Builder(builder: (context) {
         handleLoading(context, widget.presenter.isLoadingStream);
         handleNavigation(widget.presenter.navigateToStream);
-
-        widget.presenter.isSessionExpiredStream.listen((isExpired) async {
-          if (isExpired) {
-            Get.offAllNamed('/login');
-          }
-        });
+        handleSessionExpiration(widget.presenter.isSessionExpiredStream);
         return StreamBuilder<List<SurveyViewModel>>(
           stream: widget.presenter.surveysStream,
           builder: (context, snapshot) {
