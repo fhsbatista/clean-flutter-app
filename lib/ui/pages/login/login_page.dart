@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../mixins/mixins.dart';
 import '../pages.dart';
 import '../../helpers/i18n/i18n.dart';
 import '../../helpers/errors/errors.dart';
@@ -18,14 +20,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  void _hideKeyboard() {
-    final currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus) {
-      currentFocus.unfocus();
-    }
-  }
-
+class _LoginPageState extends State<LoginPage> with Keyboard {
   @override
   void dispose() {
     widget.presenter?.dispose();
@@ -58,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
           });
 
           return GestureDetector(
-            onTap: _hideKeyboard,
+            onTap: () => hideKeyboard(context),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
