@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../components/components.dart';
 import '../../helpers/i18n/i18n.dart';
 
+import '../../mixins/mixins.dart';
 import './components/components.dart';
 import 'surveys.dart';
 
@@ -17,7 +18,7 @@ class SurveysPage extends StatefulWidget {
   State<SurveysPage> createState() => _SurveysPageState();
 }
 
-class _SurveysPageState extends State<SurveysPage> {
+class _SurveysPageState extends State<SurveysPage> with Loading {
   @override
   void initState() {
     super.initState();
@@ -31,13 +32,8 @@ class _SurveysPageState extends State<SurveysPage> {
     return Scaffold(
       appBar: AppBar(title: Text(I18n.strings.surveys)),
       body: Builder(builder: (context) {
-        widget.presenter.isLoadingStream.listen((isLoading) async {
-          if (isLoading) {
-            await showLoading(context);
-          } else {
-            hideLoading(context);
-          }
-        });
+        handleLoading(context, widget.presenter.isLoadingStream);
+
         widget.presenter.navigateToStream.listen((route) {
           if (route?.isNotEmpty ?? false) {
             Get.toNamed(route!);

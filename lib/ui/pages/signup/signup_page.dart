@@ -12,7 +12,7 @@ import '../../components/components.dart';
 import 'components/components.dart';
 
 class SignUpPage extends StatefulWidget {
-  final SignUpPresenter? presenter;
+  final SignUpPresenter presenter;
 
   SignUpPage(this.presenter);
 
@@ -20,10 +20,10 @@ class SignUpPage extends StatefulWidget {
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> with Keyboard {
+class _SignUpPageState extends State<SignUpPage> with Keyboard, Loading {
   @override
   void dispose() {
-    widget.presenter?.dispose();
+    widget.presenter.dispose();
     super.dispose();
   }
 
@@ -32,21 +32,15 @@ class _SignUpPageState extends State<SignUpPage> with Keyboard {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          widget.presenter?.isLoadingStream.listen((isLoading) async {
-            if (isLoading) {
-              await showLoading(context);
-            } else {
-              hideLoading(context);
-            }
-          });
-
-          widget.presenter?.mainErrorStream.listen((error) {
+          handleLoading(context, widget.presenter.isLoadingStream);
+          
+          widget.presenter.mainErrorStream.listen((error) {
             if (error != null) {
               showErrorMessage(context, error.description);
             }
           });
 
-          widget.presenter?.navigateToStream.listen((route) {
+          widget.presenter.navigateToStream.listen((route) {
             if (route?.isNotEmpty ?? false) {
               Get.offAllNamed(route!);
             }
@@ -78,7 +72,7 @@ class _SignUpPageState extends State<SignUpPage> with Keyboard {
                             const SizedBox(height: 32),
                             SignUpButton(),
                             TextButton.icon(
-                              onPressed: widget.presenter?.login,
+                              onPressed: widget.presenter.login,
                               icon: Icon(Icons.exit_to_app),
                               label: Text(I18n.strings.login),
                             ),
