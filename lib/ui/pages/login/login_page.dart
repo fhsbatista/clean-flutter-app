@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../mixins/mixins.dart';
@@ -19,7 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage>
-    with Keyboard, Loading, MainUIError {
+    with Keyboard, Loading, MainUIError, Navigation {
   @override
   void dispose() {
     widget.presenter.dispose();
@@ -33,12 +32,7 @@ class _LoginPageState extends State<LoginPage>
         builder: (context) {
           handleLoading(context, widget.presenter.isLoadingStream);
           handleMainUIError(context, widget.presenter.mainErrorStream);
-
-          widget.presenter.navigateToStream.listen((route) {
-            if (route?.isNotEmpty ?? false) {
-              Get.offAllNamed(route!);
-            }
-          });
+          handleNavigation(widget.presenter.navigateToStream, clear: true);
 
           return GestureDetector(
             onTap: () => hideKeyboard(context),

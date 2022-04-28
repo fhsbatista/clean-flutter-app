@@ -18,7 +18,7 @@ class SurveysPage extends StatefulWidget {
   State<SurveysPage> createState() => _SurveysPageState();
 }
 
-class _SurveysPageState extends State<SurveysPage> with Loading {
+class _SurveysPageState extends State<SurveysPage> with Loading, Navigation {
   @override
   void initState() {
     super.initState();
@@ -33,12 +33,8 @@ class _SurveysPageState extends State<SurveysPage> with Loading {
       appBar: AppBar(title: Text(I18n.strings.surveys)),
       body: Builder(builder: (context) {
         handleLoading(context, widget.presenter.isLoadingStream);
+        handleNavigation(widget.presenter.navigateToStream);
 
-        widget.presenter.navigateToStream.listen((route) {
-          if (route?.isNotEmpty ?? false) {
-            Get.toNamed(route!);
-          }
-        });
         widget.presenter.isSessionExpiredStream.listen((isExpired) async {
           if (isExpired) {
             Get.offAllNamed('/login');

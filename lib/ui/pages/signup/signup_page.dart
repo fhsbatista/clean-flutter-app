@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../mixins/mixins.dart';
 import '../pages.dart';
 
-import '../../helpers/errors/errors.dart';
 import '../../helpers/i18n/i18n.dart';
 import '../../components/components.dart';
 
@@ -21,7 +20,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage>
-    with Keyboard, Loading, MainUIError {
+    with Keyboard, Loading, MainUIError, Navigation {
   @override
   void dispose() {
     widget.presenter.dispose();
@@ -35,12 +34,7 @@ class _SignUpPageState extends State<SignUpPage>
         builder: (context) {
           handleLoading(context, widget.presenter.isLoadingStream);
           handleMainUIError(context, widget.presenter.mainErrorStream);
-
-          widget.presenter.navigateToStream.listen((route) {
-            if (route?.isNotEmpty ?? false) {
-              Get.offAllNamed(route!);
-            }
-          });
+          handleNavigation(widget.presenter.navigateToStream, clear: true);
 
           return GestureDetector(
             onTap: () => hideKeyboard(context),
