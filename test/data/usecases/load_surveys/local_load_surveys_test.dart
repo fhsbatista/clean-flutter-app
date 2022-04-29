@@ -149,81 +149,81 @@ void main() {
 
       expect(future, throwsA(DomainError.unexpected));
     });
+  });
 
-    group('validate', () {
-      test('Should call FetchCacheStorage with correct key', () async {
-        await sut.validate();
+  group('save', () {
+    test('Should call CacheStorage with correct values', () async {
+      final list = [
+        {
+          'id': validSurveysEntities[0].id,
+          'question': validSurveysEntities[0].question,
+          'date': validSurveysEntities[0].date.toIso8601String(),
+          'didAnswer': validSurveysEntities[0].isAnswered.toString(),
+        },
+        {
+          'id': validSurveysEntities[1].id,
+          'question': validSurveysEntities[1].question,
+          'date': validSurveysEntities[1].date.toIso8601String(),
+          'didAnswer': validSurveysEntities[1].isAnswered.toString(),
+        },
+      ];
 
-        verify(fetchCacheStorage.fetch('surveys')).called(1);
-      });
+      await sut.save(validSurveysEntities);
 
-      test('Should delete cache if it is invalid', () async {
-        mockFetch([
-          {
-            'id': faker.guid.guid(),
-            'question': faker.lorem.words(3).toString(),
-            'date': 'invalid date',
-            'didAnswer': 'false',
-          }
-        ]);
-
-        await sut.validate();
-
-        verify(fetchCacheStorage.delete('surveys')).called(1);
-      });
-
-      test('Should delete cache if it is incomplete', () async {
-        mockFetch([
-          {
-            'id': faker.guid.guid(),
-            'date': '2022-01-27T00:00:00Z',
-            'didAnswer': 'false',
-          }
-        ]);
-
-        await sut.validate();
-
-        verify(fetchCacheStorage.delete('surveys')).called(1);
-      });
-
-      test('Should delete cache if fetch throws', () async {
-        mockFetchError();
-
-        await sut.validate();
-
-        verify(fetchCacheStorage.delete('surveys')).called(1);
-      });
+      verify(fetchCacheStorage.save(key: 'surveys', value: list)).called(1);
     });
 
-    group('save', () {
-      test('Should call CacheStorage with correct values', () async {
-        final list = [
-          {
-            'id': validSurveysEntities[0].id,
-            'question': validSurveysEntities[0].question,
-            'date': validSurveysEntities[0].date.toIso8601String(),
-            'didAnswer': validSurveysEntities[0].isAnswered.toString(),
-          },
-          {
-            'id': validSurveysEntities[1].id,
-            'question': validSurveysEntities[1].question,
-            'date': validSurveysEntities[1].date.toIso8601String(),
-            'didAnswer': validSurveysEntities[1].isAnswered.toString(),
-          },
-        ];
+    test('Should throw Unexpected error if save throws', () async {
+      mockSaveError();
 
-        await sut.save(validSurveysEntities);
+      final future = sut.save(validSurveysEntities);
 
-        verify(fetchCacheStorage.save(key: 'surveys', value: list)).called(1);
-      });
+      expect(() => future, throwsA(DomainError.unexpected));
+    });
+  });
 
-      test('Should throw Unexpected error if save throws', () async {
-        mockSaveError();
+  group('validate', () {
+    test('Should call FetchCacheStorage with correct key', () async {
+      await sut.validate();
 
-        final future = sut.save(validSurveysEntities);
+      verify(fetchCacheStorage.fetch('surveys')).called(1);
+    });
 
-        expect(() => future, throwsA(DomainError.unexpected));
-      });
+    test('Should delete cache if it is invalid', () async {
+      mockFetch([
+        {
+          'id': faker.guid.guid(),
+          'question': faker.lorem.words(3).toString(),
+          'date': 'invalid date',
+          'didAnswer': 'false',
+        }
+      ]);
+
+      await sut.validate();
+
+      verify(fetchCacheStorage.delete('surveys')).called(1);
+    });
+
+    test('Should delete cache if it is incomplete', () async {
+      mockFetch([
+        {
+          'id': faker.guid.guid(),
+          'date': '2022-01-27T00:00:00Z',
+          'didAnswer': 'false',
+        }
+      ]);
+
+      await sut.validate();
+
+      verify(fetchCacheStorage.delete('surveys')).called(1);
+    });
+
+    test('Should delete cache if fetch throws', () async {
+      mockFetchError();
+
+      await sut.validate();
+
+      verify(fetchCacheStorage.delete('surveys')).called(1);
     });
   });
 }
