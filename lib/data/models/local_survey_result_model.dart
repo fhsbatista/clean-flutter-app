@@ -18,7 +18,20 @@ class LocalSurveyResultModel {
       question: json['question'],
       answers: json['answers']
           .map<LocalSurveyAnswerModel>(
-              (answer) => LocalSurveyAnswerModel.fromJson(answer))
+            (answer) => LocalSurveyAnswerModel.fromJson(answer),
+          )
+          .toList(),
+    );
+  }
+
+  factory LocalSurveyResultModel.fromEntity(SurveyResultEntity survey) {
+    return LocalSurveyResultModel(
+      surveyId: survey.id,
+      question: survey.question,
+      answers: survey.answers
+          .map<LocalSurveyAnswerModel>(
+            (answer) => LocalSurveyAnswerModel.fromEntity(answer),
+          )
           .toList(),
     );
   }
@@ -30,4 +43,10 @@ class LocalSurveyResultModel {
             .map<SurveyAnswerEntity>((answer) => answer.toEntity())
             .toList(),
       );
+
+  Map toJson() => {
+        'surveyId': surveyId,
+        'question': question,
+        'answers': answers.map<Map>((answer) => answer.toJson()).toList(),
+      };
 }
