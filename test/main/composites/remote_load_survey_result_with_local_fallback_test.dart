@@ -2,6 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/data/usecases/usecases.dart';
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/main/composites/composites.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -37,6 +38,10 @@ void main() {
     when(remote.loadBySurvey(any)).thenAnswer((_) async => survey);
   }
 
+  void mockRemoteError(DomainError error) {
+    when(remote.loadBySurvey(any)).thenThrow(error);
+  }
+
   setUp(() {
     surveyId = faker.guid.guid();
     remote = MockRemoteLoadSurveyResult();
@@ -67,5 +72,13 @@ void main() {
     final result = await sut.loadBySurvey(surveyId);
 
     expect(result, survey);
+  });
+
+  test('Should rethrow if remote throws AccessDenied error', () async {
+    mockRemoteError(DomainError.access_denied);
+
+    final future = sut.loadBySurvey(surveyId);
+
+    expect(future, throwsA(DomainError.access_denied));
   });
 }
