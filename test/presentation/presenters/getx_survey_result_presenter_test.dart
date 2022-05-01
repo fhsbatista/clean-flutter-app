@@ -42,7 +42,7 @@ void main() {
       when(loadSurveyResult.loadBySurvey(any));
 
   PostExpectation mockSaveSurveyResultCall() =>
-      when(saveSurveyResult.save(answer: anyNamed('answer')));
+      when(saveSurveyResult.save(any));
 
   void mockLoadSurveys(SurveyResultEntity data) =>
       mockLoadSurveyResultCall().thenAnswer((_) async => data);
@@ -134,7 +134,7 @@ void main() {
     test('Should call SaveSurveyResult on save', () async {
       await sut.save(answer: answer);
 
-      verify(saveSurveyResult.save(answer: answer)).called(1);
+      verify(saveSurveyResult.save(answer)).called(1);
     });
 
     test('Should emit correct events on SaveSurveyResult success', () async {

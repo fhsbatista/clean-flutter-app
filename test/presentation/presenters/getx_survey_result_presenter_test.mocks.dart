@@ -47,8 +47,8 @@ class MockSaveSurveyResult extends _i1.Mock implements _i5.SaveSurveyResult {
   }
 
   @override
-  _i4.Future<_i2.SurveyResultEntity> save({String? answer}) =>
-      (super.noSuchMethod(Invocation.method(#save, [], {#answer: answer}),
+  _i4.Future<_i2.SurveyResultEntity> save(String? answer) =>
+      (super.noSuchMethod(Invocation.method(#save, [answer]),
               returnValue: Future<_i2.SurveyResultEntity>.value(
                   _FakeSurveyResultEntity_0()))
           as _i4.Future<_i2.SurveyResultEntity>);

@@ -40,7 +40,7 @@ class GetxSurveyResultPresenter extends GetxController
   Future<void> save({required String answer}) async {
     try {
       isLoading = true;
-      final surveyResult = await saveSurveyResult.save(answer: answer);
+      final surveyResult = await saveSurveyResult.save(answer);
       _surveyResult.value = surveyResult.toViewModel();
     } on DomainError catch (error) {
       _handleDomainError(error);

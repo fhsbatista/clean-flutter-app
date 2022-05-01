@@ -1,10 +1,11 @@
-import 'package:fordev/data/models/remote_survey_result_model.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
 import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
 import '../../http/http.dart';
+import '../../models/models.dart';
 
-class RemoteSaveSurveyResult {
+class RemoteSaveSurveyResult implements SaveSurveyResult {
   final String url;
   final HttpClient httpClient;
 
