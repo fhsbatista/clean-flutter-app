@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/data/usecases/usecases.dart';
+import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -63,6 +64,34 @@ void main() {
       method: 'put',
       body: {'answer': answer},
     )).called(1);
+  });
+
+  test('Should return result on 200', () async {
+    final data = validSurveyResult();
+    mockHttpData(data);
+
+    final result = await sut.save(answer);
+
+    expect(
+      result,
+      SurveyResultEntity(
+        id: data['surveyId'],
+        question: data['question'],
+        answers: [
+          SurveyAnswerEntity(
+            image: data['answers'][0]['image'],
+            answer: data['answers'][0]['answer'],
+            isCurrentAnswer: data['answers'][0]['isCurrentAccountAnswer'],
+            percent: data['answers'][0]['percent'],
+          ),
+          SurveyAnswerEntity(
+            answer: data['answers'][1]['answer'],
+            isCurrentAnswer: data['answers'][1]['isCurrentAccountAnswer'],
+            percent: data['answers'][1]['percent'],
+          ),
+        ],
+      ),
+    );
   });
 
   test('Should throw Unexpected error if HttpClient returns 404', () {
