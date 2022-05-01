@@ -2,11 +2,14 @@
 // in fordev/test/main/composites/remote_load_survey_result_with_local_fallback_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
+import 'package:fordev/data/cache/cache.dart' as _i4;
 import 'package:fordev/data/http/http.dart' as _i2;
+import 'package:fordev/data/usecases/load_survey_result/local_load_survey_result.dart'
+    as _i7;
 import 'package:fordev/data/usecases/load_survey_result/remote_load_survey_result.dart'
-    as _i4;
+    as _i5;
 import 'package:fordev/domain/entities/entities.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -25,11 +28,13 @@ class _FakeHttpClient_0 extends _i1.Fake implements _i2.HttpClient {}
 class _FakeSurveyResultEntity_1 extends _i1.Fake
     implements _i3.SurveyResultEntity {}
 
+class _FakeCacheStorage_2 extends _i1.Fake implements _i4.CacheStorage {}
+
 /// A class which mocks [RemoteLoadSurveyResult].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockRemoteLoadSurveyResult extends _i1.Mock
-    implements _i4.RemoteLoadSurveyResult {
+    implements _i5.RemoteLoadSurveyResult {
   MockRemoteLoadSurveyResult() {
     _i1.throwOnMissingStub(this);
   }
@@ -42,9 +47,40 @@ class MockRemoteLoadSurveyResult extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#httpClient),
           returnValue: _FakeHttpClient_0()) as _i2.HttpClient);
   @override
-  _i5.Future<_i3.SurveyResultEntity> loadBySurvey(String? surveyId) =>
+  _i6.Future<_i3.SurveyResultEntity> loadBySurvey(String? surveyId) =>
       (super.noSuchMethod(Invocation.method(#loadBySurvey, [surveyId]),
               returnValue: Future<_i3.SurveyResultEntity>.value(
                   _FakeSurveyResultEntity_1()))
-          as _i5.Future<_i3.SurveyResultEntity>);
+          as _i6.Future<_i3.SurveyResultEntity>);
+}
+
+/// A class which mocks [LocalLoadSurveyResult].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLocalLoadSurveyResult extends _i1.Mock
+    implements _i7.LocalLoadSurveyResult {
+  MockLocalLoadSurveyResult() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.CacheStorage get cacheStorage =>
+      (super.noSuchMethod(Invocation.getter(#cacheStorage),
+          returnValue: _FakeCacheStorage_2()) as _i4.CacheStorage);
+  @override
+  _i6.Future<_i3.SurveyResultEntity> loadBySurvey(String? surveyId) =>
+      (super.noSuchMethod(Invocation.method(#loadBySurvey, [surveyId]),
+              returnValue: Future<_i3.SurveyResultEntity>.value(
+                  _FakeSurveyResultEntity_1()))
+          as _i6.Future<_i3.SurveyResultEntity>);
+  @override
+  _i6.Future<void> validate(String? surveyId) =>
+      (super.noSuchMethod(Invocation.method(#validate, [surveyId]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
+  _i6.Future<void> save(_i3.SurveyResultEntity? surveyResult) =>
+      (super.noSuchMethod(Invocation.method(#save, [surveyResult]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
 }
