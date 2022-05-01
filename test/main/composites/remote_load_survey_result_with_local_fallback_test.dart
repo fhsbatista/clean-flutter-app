@@ -42,12 +42,17 @@ void main() {
     when(remote.loadBySurvey(any)).thenThrow(error);
   }
 
+  void mockLocal(SurveyResultEntity survey) {
+    when(local.loadBySurvey(any)).thenAnswer((_) async => survey);
+  }
+
   setUp(() {
     surveyId = faker.guid.guid();
     remote = MockRemoteLoadSurveyResult();
     local = MockLocalLoadSurveyResult();
     sut = RemoteLoadSurveyResultWithLocalFallback(remote: remote, local: local);
     mockRemote(validSurveyResultEntity());
+    mockLocal(validSurveyResultEntity());
   });
 
   test('Should call remote LoadBySurvey', () async {
@@ -80,5 +85,14 @@ void main() {
     final future = sut.loadBySurvey(surveyId);
 
     expect(future, throwsA(DomainError.access_denied));
+  });
+
+  test('Should call local on remote error', () async {
+    mockRemoteError(DomainError.unexpected);
+
+    await sut.loadBySurvey(surveyId);
+
+    verify(local.validate(surveyId)).called(1);
+    verify(local.loadBySurvey(surveyId)).called(1);
   });
 }
