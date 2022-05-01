@@ -53,6 +53,9 @@ void main() {
   void mockLoadSurveyResultError() =>
       mockLoadSurveyResultCall().thenThrow(DomainError.unexpected);
 
+  void mockSaveSurveyResultError(DomainError error) =>
+      mockSaveSurveyResultCall().thenThrow(error);
+
   void mockAccessDeniedError() =>
       mockLoadSurveyResultCall().thenThrow(DomainError.access_denied);
 
@@ -170,5 +173,26 @@ void main() {
 
       await sut.save(answer: answer);
     });
+  });
+
+  test('Should emit correct events on LoadSurveyResult failure', () async {
+    mockSaveSurveyResultError(DomainError.unexpected);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.surveyResultStream.listen(
+      null,
+      onError: (error, _) => expect(error, UIError.unexpected.description),
+    );
+
+    await sut.save(answer: answer);
+  });
+
+  test('Should emit correct events on access denied', () async {
+    mockSaveSurveyResultError(DomainError.access_denied);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(sut.isSessionExpiredStream, emits(true));
+
+    await sut.save(answer: answer);
   });
 }
