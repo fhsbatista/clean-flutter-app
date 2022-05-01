@@ -16,9 +16,12 @@ class SurveyResultPage extends StatelessWidget with Loading, SessionExpiration {
     return Scaffold(
       appBar: AppBar(title: Text(I18n.strings.surveys)),
       body: Builder(builder: (context) {
-        handleLoading(context, presenter.isLoadingStream);
-        handleSessionExpiration(presenter.isSessionExpiredStream);
-        presenter.loadData();
+        WidgetsBinding.instance?.addPostFrameCallback((_) {
+          handleLoading(context, presenter.isLoadingStream);
+          handleSessionExpiration(presenter.isSessionExpiredStream);
+          presenter.loadData();
+        });
+
         return StreamBuilder<SurveyResultViewModel?>(
           stream: presenter.surveyResultStream,
           builder: (context, snapshot) {
