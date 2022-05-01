@@ -136,5 +136,39 @@ void main() {
 
       verify(saveSurveyResult.save(answer: answer)).called(1);
     });
+
+    test('Should emit correct events on SaveSurveyResult success', () async {
+      final surveyResult = validSurveyResult;
+      mockSaveSurveyResult(surveyResult);
+
+      expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+      sut.surveyResultStream.listen(
+        expectAsync1(
+          (result) => expect(
+            result,
+            SurveyResultViewModel(
+              id: surveyResult.id,
+              question: surveyResult.question,
+              answers: [
+                SurveyAnswerViewModel(
+                  image: surveyResult.answers[0].image,
+                  answer: surveyResult.answers[0].answer,
+                  isCurrentAnswer: surveyResult.answers[0].isCurrentAnswer,
+                  percent: '${surveyResult.answers[0].percent}%',
+                ),
+                SurveyAnswerViewModel(
+                  image: surveyResult.answers[1].image,
+                  answer: surveyResult.answers[1].answer,
+                  isCurrentAnswer: surveyResult.answers[1].isCurrentAnswer,
+                  percent: '${surveyResult.answers[1].percent}%',
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+
+      await sut.save(answer: answer);
+    });
   });
 }
