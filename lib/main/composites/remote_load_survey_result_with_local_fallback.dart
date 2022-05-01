@@ -2,11 +2,11 @@ import '../../data/usecases/usecases.dart';
 import '../../domain/entities/entities.dart';
 import '../../domain/usecases/usecases.dart';
 
-class RemoteLoadSurveyResultWithFallback implements LoadSurveyResult {
+class RemoteLoadSurveyResultWithLocalFallback implements LoadSurveyResult {
   final RemoteLoadSurveyResult remote;
   final LocalLoadSurveyResult local;
 
-  RemoteLoadSurveyResultWithFallback({
+  RemoteLoadSurveyResultWithLocalFallback({
     required this.remote,
     required this.local,
   });

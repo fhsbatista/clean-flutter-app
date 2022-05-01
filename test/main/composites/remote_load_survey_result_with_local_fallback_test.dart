@@ -10,7 +10,7 @@ import 'remote_load_survey_result_with_local_fallback_test.mocks.dart';
 
 @GenerateMocks([RemoteLoadSurveyResult, LocalLoadSurveyResult])
 void main() {
-  late RemoteLoadSurveyResultWithFallback sut;
+  late RemoteLoadSurveyResultWithLocalFallback sut;
   late MockRemoteLoadSurveyResult remote;
   late MockLocalLoadSurveyResult local;
   late String surveyId;
@@ -41,7 +41,7 @@ void main() {
     surveyId = faker.guid.guid();
     remote = MockRemoteLoadSurveyResult();
     local = MockLocalLoadSurveyResult();
-    sut = RemoteLoadSurveyResultWithFallback(remote: remote, local: local);
+    sut = RemoteLoadSurveyResultWithLocalFallback(remote: remote, local: local);
     mockRemote(validSurveyResultEntity());
   });
 
