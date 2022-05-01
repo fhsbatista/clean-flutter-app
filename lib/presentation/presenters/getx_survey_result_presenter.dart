@@ -1,3 +1,4 @@
+import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/ui/pages/survey_result/survey_result.dart';
 import 'package:get/get.dart';
 
@@ -22,31 +23,14 @@ class GetxSurveyResultPresenter extends GetxController
     required this.surveyId,
   });
 
+  @override
   Future<void> loadData() async {
     try {
       isLoading = true;
       final surveyResult = await loadSurveyResult.loadBySurvey(surveyId);
-      _surveyResult.value = SurveyResultViewModel(
-        id: surveyResult.id,
-        question: surveyResult.question,
-        answers: surveyResult.answers
-            .map((answer) => SurveyAnswerViewModel(
-                  answer: answer.answer,
-                  isCurrentAnswer: answer.isCurrentAnswer,
-                  percent: '${answer.percent}%',
-                  image: answer.image,
-                ))
-            .toList(),
-      );
+      _surveyResult.value = surveyResult.toViewModel();
     } on DomainError catch (error) {
-      if (error == DomainError.access_denied) {
-        isSessionExpired = true;
-      } else {
-        _surveyResult.addError(
-          UIError.unexpected.description,
-          StackTrace.empty,
-        );
-      }
+      _handleDomainError(error);
     } finally {
       isLoading = false;
     }
@@ -57,29 +41,39 @@ class GetxSurveyResultPresenter extends GetxController
     try {
       isLoading = true;
       final surveyResult = await saveSurveyResult.save(answer: answer);
-      _surveyResult.value = SurveyResultViewModel(
-        id: surveyResult.id,
-        question: surveyResult.question,
-        answers: surveyResult.answers
-            .map((answer) => SurveyAnswerViewModel(
-                  answer: answer.answer,
-                  isCurrentAnswer: answer.isCurrentAnswer,
-                  percent: '${answer.percent}%',
-                  image: answer.image,
-                ))
-            .toList(),
-      );
+      _surveyResult.value = surveyResult.toViewModel();
     } on DomainError catch (error) {
-      if (error == DomainError.access_denied) {
-        isSessionExpired = true;
-      } else {
-        _surveyResult.addError(
-          UIError.unexpected.description,
-          StackTrace.empty,
-        );
-      }
+      _handleDomainError(error);
     } finally {
       isLoading = false;
     }
+  }
+
+  void _handleDomainError(DomainError error) {
+    if (error == DomainError.access_denied) {
+      isSessionExpired = true;
+    } else {
+      _surveyResult.addError(
+        UIError.unexpected.description,
+        StackTrace.empty,
+      );
+    }
+  }
+}
+
+extension Extensions on SurveyResultEntity {
+  SurveyResultViewModel toViewModel() {
+    return SurveyResultViewModel(
+      id: id,
+      question: question,
+      answers: answers
+          .map((answer) => SurveyAnswerViewModel(
+                answer: answer.answer,
+                isCurrentAnswer: answer.isCurrentAnswer,
+                percent: '${answer.percent}%',
+                image: answer.image,
+              ))
+          .toList(),
+    );
   }
 }
