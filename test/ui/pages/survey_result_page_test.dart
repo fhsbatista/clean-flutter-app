@@ -36,6 +36,11 @@ void main() {
         .thenAnswer((_) => isSessionExpiredController.stream);
   }
 
+  void mockSave() {
+    when(presenter.save(answer: anyNamed('answer')))
+        .thenAnswer((_) async => null);
+  }
+
   void closeStreams() {
     isLoadingController.close();
     surveysController.close();
@@ -72,6 +77,7 @@ void main() {
     presenter = MockSurveyResultPresenter();
     initStreams();
     mockStreams();
+    mockSave();
     final surveysPage = GetMaterialApp(
       initialRoute: '/survey_result/any_survey_id',
       getPages: [
@@ -188,5 +194,18 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(Get.currentRoute, '/survey_result/any_survey_id');
+  });
+
+  testWidgets('Should call save survey result when an item is clicked',
+      (tester) async {
+    await loadPage(tester);
+
+    surveysController.add(validSurveyResultViewModel());
+    await mockNetworkImagesFor(() async {
+      await tester.pump();
+    });
+    await tester.tap(find.text('answer 1'));
+
+    verify(presenter.save(answer: 'answer 1')).called(1);
   });
 }

@@ -35,7 +35,12 @@ class SurveyResultPage extends StatelessWidget with Loading, SessionExpiration {
             }
             if (snapshot.hasData) {
               if (snapshot.data != null) {
-                return SurveyResult(snapshot.data!);
+                return SurveyResult(
+                  viewModel: snapshot.data!,
+                  onClick: (answer) {
+                    presenter.save(answer: answer);
+                  },
+                );
               }
             }
             return SizedBox.shrink();

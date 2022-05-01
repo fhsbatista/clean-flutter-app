@@ -9,4 +9,5 @@ abstract class SurveyResultPresenter implements Listenable {
   Stream<bool> get isSessionExpiredStream;
 
   Future<void> loadData();
+  Future<void> save({required String answer});
 }

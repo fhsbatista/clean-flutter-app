@@ -5,8 +5,12 @@ import 'components.dart';
 
 class SurveyResult extends StatelessWidget {
   final SurveyResultViewModel viewModel;
+  final Function(String) onClick;
 
-  const SurveyResult(this.viewModel);
+  const SurveyResult({
+    required this.viewModel,
+    required this.onClick,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,10 @@ class SurveyResult extends StatelessWidget {
         if (index == 0) {
           return SurveyHeader(viewModel.question);
         }
-        return SurveyAnswer(viewModel.answers[index - 1]);
+        return InkWell(
+          onTap: onClick(viewModel.answers[index -1].answer),
+          child: SurveyAnswer(viewModel.answers[index - 1]),
+        );
       },
     );
   }

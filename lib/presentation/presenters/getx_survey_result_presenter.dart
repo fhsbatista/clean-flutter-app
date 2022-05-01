@@ -7,7 +7,8 @@ import '../../ui/helpers/errors/errors.dart';
 import '../mixins/mixins.dart';
 
 class GetxSurveyResultPresenter extends GetxController
-    with GetxLoading, GetxSession implements SurveyResultPresenter {
+    with GetxLoading, GetxSession
+    implements SurveyResultPresenter {
   final LoadSurveyResult loadSurveyResult;
   final String surveyId;
 
@@ -47,5 +48,10 @@ class GetxSurveyResultPresenter extends GetxController
     } finally {
       isLoading = false;
     }
+  }
+
+  @override
+  Future<void> save({required String answer}) async {
+    return;
   }
 }
