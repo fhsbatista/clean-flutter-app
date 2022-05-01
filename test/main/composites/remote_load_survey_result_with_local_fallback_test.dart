@@ -95,4 +95,14 @@ void main() {
     verify(local.validate(surveyId)).called(1);
     verify(local.loadBySurvey(surveyId)).called(1);
   });
+
+  test('Should return local data on remote error', () async {
+    final survey = validSurveyResultEntity();
+    mockRemoteError(DomainError.unexpected);
+    mockLocal(survey);
+
+    final result = await sut.loadBySurvey(surveyId);
+
+    expect(result, survey);
+  });
 }
