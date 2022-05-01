@@ -26,13 +26,25 @@ class HttpAdapter implements HttpClient {
     Response? response;
     try {
       if (method == 'post') {
-        response = await client.post(
-          Uri.parse(url),
-          headers: finalHeaders,
-          body: body != null ? jsonEncode(body) : null,
-        ).timeout(const Duration(seconds: 3));
+        response = await client
+            .post(
+              Uri.parse(url),
+              headers: finalHeaders,
+              body: body != null ? jsonEncode(body) : null,
+            )
+            .timeout(const Duration(seconds: 3));
       } else if (method == 'get') {
-        response = await client.get(Uri.parse(url), headers: finalHeaders).timeout(const Duration(seconds: 3));
+        response = await client
+            .get(Uri.parse(url), headers: finalHeaders)
+            .timeout(const Duration(seconds: 3));
+      } else if (method == 'put') {
+        response = await client
+            .put(
+              Uri.parse(url),
+              headers: finalHeaders,
+              body: body != null ? jsonEncode(body) : null,
+            )
+            .timeout(const Duration(seconds: 3));
       }
     } catch (_) {
       throw HttpError.serverError;
