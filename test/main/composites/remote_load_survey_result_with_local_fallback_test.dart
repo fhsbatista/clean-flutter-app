@@ -59,4 +59,13 @@ void main() {
 
     verify(local.save(survey)).called(1);
   });
+
+  test('Should return remote data', () async {
+    final survey = validSurveyResultEntity();
+    mockRemote(survey);
+
+    final result = await sut.loadBySurvey(surveyId);
+
+    expect(result, survey);
+  });
 }
