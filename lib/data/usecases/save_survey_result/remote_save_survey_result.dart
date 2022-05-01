@@ -1,3 +1,4 @@
+import '../../../domain/helpers/helpers.dart';
 import '../../http/http.dart';
 
 class RemoteSaveSurveyResult {
@@ -10,6 +11,16 @@ class RemoteSaveSurveyResult {
   });
 
   Future<void> save(String answer) async {
-    httpClient.request(url: url, method: 'put', body: {'answer': answer});
+    try {
+      await httpClient.request(
+        url: url,
+        method: 'put',
+        body: {'answer': answer},
+      );
+    } on HttpError catch (error) {
+      throw error == HttpError.forbidden
+          ? DomainError.access_denied
+          : DomainError.unexpected;
+    }
   }
 }
