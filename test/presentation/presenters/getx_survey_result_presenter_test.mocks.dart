@@ -6,6 +6,7 @@ import 'dart:async' as _i4;
 
 import 'package:fordev/domain/entities/entities.dart' as _i2;
 import 'package:fordev/domain/usecases/load_survey_result.dart' as _i3;
+import 'package:fordev/domain/usecases/save_survey_result.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -32,6 +33,22 @@ class MockLoadSurveyResult extends _i1.Mock implements _i3.LoadSurveyResult {
   @override
   _i4.Future<_i2.SurveyResultEntity> loadBySurvey(String? surveyId) =>
       (super.noSuchMethod(Invocation.method(#loadBySurvey, [surveyId]),
+              returnValue: Future<_i2.SurveyResultEntity>.value(
+                  _FakeSurveyResultEntity_0()))
+          as _i4.Future<_i2.SurveyResultEntity>);
+}
+
+/// A class which mocks [SaveSurveyResult].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSaveSurveyResult extends _i1.Mock implements _i5.SaveSurveyResult {
+  MockSaveSurveyResult() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<_i2.SurveyResultEntity> save({String? answer}) =>
+      (super.noSuchMethod(Invocation.method(#save, [], {#answer: answer}),
               returnValue: Future<_i2.SurveyResultEntity>.value(
                   _FakeSurveyResultEntity_0()))
           as _i4.Future<_i2.SurveyResultEntity>);

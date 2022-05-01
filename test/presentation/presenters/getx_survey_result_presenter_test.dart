@@ -12,11 +12,13 @@ import 'package:fordev/presentation/presenters/presenters.dart';
 
 import 'getx_survey_result_presenter_test.mocks.dart';
 
-@GenerateMocks([LoadSurveyResult])
+@GenerateMocks([LoadSurveyResult, SaveSurveyResult])
 void main() {
   late GetxSurveyResultPresenter sut;
   late MockLoadSurveyResult loadSurveyResult;
+  late MockSaveSurveyResult saveSurveyResult;
   late String surveyId;
+  late String answer;
 
   final validSurveyResult = SurveyResultEntity(
     id: faker.guid.guid(),
@@ -39,8 +41,14 @@ void main() {
   PostExpectation mockLoadSurveyResultCall() =>
       when(loadSurveyResult.loadBySurvey(any));
 
+  PostExpectation mockSaveSurveyResultCall() =>
+      when(saveSurveyResult.save(answer: anyNamed('answer')));
+
   void mockLoadSurveys(SurveyResultEntity data) =>
       mockLoadSurveyResultCall().thenAnswer((_) async => data);
+
+  void mockSaveSurveyResult(SurveyResultEntity data) =>
+      mockSaveSurveyResultCall().thenAnswer((_) async => data);
 
   void mockLoadSurveyResultError() =>
       mockLoadSurveyResultCall().thenThrow(DomainError.unexpected);
@@ -50,12 +58,16 @@ void main() {
 
   setUp(() {
     loadSurveyResult = MockLoadSurveyResult();
+    saveSurveyResult = MockSaveSurveyResult();
     surveyId = faker.guid.guid();
+    answer = faker.lorem.sentence();
     sut = GetxSurveyResultPresenter(
       loadSurveyResult: loadSurveyResult,
+      saveSurveyResult: saveSurveyResult,
       surveyId: surveyId,
     );
     mockLoadSurveys(validSurveyResult);
+    mockSaveSurveyResult(validSurveyResult);
   });
 
   group('load data', () {
@@ -115,6 +127,14 @@ void main() {
       expectLater(sut.isSessionExpiredStream, emits(true));
 
       await sut.loadData();
+    });
+  });
+
+  group('save answer', () {
+    test('Should call SaveSurveyResult on save', () async {
+      await sut.save(answer: answer);
+
+      verify(saveSurveyResult.save(answer: answer)).called(1);
     });
   });
 }
