@@ -90,11 +90,15 @@ void main() {
     await sut.loadData();
   });
 
-  test('Should change page to SurveyResult when requested', () async {
-    sut.navigateToStream.listen(expectAsync1((page) {
-      expect(page, '/survey_result/abcde123');
-    }));
+  test(
+      'Should change page to SurveyResult when requested even though the route is the same as the previous',
+      () async {
+    expectLater(
+      sut.navigateToStream,
+      emitsInOrder(['/survey_result/abcde123', '/survey_result/abcde123']),
+    );
 
+    sut.goToSurveyResult(surveyId: 'abcde123');
     sut.goToSurveyResult(surveyId: 'abcde123');
   });
 
