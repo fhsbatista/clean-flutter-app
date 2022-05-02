@@ -21,7 +21,7 @@ class SurveyResult extends StatelessWidget {
           return SurveyHeader(viewModel.question);
         }
         return InkWell(
-          onTap: onClick(viewModel.answers[index -1].answer),
+          onTap: () => onClick(viewModel.answers[index -1].answer),
           child: SurveyAnswer(viewModel.answers[index - 1]),
         );
       },
