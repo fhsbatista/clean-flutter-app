@@ -1,4 +1,4 @@
-import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/presentation/extensions/extensions.dart';
 import 'package:fordev/ui/pages/survey_result/survey_result.dart';
 import 'package:get/get.dart';
 
@@ -58,22 +58,5 @@ class GetxSurveyResultPresenter extends GetxController
         StackTrace.empty,
       );
     }
-  }
-}
-
-extension Extensions on SurveyResultEntity {
-  SurveyResultViewModel toViewModel() {
-    return SurveyResultViewModel(
-      id: id,
-      question: question,
-      answers: answers
-          .map((answer) => SurveyAnswerViewModel(
-                answer: answer.answer,
-                isCurrentAnswer: answer.isCurrentAnswer,
-                percent: '${answer.percent}%',
-                image: answer.image,
-              ))
-          .toList(),
-    );
   }
 }

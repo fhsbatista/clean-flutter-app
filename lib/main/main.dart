@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
 import '../ui/components/app_theme.dart';
 
@@ -20,11 +20,13 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    final routeObserver = Get.put<RouteObserver>(RouteObserver<PageRoute>());
     return GetMaterialApp(
       title: 'ForDev',
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
       initialRoute: '/',
+      navigatorObservers: [routeObserver],
       getPages: [
         GetPage(
           name: '/',

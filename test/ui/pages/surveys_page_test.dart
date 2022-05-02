@@ -50,8 +50,10 @@ void main() {
   Future<void> loadPage(WidgetTester tester) async {
     initStreams();
     mockStreams();
+    final routeObserver = Get.put<RouteObserver>(RouteObserver<PageRoute>());
     final surveysPage = GetMaterialApp(
       initialRoute: '/surveys',
+      navigatorObservers: [routeObserver],
       getPages: [
         GetPage(
           name: '/surveys',
@@ -59,7 +61,7 @@ void main() {
         ),
         GetPage(
           name: '/fake_route',
-          page: () => Scaffold(body: Text('fake page')),
+          page: () => Scaffold(appBar: AppBar(),body: Text('fake page')),
         ),
         GetPage(
           name: '/login',
@@ -92,6 +94,18 @@ void main() {
   testWidgets('Should call LoadSurveys on page load', (tester) async {
     await loadPage(tester);
     verify(presenter.loadData()).called(1);
+  });
+
+  testWidgets('Should call LoadSurveys when page gets visible again',
+      (tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/fake_route');
+    await tester.pumpAndSettle();
+    //So that this method work, the widget needs to have an app bar. Hence the "fake route" route contains an app bar.
+    await tester.pageBack();
+
+    verify(presenter.loadData()).called(2);
   });
 
   group('loading states', () {

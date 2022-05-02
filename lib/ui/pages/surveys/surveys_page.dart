@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
@@ -18,7 +19,7 @@ class SurveysPage extends StatefulWidget {
 }
 
 class _SurveysPageState extends State<SurveysPage>
-    with Loading, Navigation, SessionExpiration {
+    with Loading, Navigation, SessionExpiration, RouteAware {
   @override
   void initState() {
     super.initState();
@@ -28,7 +29,23 @@ class _SurveysPageState extends State<SurveysPage>
   }
 
   @override
+  void didPopNext() {
+    super.didPopNext();
+    widget.presenter.loadData();
+  }
+
+  @override
+  void dispose() {
+    Get.find<RouteObserver>().unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Get.find<RouteObserver>().subscribe(
+      this,
+      ModalRoute.of(context) as PageRoute,
+    );
     return Scaffold(
       appBar: AppBar(title: Text(I18n.strings.surveys)),
       body: Builder(builder: (context) {
