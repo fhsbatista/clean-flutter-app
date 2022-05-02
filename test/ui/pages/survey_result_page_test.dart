@@ -61,12 +61,12 @@ void main() {
         SurveyAnswerViewModel(
           image: 'image 1',
           answer: 'answer 1',
-          isCurrentAnswer: true,
+          isCurrentAnswer: false,
           percent: '60%',
         ),
         SurveyAnswerViewModel(
           answer: 'answer 2',
-          isCurrentAnswer: false,
+          isCurrentAnswer: true,
           percent: '30%',
         ),
       ],
@@ -207,5 +207,18 @@ void main() {
     await tester.tap(find.text('answer 1'));
 
     verify(presenter.save(answer: 'answer 1')).called(1);
+  });
+
+  testWidgets('Should not call save if it is already current answer',
+      (tester) async {
+    await loadPage(tester);
+
+    surveysController.add(validSurveyResultViewModel());
+    await mockNetworkImagesFor(() async {
+      await tester.pump();
+    });
+    await tester.tap(find.text('answer 2'));
+
+    verifyNever(presenter.save(answer: 'answer 2'));
   });
 }
