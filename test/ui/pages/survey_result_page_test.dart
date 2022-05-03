@@ -12,6 +12,7 @@ import 'package:mockito/mockito.dart';
 import 'package:fordev/ui/pages/pages.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
+import '../helpers/helpers.dart';
 import 'survey_result_page_test.mocks.dart';
 
 @GenerateMocks([SurveyResultPresenter])
@@ -78,27 +79,15 @@ void main() {
     initStreams();
     mockStreams();
     mockSave();
-    final surveysPage = GetMaterialApp(
-      initialRoute: '/survey_result/any_survey_id',
-      getPages: [
-        GetPage(
-          name: '/survey_result',
-          page: () => SurveyResultPage(presenter),
-        ),
-        GetPage(
-          name: '/fake_route',
-          page: () => Scaffold(body: Text('fake page')),
-        ),
-        GetPage(
-          name: '/login',
-          page: () => Scaffold(body: Text('login page')),
-        ),
-      ],
-    );
     //Para evitar problemas com caregamento do Image.network no widget.
     //É necessário esperar essa função terminal (por isso o await) pois se não os testes vão dar problema de conflito de chamadas.
     await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(surveysPage);
+      await tester.pumpWidget(
+        makePage(
+          path: '/survey_result/any_survey_id',
+          page: () => SurveyResultPage(presenter),
+        ),
+      );
     });
   }
 

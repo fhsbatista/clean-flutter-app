@@ -11,6 +11,7 @@ import 'package:mockito/mockito.dart';
 import 'package:fordev/ui/helpers/i18n/i18n.dart';
 import 'package:fordev/ui/pages/pages.dart';
 
+import '../helpers/helpers.dart';
 import 'signup_page_test.mocks.dart';
 
 @GenerateMocks([SignUpPresenter])
@@ -70,20 +71,10 @@ void main() {
   Future<void> loadPage(WidgetTester tester) async {
     initStreams();
     mockStreams();
-    final signupPage = GetMaterialApp(
-      initialRoute: '/signup',
-      getPages: [
-        GetPage(
-          name: '/signup',
-          page: () => SignUpPage(presenter),
-        ),
-        GetPage(
-          name: '/fake_route',
-          page: () => Scaffold(body: Text('fake page')),
-        ),
-      ],
-    );
-    await tester.pumpWidget(signupPage);
+    await tester.pumpWidget(makePage(
+      path: '/signup',
+      page: () => SignUpPage(presenter),
+    ));
   }
 
   tearDown(() {

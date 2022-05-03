@@ -8,6 +8,7 @@ import 'package:mockito/mockito.dart';
 
 import 'package:fordev/ui/pages/pages.dart';
 
+import '../helpers/helpers.dart';
 import 'splash_page_test.mocks.dart';
 
 @GenerateMocks([SplashPresenter])
@@ -21,20 +22,9 @@ void main() {
     when(presenter.navigateToStream)
         .thenAnswer((_) => navigateToController.stream);
     await tester.pumpWidget(
-      GetMaterialApp(
-        initialRoute: '/',
-        getPages: [
-          GetPage(
-            name: '/',
-            page: () => SplashPage(presenter),
-          ),
-          GetPage(
-            name: '/any_route',
-            page: () => Scaffold(
-              body: Text('fake page'),
-            ),
-          )
-        ],
+      makePage(
+        path: '/',
+        page: () => SplashPage(presenter),
       ),
     );
   }
@@ -57,10 +47,10 @@ void main() {
   testWidgets('Should change page', (tester) async {
     await loadPage(tester);
 
-    navigateToController.add('/any_route');
+    navigateToController.add('/fake_route');
     await tester.pumpAndSettle(); //To wait for animations end
 
-    expect(Get.currentRoute, '/any_route');
+    expect(Get.currentRoute, '/fake_route');
     expect(find.text('fake page'), findsOneWidget);
   });
 

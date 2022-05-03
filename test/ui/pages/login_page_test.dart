@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 
 import 'package:fordev/ui/pages/pages.dart';
 
+import '../helpers/helpers.dart';
 import 'login_page_test.mocks.dart';
 
 @GenerateMocks([LoginPresenter])
@@ -61,20 +62,11 @@ void main() {
     presenter = MockLoginPresenter();
     initStreams();
     mockStreams();
-    final loginPage = GetMaterialApp(
-      initialRoute: '/login',
-      getPages: [
-        GetPage(
-          name: '/login',
-          page: () => LoginPage(presenter),
-        ),
-        GetPage(
-          name: '/fake_route',
-          page: () => Scaffold(body: Text('fake page')),
-        ),
-      ],
-    );
-    await tester.pumpWidget(loginPage);
+    await tester.pumpWidget(makePage(
+      path: '/login',
+      page: () => LoginPage(presenter),
+      isLogin: true,
+    ));
   }
 
   tearDown(() {

@@ -10,6 +10,7 @@ import 'package:mockito/mockito.dart';
 
 import 'package:fordev/ui/pages/pages.dart';
 
+import '../helpers/helpers.dart';
 import 'surveys_page_test.mocks.dart';
 
 @GenerateMocks([SurveysPresenter])
@@ -50,26 +51,9 @@ void main() {
   Future<void> loadPage(WidgetTester tester) async {
     initStreams();
     mockStreams();
-    final routeObserver = Get.put<RouteObserver>(RouteObserver<PageRoute>());
-    final surveysPage = GetMaterialApp(
-      initialRoute: '/surveys',
-      navigatorObservers: [routeObserver],
-      getPages: [
-        GetPage(
-          name: '/surveys',
-          page: () => SurveysPage(presenter),
-        ),
-        GetPage(
-          name: '/fake_route',
-          page: () => Scaffold(appBar: AppBar(),body: Text('fake page')),
-        ),
-        GetPage(
-          name: '/login',
-          page: () => Scaffold(body: Text('login page')),
-        ),
-      ],
+    await tester.pumpWidget(
+      makePage(path: '/surveys', page: () => SurveysPage(presenter)),
     );
-    await tester.pumpWidget(surveysPage);
   }
 
   List<SurveyViewModel> makeSurveys() => [
