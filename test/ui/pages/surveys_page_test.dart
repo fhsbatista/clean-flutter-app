@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/ui/helpers/errors/errors.dart';
 import 'package:fordev/ui/helpers/i18n/i18n.dart';
-import 'package:get/get.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -171,7 +170,7 @@ void main() {
     //Settle so that the test waits to animation ends
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/fake_route');
+    expect(currentRoute, '/fake_route');
     expect(find.text('fake page'), findsOneWidget);
   });
 
@@ -183,7 +182,7 @@ void main() {
     //Settle so that the test waits to animation ends
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/login');
+    expect(currentRoute, '/login');
   });
 
   testWidgets('Should not logout', (tester) async {
@@ -194,6 +193,6 @@ void main() {
     //Settle so that the test waits to animation ends
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/surveys');
+    expect(currentRoute, '/surveys');
   });
 }

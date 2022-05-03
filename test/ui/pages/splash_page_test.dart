@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -50,7 +49,7 @@ void main() {
     navigateToController.add('/fake_route');
     await tester.pumpAndSettle(); //To wait for animations end
 
-    expect(Get.currentRoute, '/fake_route');
+    expect(currentRoute, '/fake_route');
     expect(find.text('fake page'), findsOneWidget);
   });
 
@@ -59,10 +58,10 @@ void main() {
 
     navigateToController.add('');
     await tester.pump();
-    expect(Get.currentRoute, '/');
+    expect(currentRoute, '/');
 
     navigateToController.add(null);
     await tester.pump();
-    expect(Get.currentRoute, '/');
+    expect(currentRoute, '/');
   });
 }

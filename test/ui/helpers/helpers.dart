@@ -28,3 +28,5 @@ Widget makePage({
     getPages: pages,
   );
 }
+
+String get currentRoute => Get.currentRoute;

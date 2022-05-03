@@ -7,7 +7,6 @@ import 'package:fordev/ui/helpers/errors/errors.dart';
 import 'package:fordev/ui/helpers/i18n/i18n.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:get/get.dart';
 
 import 'package:fordev/ui/pages/pages.dart';
 
@@ -232,7 +231,7 @@ void main() {
     //Settle so that the test waits to animation ends
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/fake_route');
+    expect(currentRoute, '/fake_route');
     expect(find.text('fake page'), findsOneWidget);
   });
 
@@ -242,11 +241,11 @@ void main() {
 
     navigateToController.add('');
     await tester.pump();
-    expect(Get.currentRoute, '/login');
+    expect(currentRoute, '/login');
 
     navigateToController.add(null);
     await tester.pump();
-    expect(Get.currentRoute, '/login');
+    expect(currentRoute, '/login');
   });
 
   testWidgets('Should call signup on signup click', (tester) async {
