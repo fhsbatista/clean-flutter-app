@@ -9,6 +9,7 @@ import 'package:fordev/domain/usecases/add_account.dart';
 import 'package:fordev/data/http/http.dart';
 import 'package:fordev/data/usecases/usecases.dart';
 
+import '../../../mocks/mocks.dart';
 import 'remote_add_account_test.mocks.dart';
 
 @GenerateMocks([HttpClient])
@@ -17,11 +18,6 @@ void main() {
   late MockHttpClient httpClient;
   late String url;
   late AddAccountParams params;
-
-  Map getValidData() => {
-        'accessToken': faker.guid.guid(),
-        'name': faker.person.name(),
-      };
 
   PostExpectation mockRequest() => when(
         httpClient.request(
@@ -39,13 +35,8 @@ void main() {
     httpClient = MockHttpClient();
     url = faker.internet.httpUrl();
     sut = RemoteAddAccount(httpClient: httpClient, url: url);
-    params = AddAccountParams(
-      name: faker.person.name(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      passwordConfirmation: faker.internet.password(),
-    );
-    mockHttpData(getValidData());
+    params = FakeParamsFactory.addAccount;
+    mockHttpData(FakeAccountFactory.apiJson);
   });
 
   test('Should call HttpClient with correct values', () async {
@@ -96,7 +87,7 @@ void main() {
   });
 
   test('Should return an Account if HttpClient returns 200', () async {
-    final validData = getValidData();
+    final validData = FakeAccountFactory.apiJson;
     mockHttpData(validData);
 
     final account = await sut.add(params);

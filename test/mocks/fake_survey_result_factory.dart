@@ -1,0 +1,103 @@
+import 'package:faker/faker.dart';
+import 'package:fordev/domain/entities/entities.dart';
+
+class FakeSurveyResultFactory {
+  static Map get cacheJson {
+    return {
+      'surveyId': faker.guid.guid(),
+      'question': faker.lorem.sentence(),
+      'answers': [
+        {
+          'image': faker.internet.httpsUrl(),
+          'answer': faker.lorem.sentence(),
+          'percent': '40',
+          'count': '300',
+          'isCurrentAnswer': 'false',
+        },
+        {
+          'answer': faker.lorem.sentence(),
+          'percent': '13',
+          'count': '288',
+          'isCurrentAnswer': 'true',
+        },
+      ],
+    };
+  }
+
+  static Map get apiJson {
+    return {
+      'surveyId': faker.guid.guid(),
+      'question': faker.randomGenerator.string(50),
+      'answers': [
+        {
+          'image': faker.internet.httpsUrl(),
+          'answer': faker.randomGenerator.string(20),
+          'percent': faker.randomGenerator.integer(100),
+          'count': faker.randomGenerator.integer(1000),
+          'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
+        },
+        {
+          'answer': faker.randomGenerator.string(20),
+          'percent': faker.randomGenerator.integer(100),
+          'count': faker.randomGenerator.integer(1000),
+          'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
+        },
+      ],
+      'date': faker.date.dateTime().toIso8601String(),
+    };
+  }
+
+  static Map get invalidCacheJson {
+    return {
+      'surveyId': faker.guid.guid(),
+      'question': faker.lorem.sentence(),
+      'answers': [
+        {
+          'image': faker.internet.httpsUrl(),
+          'answer': faker.lorem.sentence(),
+          'percent': 'invalid int',
+          'isCurrentAccountAnswer': 'invalid_boolean',
+        },
+      ],
+    };
+  }
+
+  static Map get invalidApiJson {
+    return {
+      'invalid_key': 'invalid_value',
+    };
+  }
+
+  static Map get incompleteCacheJson {
+    return {
+      'surveyId': faker.guid.guid(),
+      'answers': [
+        {
+          'image': faker.internet.httpsUrl(),
+          'percent': 'invalid int',
+          'isCurrentAccountAnswer': 'invalid_boolean',
+        },
+      ],
+    };
+  }
+
+  static SurveyResultEntity get entity {
+    return SurveyResultEntity(
+      id: faker.guid.guid(),
+      question: faker.lorem.sentence(),
+      answers: [
+        SurveyAnswerEntity(
+          answer: faker.lorem.sentence(),
+          isCurrentAnswer: true,
+          percent: 40,
+          image: faker.internet.httpsUrl(),
+        ),
+        SurveyAnswerEntity(
+          answer: faker.lorem.sentence(),
+          isCurrentAnswer: false,
+          percent: 20,
+        ),
+      ],
+    );
+  }
+}

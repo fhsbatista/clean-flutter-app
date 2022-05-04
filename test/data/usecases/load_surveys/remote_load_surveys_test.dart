@@ -8,6 +8,7 @@ import 'package:fordev/data/usecases/load_surveys/load_surveys.dart';
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
 
+import '../../../mocks/mocks.dart';
 import '../add_account/remote_add_account_test.mocks.dart';
 
 @GenerateMocks([HttpClient])
@@ -24,28 +25,13 @@ void main() {
   void mockHttpData({List<Map>? data}) =>
       mockHttp().thenAnswer((_) async => data);
 
-  List<Map> mockValidData() => [
-        {
-          'id': faker.guid.guid(),
-          'question': faker.randomGenerator.string(50),
-          'date': faker.date.dateTime().toIso8601String(),
-          'didAnswer': faker.randomGenerator.boolean(),
-        },
-        {
-          'id': faker.guid.guid(),
-          'question': faker.randomGenerator.string(50),
-          'date': faker.date.dateTime().toIso8601String(),
-          'didAnswer': faker.randomGenerator.boolean(),
-        },
-      ];
-
   void mockHttpError(HttpError error) => mockHttp().thenThrow(error);
 
   setUp(() {
     url = faker.internet.httpUrl();
     httpClient = MockHttpClient();
     sut = RemoteLoadSurveys(url: url, httpClient: httpClient);
-    mockHttpData(data: mockValidData());
+    mockHttpData(data: FakeSurveysFactory.apiJson);
   });
 
   test('Should call HttpClient with correct values', () async {
@@ -55,7 +41,7 @@ void main() {
   });
 
   test('Should return surveys on 200', () async {
-    final List<Map> data = mockValidData();
+    final List<Map> data = FakeSurveysFactory.apiJson;
     mockHttpData(data: data);
     final expectedSurveys = [
       SurveyEntity(
@@ -80,9 +66,7 @@ void main() {
   test(
       'Should throw Unexpected error if HttpClient returns 200 with invalid data',
       () async {
-    mockHttpData(data: [
-      {'invalid_key': 'invalid_value'}
-    ]);
+    mockHttpData(data: FakeSurveysFactory.invalidApiJson);
 
     final future = sut.load();
 

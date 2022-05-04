@@ -8,6 +8,7 @@ import 'package:mockito/mockito.dart';
 
 import 'package:fordev/data/http/http.dart';
 
+import '../../../mocks/mocks.dart';
 import 'remote_save_survey_result_test.mocks.dart';
 
 @GenerateMocks([HttpClient])
@@ -16,27 +17,6 @@ void main() {
   late String url;
   late MockHttpClient httpClient;
   late String answer;
-
-  Map validSurveyResult() => {
-        'surveyId': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'answers': [
-          {
-            'image': faker.internet.httpsUrl(),
-            'answer': faker.randomGenerator.string(20),
-            'percent': faker.randomGenerator.integer(100),
-            'count': faker.randomGenerator.integer(1000),
-            'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
-          },
-          {
-            'answer': faker.randomGenerator.string(20),
-            'percent': faker.randomGenerator.integer(100),
-            'count': faker.randomGenerator.integer(1000),
-            'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
-          },
-        ],
-        'date': faker.date.dateTime().toIso8601String(),
-      };
 
   PostExpectation mockHttp() => when(httpClient.request(
         url: anyNamed('url'),
@@ -53,7 +33,7 @@ void main() {
     httpClient = MockHttpClient();
     sut = RemoteSaveSurveyResult(url: url, httpClient: httpClient);
     answer = faker.lorem.word();
-    mockHttpData(validSurveyResult());
+    mockHttpData(FakeSurveyResultFactory.apiJson);
   });
 
   test('Should call HttpClient with correct values', () async {
@@ -67,7 +47,7 @@ void main() {
   });
 
   test('Should return result on 200', () async {
-    final data = validSurveyResult();
+    final data = FakeSurveyResultFactory.apiJson;
     mockHttpData(data);
 
     final result = await sut.save(answer);
@@ -97,7 +77,7 @@ void main() {
   test(
       'Should throw Unexpected error if HttpClient returns 200 with invalid data',
       () async {
-    mockHttpData({'invalid_key': 'invalid_value'});
+    mockHttpData(FakeSurveyResultFactory.invalidApiJson);
 
     final future = sut.save(answer);
 
