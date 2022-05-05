@@ -7,6 +7,7 @@ import 'package:fordev/main/composites/composites.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../mocks/mocks.dart';
 import 'remote_load_survey_result_with_local_fallback_test.mocks.dart';
 
 @GenerateMocks([RemoteLoadSurveyResult, LocalLoadSurveyResult])
@@ -15,24 +16,6 @@ void main() {
   late MockRemoteLoadSurveyResult remote;
   late MockLocalLoadSurveyResult local;
   late String surveyId;
-
-  SurveyResultEntity validSurveyResultEntity() => SurveyResultEntity(
-        id: surveyId,
-        question: faker.lorem.sentence(),
-        answers: [
-          SurveyAnswerEntity(
-            answer: faker.lorem.sentence(),
-            isCurrentAnswer: true,
-            percent: 40,
-            image: faker.internet.httpsUrl(),
-          ),
-          SurveyAnswerEntity(
-            answer: faker.lorem.sentence(),
-            isCurrentAnswer: false,
-            percent: 20,
-          ),
-        ],
-      );
 
   void mockRemote(SurveyResultEntity survey) {
     when(remote.loadBySurvey(any)).thenAnswer((_) async => survey);
@@ -55,8 +38,8 @@ void main() {
     remote = MockRemoteLoadSurveyResult();
     local = MockLocalLoadSurveyResult();
     sut = RemoteLoadSurveyResultWithLocalFallback(remote: remote, local: local);
-    mockRemote(validSurveyResultEntity());
-    mockLocal(validSurveyResultEntity());
+    mockRemote(FakeSurveyResultFactory.entity);
+    mockLocal(FakeSurveyResultFactory.entity);
   });
 
   test('Should call remote LoadBySurvey', () async {
@@ -66,7 +49,7 @@ void main() {
   });
 
   test('Should call local save with remote data', () async {
-    final survey = validSurveyResultEntity();
+    final survey = FakeSurveyResultFactory.entity;
     mockRemote(survey);
 
     await sut.loadBySurvey(surveyId);
@@ -75,7 +58,7 @@ void main() {
   });
 
   test('Should return remote data', () async {
-    final survey = validSurveyResultEntity();
+    final survey = FakeSurveyResultFactory.entity;
     mockRemote(survey);
 
     final result = await sut.loadBySurvey(surveyId);
@@ -101,7 +84,7 @@ void main() {
   });
 
   test('Should return local data on remote error', () async {
-    final survey = validSurveyResultEntity();
+    final survey = FakeSurveyResultFactory.entity;
     mockRemoteError(DomainError.unexpected);
     mockLocal(survey);
 

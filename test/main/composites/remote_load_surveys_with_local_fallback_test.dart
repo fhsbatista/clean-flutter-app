@@ -1,4 +1,3 @@
-import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fordev/data/usecases/usecases.dart';
 import 'package:fordev/domain/entities/entities.dart';
@@ -7,6 +6,7 @@ import 'package:fordev/main/composites/composites.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../mocks/mocks.dart';
 import 'remote_load_surveys_with_local_fallback_test.mocks.dart';
 
 @GenerateMocks([RemoteLoadSurveys, LocalLoadSurveys])
@@ -17,25 +17,8 @@ void main() {
   late List<SurveyEntity> remoteSurveys;
   late List<SurveyEntity> localSurveys;
 
-  List<SurveyEntity> validSurveys() {
-    return [
-      SurveyEntity(
-        id: faker.guid.guid(),
-        question: faker.randomGenerator.string(10),
-        date: faker.date.dateTime(),
-        isAnswered: faker.randomGenerator.boolean(),
-      ),
-      SurveyEntity(
-        id: faker.guid.guid(),
-        question: faker.randomGenerator.string(10),
-        date: faker.date.dateTime(),
-        isAnswered: faker.randomGenerator.boolean(),
-      ),
-    ];
-  }
-
   void mockRemote() {
-    remoteSurveys = validSurveys();
+    remoteSurveys = FakeSurveysFactory.entities;
     when(remote.load()).thenAnswer((_) async => remoteSurveys);
   }
 
@@ -44,7 +27,7 @@ void main() {
   }
 
   void mockLocal() {
-    localSurveys = validSurveys();
+    localSurveys = FakeSurveysFactory.entities;
     when(local.load()).thenAnswer((_) async => localSurveys);
   }
 

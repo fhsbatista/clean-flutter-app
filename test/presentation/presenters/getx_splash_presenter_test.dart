@@ -6,6 +6,7 @@ import 'package:fordev/presentation/presenters/presenters.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../mocks/fake_account_factory.dart';
 import 'getx_splash_presenter_test.mocks.dart';
 
 @GenerateMocks([LoadCurrentAccount])
@@ -27,7 +28,7 @@ void main() {
   setUp(() {
     loadCurrentAccount = MockLoadCurrentAccount();
     sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
-    mockLoadCurrentAccount(AccountEntity(token: faker.guid.guid()));
+    mockLoadCurrentAccount(FakeAccountFactory.entity);
   });
 
   test('Should call LoadCurrentAccount', () async {

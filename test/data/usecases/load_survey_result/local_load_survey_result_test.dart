@@ -155,7 +155,7 @@ void main() {
     test('Should call CacheStorage with correct values', () async {
       final entity = FakeSurveyResultFactory.entity;
       final surveyMap = {
-        'surveyId': surveyId,
+        'surveyId': entity.id,
         'question': entity.question,
         'answers': [
           {
@@ -176,7 +176,7 @@ void main() {
       await sut.save(entity);
 
       verify(fetchCacheStorage.save(
-        key: 'survey_result/$surveyId',
+        key: 'survey_result/${entity.id}',
         value: surveyMap,
       )).called(1);
     });

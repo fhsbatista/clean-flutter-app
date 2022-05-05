@@ -10,6 +10,7 @@ import 'package:mockito/mockito.dart';
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/presentation/presenters/presenters.dart';
 
+import '../../mocks/mocks.dart';
 import 'getx_survey_result_presenter_test.mocks.dart';
 
 @GenerateMocks([LoadSurveyResult, SaveSurveyResult])
@@ -19,24 +20,7 @@ void main() {
   late MockSaveSurveyResult saveSurveyResult;
   late String surveyId;
   late String answer;
-
-  final validSurveyResult = SurveyResultEntity(
-    id: faker.guid.guid(),
-    question: faker.lorem.sentence(),
-    answers: [
-      SurveyAnswerEntity(
-        image: faker.internet.httpsUrl(),
-        answer: faker.lorem.sentence(),
-        percent: faker.randomGenerator.integer(100),
-        isCurrentAnswer: faker.randomGenerator.boolean(),
-      ),
-      SurveyAnswerEntity(
-        answer: faker.lorem.sentence(),
-        percent: faker.randomGenerator.integer(100),
-        isCurrentAnswer: faker.randomGenerator.boolean(),
-      ),
-    ],
-  );
+  late SurveyResultEntity surveyResultEntity;
 
   PostExpectation mockLoadSurveyResultCall() =>
       when(loadSurveyResult.loadBySurvey(any));
@@ -66,8 +50,9 @@ void main() {
       saveSurveyResult: saveSurveyResult,
       surveyId: surveyId,
     );
-    mockLoadSurveys(validSurveyResult);
-    mockSaveSurveyResult(validSurveyResult);
+    surveyResultEntity = FakeSurveyResultFactory.entity;
+    mockLoadSurveys(surveyResultEntity);
+    mockSaveSurveyResult(surveyResultEntity);
   });
 
   group('load data', () {
@@ -84,20 +69,20 @@ void main() {
           (result) => expect(
             result,
             SurveyResultViewModel(
-              id: validSurveyResult.id,
-              question: validSurveyResult.question,
+              id: surveyResultEntity.id,
+              question: surveyResultEntity.question,
               answers: [
                 SurveyAnswerViewModel(
-                  image: validSurveyResult.answers[0].image,
-                  answer: validSurveyResult.answers[0].answer,
-                  isCurrentAnswer: validSurveyResult.answers[0].isCurrentAnswer,
-                  percent: '${validSurveyResult.answers[0].percent}%',
+                  image: surveyResultEntity.answers[0].image,
+                  answer: surveyResultEntity.answers[0].answer,
+                  isCurrentAnswer: surveyResultEntity.answers[0].isCurrentAnswer,
+                  percent: '${surveyResultEntity.answers[0].percent}%',
                 ),
                 SurveyAnswerViewModel(
-                  image: validSurveyResult.answers[1].image,
-                  answer: validSurveyResult.answers[1].answer,
-                  isCurrentAnswer: validSurveyResult.answers[1].isCurrentAnswer,
-                  percent: '${validSurveyResult.answers[1].percent}%',
+                  image: surveyResultEntity.answers[1].image,
+                  answer: surveyResultEntity.answers[1].answer,
+                  isCurrentAnswer: surveyResultEntity.answers[1].isCurrentAnswer,
+                  percent: '${surveyResultEntity.answers[1].percent}%',
                 )
               ],
             ),
@@ -138,7 +123,7 @@ void main() {
     });
 
     test('Should emit correct events on SaveSurveyResult success', () async {
-      final surveyResult = validSurveyResult;
+      final surveyResult = surveyResultEntity;
       mockSaveSurveyResult(surveyResult);
 
       expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
