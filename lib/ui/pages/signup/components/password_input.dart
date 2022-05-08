@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../helpers/i18n/i18n.dart';
 
 import '../signup_presenter.dart';
-import 'components.dart';
+import '../../../components/components.dart';
 
 class PasswordInput extends StatelessWidget {
   @override

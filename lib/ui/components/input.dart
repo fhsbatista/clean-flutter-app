@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../helpers/errors/errors.dart';
+import '../helpers/errors/errors.dart';
 
 class Input extends StatelessWidget {
   Input({

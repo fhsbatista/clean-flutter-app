@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../ui/helpers/i18n/i18n.dart';
 
 import '../signup_presenter.dart';
-import 'components.dart';
+import '../../../components/components.dart';
 
 class PasswordConfirmationInput extends StatelessWidget {
   @override
