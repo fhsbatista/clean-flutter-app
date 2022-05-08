@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../helpers/i18n/i18n.dart';
 import '../../mixins/mixins.dart';
 import 'splash_presenter.dart';
 
@@ -12,7 +13,7 @@ class SplashPage extends StatelessWidget with Navigation {
     presenter.checkAccount();
     return Scaffold(
       appBar: AppBar(
-        title: Text('fordev'),
+        title: Text(I18n.strings.appTitle),
       ),
       body: Builder(
         builder: (context) {

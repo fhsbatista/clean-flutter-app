@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../helpers/i18n/i18n.dart';
+
 Future<void> showLoading(BuildContext context) async {
   await showDialog(
     context: context,
@@ -12,7 +14,7 @@ Future<void> showLoading(BuildContext context) async {
             children: [
               CircularProgressIndicator(),
               const SizedBox(height: 10),
-              Text('Aguarde...', textAlign: TextAlign.center),
+              Text(I18n.strings.holdOn, textAlign: TextAlign.center),
             ],
           )
         ],
