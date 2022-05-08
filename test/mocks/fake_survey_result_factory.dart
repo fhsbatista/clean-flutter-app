@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/ui/pages/pages.dart';
 
 class FakeSurveyResultFactory {
   static Map get cacheJson {
@@ -96,6 +97,28 @@ class FakeSurveyResultFactory {
           answer: faker.lorem.sentence(),
           isCurrentAnswer: false,
           percent: 20,
+        ),
+      ],
+    );
+  }
+
+  static SurveyResultViewModel get viewModel {
+    //Não está usando o 'faker' para evitar o risco de o faker acabar gerando strings iguais.
+    //Isso faria o teste passar ou falhar por motivos errados já que eles precisam encontrar (método find) um número específico de widgets que dão match.
+    return SurveyResultViewModel(
+      id: 'any_id',
+      question: 'Question',
+      answers: [
+        SurveyAnswerViewModel(
+          image: 'image 1',
+          answer: 'answer 1',
+          isCurrentAnswer: false,
+          percent: '60%',
+        ),
+        SurveyAnswerViewModel(
+          answer: 'answer 2',
+          isCurrentAnswer: true,
+          percent: '30%',
         ),
       ],
     );

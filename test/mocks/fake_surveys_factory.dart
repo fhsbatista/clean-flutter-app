@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:fordev/domain/entities/survey_entity.dart';
+import 'package:fordev/ui/pages/pages.dart';
 
 class FakeSurveysFactory {
   static List<Map> get cacheJson {
@@ -78,4 +79,19 @@ class FakeSurveysFactory {
       ),
     ];
   }
+
+  static List<SurveyViewModel> get viewModels => [
+        SurveyViewModel(
+          id: '1',
+          question: 'Question 1',
+          date: 'Date 1',
+          isAnswered: false,
+        ),
+        SurveyViewModel(
+          id: '1',
+          question: 'Question 2',
+          date: 'Date 2',
+          isAnswered: false,
+        ),
+      ];
 }

@@ -9,6 +9,7 @@ import 'package:mockito/mockito.dart';
 
 import 'package:fordev/ui/pages/pages.dart';
 
+import '../../mocks/fake_surveys_factory.dart';
 import '../helpers/helpers.dart';
 import 'surveys_page_test.mocks.dart';
 
@@ -54,21 +55,6 @@ void main() {
       makePage(path: '/surveys', page: () => SurveysPage(presenter)),
     );
   }
-
-  List<SurveyViewModel> makeSurveys() => [
-        SurveyViewModel(
-          id: '1',
-          question: 'Question 1',
-          date: 'Date 1',
-          isAnswered: false,
-        ),
-        SurveyViewModel(
-          id: '1',
-          question: 'Question 2',
-          date: 'Date 2',
-          isAnswered: false,
-        ),
-      ];
 
   tearDown(() {
     closeStreams();
@@ -129,7 +115,7 @@ void main() {
       (tester) async {
     await loadPage(tester);
 
-    surveysController.add(makeSurveys());
+    surveysController.add(FakeSurveysFactory.viewModels);
     await tester.pump();
 
     expect(find.text(I18n.strings.msgUnexpectedError), findsNothing);
@@ -153,7 +139,7 @@ void main() {
   testWidgets('Should call goToSurveyResult on survey click', (tester) async {
     await loadPage(tester);
 
-    surveysController.add(makeSurveys());
+    surveysController.add(FakeSurveysFactory.viewModels);
     await tester.pump();
 
     await tester.tap(find.text('Question 1'));
