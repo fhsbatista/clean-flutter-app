@@ -65,6 +65,7 @@ class SurveyAnswer extends StatelessWidget {
     return viewModel.image != null
         ? Image.network(
             viewModel.image!,
+            errorBuilder: (_, __, ___) => const SizedBox.shrink(),
             width: 80,
             height: 40,
           )
