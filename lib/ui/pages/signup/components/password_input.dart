@@ -15,6 +15,7 @@ class PasswordInput extends StatelessWidget {
       icon: Icons.lock,
       errorStream: presenter.passwordErrorStream,
       onChange: presenter.validatePassword,
+      obscure: true,
     );
   }
 }

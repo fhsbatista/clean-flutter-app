@@ -76,11 +76,11 @@ void main() {
     await loadPage(tester);
 
     final email = faker.internet.email();
-    await tester.enterText(find.bySemanticsLabel('email'), email);
+    await tester.enterText(find.bySemanticsLabel(I18n.strings.email), email);
     verify(presenter.validateEmail(email));
 
     final password = faker.internet.password();
-    await tester.enterText(find.bySemanticsLabel('senha'), password);
+    await tester.enterText(find.bySemanticsLabel(I18n.strings.password), password);
     verify(presenter.validatePassword(password));
   });
 
@@ -110,7 +110,7 @@ void main() {
 
     expect(
       find.descendant(
-        of: find.bySemanticsLabel('email'),
+        of: find.bySemanticsLabel(I18n.strings.email),
         matching: find.byType(Text),
       ),
       findsOneWidget,
@@ -134,7 +134,7 @@ void main() {
 
     expect(
       find.descendant(
-        of: find.bySemanticsLabel('senha'),
+        of: find.bySemanticsLabel(I18n.strings.password),
         matching: find.byType(Text),
       ),
       findsOneWidget,

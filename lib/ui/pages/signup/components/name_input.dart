@@ -12,7 +12,6 @@ class NameInput extends StatelessWidget {
     return Input(
       label: I18n.strings.name,
       icon: Icons.person,
-      keyboardType: TextInputType.emailAddress,
       errorStream: presenter.nameErrorStream,
       onChange: presenter.validateName,
     );

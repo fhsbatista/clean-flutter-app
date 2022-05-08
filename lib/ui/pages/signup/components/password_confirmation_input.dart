@@ -13,7 +13,6 @@ class PasswordConfirmationInput extends StatelessWidget {
     return Input(
       label: I18n.strings.confirmPassword,
       icon: Icons.lock,
-      keyboardType: TextInputType.emailAddress,
       errorStream: presenter.passwordConfirmationErrorStream,
       onChange: presenter.validatePasswordConfirmation,
       obscure: true,
