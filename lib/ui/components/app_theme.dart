@@ -8,7 +8,7 @@ ThemeData makeAppTheme() {
   final secondaryColorDark = Color.fromRGBO(0, 37, 26, 1);
   final disabledColor = Colors.grey[400];
   final dividerColor = Colors.grey;
-  final theme = ThemeData(
+  return ThemeData(
     backgroundColor: Colors.white,
     primaryColor: primaryColor,
     primaryColorDark: primaryDark,
@@ -17,6 +17,7 @@ ThemeData makeAppTheme() {
     highlightColor: secondaryColor,
     disabledColor: disabledColor,
     dividerColor: dividerColor,
+    colorScheme: ColorScheme.light(primary: primaryColor),
     textTheme: TextTheme(
       headline1: TextStyle(
         fontSize: 30,
@@ -40,8 +41,5 @@ ThemeData makeAppTheme() {
         textStyle: TextStyle(fontWeight: FontWeight.bold),
       ),
     ),
-  );
-  return theme.copyWith(
-    colorScheme: theme.colorScheme.copyWith(secondary: primaryColor),
   );
 }
