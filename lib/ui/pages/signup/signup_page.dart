@@ -8,6 +8,7 @@ import '../../helpers/i18n/i18n.dart';
 import '../../components/components.dart';
 
 import 'components/components.dart';
+import 'components/input.dart';
 
 class SignUpPage extends StatefulWidget {
   final SignUpPresenter presenter;
