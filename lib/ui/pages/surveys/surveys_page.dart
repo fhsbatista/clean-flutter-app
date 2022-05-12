@@ -23,7 +23,7 @@ class _SurveysPageState extends State<SurveysPage>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.presenter.loadData();
     });
   }
